@@ -1,1 +1,2 @@
+from .errorHandlerCompiler  import ErrorHandlerCompiler
 from .errorHandlerVariables import ErrorHandlerVariables

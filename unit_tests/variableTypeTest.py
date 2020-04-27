@@ -7,7 +7,7 @@ import unittest
 class VariableTypeTest(unittest.TestCase):
     def testInt(self):
         instruction_loader = Instruction_loader()
-        variables = instruction_loader.mem.variables
+        variables = instruction_loader.variables
         lines = ["nueva m I 5", "cargue m"]
         for instruction in lines:
             instruction_loader.parse_and_compile(instruction)
@@ -16,7 +16,7 @@ class VariableTypeTest(unittest.TestCase):
 
     def testString(self):
         instruction_loader = Instruction_loader()
-        variables = instruction_loader.mem.variables
+        variables = instruction_loader.variables
         lines = ["nueva n C 5", "cargue n"]
         for instruction in lines:
             instruction_loader.parse_and_compile(instruction)
@@ -26,7 +26,7 @@ class VariableTypeTest(unittest.TestCase):
 
     def testBool(self):
         instruction_loader = Instruction_loader()
-        variables = instruction_loader.mem.variables
+        variables = instruction_loader.variables
         lines = ["nueva o L 0", "cargue o"]
         for instruction in lines:
             instruction_loader.parse_and_compile(instruction)

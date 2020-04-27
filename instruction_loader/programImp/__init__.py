@@ -1,1 +1,1 @@
-from .programImp import Program
+from .programImp import ProgramDefinitions

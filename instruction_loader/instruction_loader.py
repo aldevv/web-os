@@ -1,41 +1,43 @@
-from .memory import Memory
-from .programImp import Program
-from .errorHandlerCompiler import ErrorHandlerCompiler
+from .memory                import Memory
+from .programImp            import ProgramDefinitions
+from .errorHandling         import ErrorHandlerCompiler, ErrorHandlerVariables
+from .declaration_storage   import Declarable_Item
 
 class Instruction_loader:
     def __init__(self,memory_available=80,kernel=10, acumulador=0):
-        self.mem   = Memory(memory_available,kernel,acumulador)
-        self.prog  = Program(self.mem)
-        self.e     = ErrorHandlerCompiler()
-        self.index = 1 # represents the current instruction
-        self.possible_operators = { # todos definidos en Program
-                        "cargue":self.prog.cargar, 
-                        "almacene":self.prog.almacene,
-                        "vaya":self.vaya, 
-                        "vayasi":self.vayasi,
-                        "lea":self.prog.lea,
-                        "sume":self.prog.sume,
-                        "reste":self.prog.reste,
-                        "multiplique":self.prog.multiplique,
-                        "divida":self.prog.divida,
-                        "potencia":self.prog.potencia,
-                        "modulo":self.prog.modulo,
-                        "concatene":self.prog.concatene,
-                        "elimine":self.prog.elimine,
-                        "extraiga":self.prog.extraiga,
-                        "Y":self.prog.Y,
-                        "O":self.prog.O,
-                        "NO":self.prog.NO,
-                        "muestre":self.prog.muestre,
-                        "imprima":self.prog.imprima,
-                        "max":self.prog.max_,
-                        "returne":self.prog.returne
+        self.index     = 1 # represents the current instruction
+        self.mem       = Memory(memory_available,kernel,acumulador)
+        self.variables = Declarable_Item(self.mem)
+        self.tags      = Declarable_Item(self.mem)
+        self.progDefs  = ProgramDefinitions(self.variables, self.tags, self)
+        self.possible_declarations = {
+                        "nueva":self.progDefs.nueva,
+                        "etiqueta":self.progDefs.etiqueta,
+        }
+        self.possible_operators = { 
+                        "cargue":self.progDefs.cargar, 
+                        "almacene":self.progDefs.almacene,
+                        "vaya":self.progDefs.vaya, 
+                        "vayasi":self.progDefs.vayasi,
+                        "lea":self.progDefs.lea,
+                        "sume":self.progDefs.sume,
+                        "reste":self.progDefs.reste,
+                        "multiplique":self.progDefs.multiplique,
+                        "divida":self.progDefs.divida,
+                        "potencia":self.progDefs.potencia,
+                        "modulo":self.progDefs.modulo,
+                        "concatene":self.progDefs.concatene,
+                        "elimine":self.progDefs.elimine,
+                        "extraiga":self.progDefs.extraiga,
+                        "Y":self.progDefs.Y,
+                        "O":self.progDefs.O,
+                        "NO":self.progDefs.NO,
+                        "muestre":self.progDefs.muestre,
+                        "imprima":self.progDefs.imprima,
+                        "max":self.progDefs.max_,
+                        "returne":self.progDefs.returne
         }
 
-        self.possible_declarations = {
-                        "nueva":self.prog.nueva,
-                        "etiqueta":self.prog.etiqueta,
-        }
 
     def parse_and_compile(self,string):
         if self.isComment(string):
@@ -48,83 +50,71 @@ class Instruction_loader:
 
     def compile_(self,string):
         if self.mem.memory_isEmpty():
-            self.e.throw_not_enough_memory_comp(string)
+            ErrorHandlerCompiler.throw_not_enough_memory_comp(string)
             return
         self.mem.save_instruction_to_memory(string)
         self.validate_and_save(string)
 
 
     def validate_and_save(self, instruction):
-        declaration = self.operator_or_declaration_name(instruction)
+        declaration = self.function_name(instruction)
         if declaration in self.possible_declarations:
-            self.exec_instruction(declaration, instruction)
+            self.run(declaration, instruction)
 
-    def operator_or_declaration_name(self, instruction):
+    def function_name(self, instruction):
         return instruction[0]
 
-    def exec_instruction(self, name, instruction, declaration=True):
+    def run(self, name, instruction, declaration=True):
         try:
             if(declaration):
                 self.possible_declarations[name](*instruction[1:])
             else:
                 self.possible_operators[name](*instruction[1:])
         except TypeError:
-            self.e.throw_too_many_arguments()
-
-    def run_instruction(self, id_):
-        instruction = self.mem.access_memory(id_)
-        # print(instruction) 
-        operator = self.operator_or_declaration_name(instruction)
-        if operator in self.possible_operators:
-            self.exec_instruction(operator, instruction,declaration=False)
+            ErrorHandlerCompiler.throw_too_many_arguments(name, instruction, declaration)
 
     def run_all(self):
         if self.mem.memory_isEmpty():
-            self.e.throw_not_enough_memory_runtime()
+            ErrorHandlerCompiler.throw_not_enough_memory_runtime()
             return
         self.run_instructions_in_memory()
-
 
     def run_instructions_in_memory(self):
         while self.getIndex() < self.mem.num_instructions_loaded():
             self.run_instruction(self.index)
             self.nextPosition()
 
-    def nextPosition(self):
-        self.index += 1
-
     def getIndex(self):
         return self.index
 
-    def vaya(self,tag):
-        if not self.mem.inDeclarations(tag):
-            self.prog.e.throw_tag_no_declarada(tag)
-            return
-        self.index = self.mem.getVariable(tag) -1 # makes it equal to the value in tag1
+    def run_instruction(self, id_):
+        instruction = self.mem.access_memory(id_)
+        # print(instruction) 
+        operator = self.function_name(instruction)
+        if operator in self.possible_operators:
+            self.run(operator, instruction,declaration=False)
 
+    def nextPosition(self):
+        self.index += 1
 
-    def vayasi(self, tag1, tag2):
-        if not self.mem.inDeclarations(tag1):
-            self.prog.e.throw_tag_no_declarada(tag1)
-            exit()
-            return
-        if not self.mem.inDeclarations(tag2):
-            self.prog.e.throw_tag_no_declarada(tag2)
-            exit()
-            return
-        if self.mem.getAcumulador() > 0:
-            self.index = self.mem.getVariable(tag1) -1 # makes it equal to the value in tag1
-            return
-        if self.mem.getAcumulador() < 0:
-            self.index = self.mem.getVariable(tag2)-1 # makes it equal to the value in tag2
-            return
+    def setIndex(self, value):
+        self.index = value
+
+    def getVariables(self):
+        return self.variables
+
+    def getTags(self):
+        return self.tags
+
+    def getMemory(self):
+        return self.mem
 
     def debug_run(self):
             print("___________________-")
             print(f"instruccion: {self.index}")
             print("___________________-")
             print(self.mem.access_memory(self.index))
-            self.mem.print_all_declarations()
+            self.variables.print_all_declarations()
             print(f"memory: {self.mem.get_available_memory()} ")
 
 
@@ -148,7 +138,7 @@ if __name__ == "__main__":
     myinstructions.run_all()
     inte = myinstructions.mem.getAcumulador()
     print(f"acumulador {inte}")
-    mivariable = myinstructions.mem.getVariable("mivariable")
+    mivariable = myinstructions.variables.getVariable("mivariable")
     print(f"mi variable: {mivariable}")
 
     #! TODO
