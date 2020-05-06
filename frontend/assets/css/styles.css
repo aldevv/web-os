@@ -1,0 +1,72 @@
+
+:root {
+    --side-A-col:#212121;
+    --input: #adadad;
+    --screen: #6d9eeb;
+}
+
+body {
+    background-color: var(--side-A-col) !important;
+}
+.my-container {
+    background: var(--side-A-col);
+    color: white;
+}
+
+.side-A {
+    border: 3px dotted violet
+}
+
+
+.nav-row, .variable-row{
+    padding: 10px 10px 10px 10px;
+}
+
+.input-buttons {
+    text-align: center;
+    color: black;
+    background-color: var(--input);
+    padding: 2px 2px 2px 2px;
+}
+    /* this is for the separators in the buttons */
+.input-buttons:not(:last-child) {
+    border-right: 2px dotted var(--side-A-col);
+}
+
+.nav-row input{
+   background: var(--input); 
+   color: black;
+   border:0px solid var(--side-A-col);
+}
+
+/* TODO */
+.monitor-row {
+    background: var(--screen);
+    border: 3px solid violet;
+    height: 200px;
+    text-align: center;
+    
+}
+
+.mode-row {
+    text-align: center;
+    border: 3px solid gray;
+}
+
+.table-row {
+    text-align: center;
+    border: 3px solid brown;
+}
+
+.side-B {
+    border: 3px dotted purple
+}
+
+.variable-row {
+    text-align: center;
+    height: 100%;
+}
+.my-var-col {
+    border: 3px dotted white;
+ 
+}

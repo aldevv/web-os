@@ -5,9 +5,6 @@ class Declarable_Item :
         self.__names =  []
         self.__mem = memory
     
-    def getMemory(self):
-        return self.__mem
-
     def print_all_declarations(self):
         print(f"0: acumulador = {self.__mem.getAcumulador()}")
         for i, name in enumerate(Declarable_Item.all_data_names):
@@ -19,10 +16,10 @@ class Declarable_Item :
         else:
             return False
 
-    def getVariable(self, name):
+    def getValue(self, name):
         return Declarable_Item.all_data[name]
 
-    def setVariable(self, name, value, tag=False):
+    def setValue(self, name, value, tag=False):
         self.update_value_in_declarations(value, name)
         self.validate_in_declaration_name_list(name)
         self.append_name(name)
@@ -43,6 +40,12 @@ class Declarable_Item :
 
     def include_in_declaration_name_list(self, name):
         Declarable_Item.all_data_names.append(name)
+    
+    def getMemory(self):
+        return self.__mem
 
     def getNames(self):
         return self.__names
+    
+    def getAll(self):
+        return Declarable_Item.all_data

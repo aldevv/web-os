@@ -8,6 +8,11 @@ class Memory:
         self.acumulador       = acumulador
         self.memory_slots.append("acumulador")
 
+    def get_used_memory(self):
+        return self.initial_memory - self.memory_available
+
+    def get_available_memory(self):
+        return self.memory_available
 
     def getAcumulador(self):
         return self.acumulador
@@ -35,11 +40,7 @@ class Memory:
     def num_instructions_loaded(self):
         return len(self.memory_slots)  # because acumulador is not counted
 
-    def get_available_memory(self):
-        return self.memory_available
 
     def memory_isEmpty(self):
         return self.memory_available == 0
 
-    def get_used_memory(self):
-        return self.initial_memory - self.memory_available
