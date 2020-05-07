@@ -18,7 +18,7 @@ body {
 }
 
 
-.nav-row, .variable-row{
+.nav-row, .declarable-row{
     padding: 10px 10px 10px 10px;
 }
 
@@ -53,20 +53,45 @@ body {
     border: 3px solid gray;
 }
 
-.table-row {
+.declarable-row {
     text-align: center;
     border: 3px solid brown;
 }
 
-.side-B {
-    border: 3px dotted purple
+.my-variables , .my-tags {
+    text-align: center;
+    border: 1px dotted gray;
+    height: 200px;
 }
 
-.variable-row {
-    text-align: center;
-    height: 100%;
+/* add separators to attibutes */
+.my-variables [class*="col-"], .my-tags [class*="col-"]:not(:last-child) {
+    border-right: 1px dotted gray;
 }
-.my-var-col {
-    border: 3px dotted white;
- 
+
+.attribute {
+    border-bottom: 1px dotted gray;
+}
+
+.side-B {
+    border: 1px dotted purple
+}
+
+.info-row {
+    text-align: center;
+    margin-top: 2.2%;
+    height: 50%;
+}
+.my-instruction-col, .my-memory-col {
+    border: 2px dotted white;
+}
+
+.program-row {
+    text-align: center;
+    /* height: 39%; */
+    /* why does it overflow the container height!!!?  */
+}
+
+.top-marg {
+    margin-top: 10%;
 }
