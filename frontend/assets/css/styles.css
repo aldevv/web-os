@@ -1,6 +1,7 @@
 
 :root {
     --side-A-col:#212121;
+    --side-B-col:#303030;
     --input: #adadad;
     --screen: #6d9eeb;
 }
@@ -11,6 +12,7 @@ body {
 .my-container {
     background: var(--side-A-col);
     color: white;
+    border: 2px dotted red;
 }
 
 .side-A {
@@ -58,23 +60,15 @@ body {
     border: 3px solid brown;
 }
 
-.my-variables , .my-tags {
-    text-align: center;
-    border: 1px dotted gray;
-    height: 200px;
+table, thead, tbody {
+    background-color: var(--side-A-col);
+    border: 2px solid rgb(102, 63, 102) !important;
 }
 
-/* add separators to attibutes */
-.my-variables [class*="col-"], .my-tags [class*="col-"]:not(:last-child) {
-    border-right: 1px dotted gray;
-}
-
-.attribute {
-    border-bottom: 1px dotted gray;
-}
 
 .side-B {
-    border: 1px dotted purple
+    border: 1px dotted purple;
+    background-color: var(--side-B-col);
 }
 
 .info-row {
@@ -82,12 +76,12 @@ body {
     margin-top: 2.2%;
     height: 50%;
 }
-.my-instruction-col, .my-memory-col {
-    border: 2px dotted white;
+.my-instruction-col, .my-memory-col, .my-program-col {
+    /* border: 2px dotted white; */
 }
 
 .program-row {
-    text-align: center;
+    /* text-align: center; */
     /* height: 39%; */
     /* why does it overflow the container height!!!?  */
 }
