@@ -3,9 +3,10 @@ from ..factory               import Factory
 
 class InstructionRunner:
     def __init__(self, mem, variables, tags):
-        self.__mem = mem
+        self.__mem     = mem
         self.progDefs  = Factory.createProgramDefinitions(mem, variables, tags, self)
         self.index     = 1 # represents the current instruction
+        self.stdin     = []
         self.possible_operators = { 
                         "cargue":       self.progDefs.cargar, 
                         "almacene":     self.progDefs.almacene,
@@ -37,9 +38,12 @@ class InstructionRunner:
         self.run_saved_instructions()
 
     def run_saved_instructions(self):
-        while self.getIndex() < self.__mem.num_instructions_loaded():
+        while self.getIndex() < self.__mem.num_instructions_saved():
             self.load_instruction(self.index)
             self.nextPosition()
+
+    def getIndex(self):
+        return self.index
 
     def load_instruction(self, id_):
         instruction = self.__mem.access_memory(id_)
@@ -51,8 +55,6 @@ class InstructionRunner:
     def program_name(self, instruction):
         return instruction[0]
 
-    def getIndex(self):
-        return self.index
 
     def nextPosition(self):
         self.index += 1
@@ -65,3 +67,9 @@ class InstructionRunner:
 
     def setIndex(self, value):
         self.index = value
+
+    def appendStdin(self, string):
+        self.stdin.append(string)
+    
+    def getStdin(self):
+        return self.stdin

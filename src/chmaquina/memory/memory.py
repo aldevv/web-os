@@ -34,10 +34,10 @@ class Memory:
     def access_memory(self, id_):
         return self.memory_slots[id_]
 
-    def instructions_loaded(self):
+    def instructions_saved(self):
         return self.memory_slots
 
-    def num_instructions_loaded(self):
+    def num_instructions_saved(self):
         return len(self.memory_slots)  # because acumulador is not counted
 
 

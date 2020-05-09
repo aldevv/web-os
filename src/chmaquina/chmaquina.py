@@ -28,3 +28,6 @@ class Chmaquina:
 
     def getAcumulador(self):
         return self.mem.getAcumulador()
+    
+    def getStdin(self):
+        return self.instructionRunner.getStdin()

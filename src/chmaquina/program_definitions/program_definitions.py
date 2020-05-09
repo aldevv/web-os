@@ -1,7 +1,7 @@
 from ..errorHandling         import ErrorHandlerVariables
 
 class ProgramDefinitions:
-    def __init__(self , mem, variables, tags, runner):
+    def __init__(self , mem, variables, tags, runner=None):
         self.__mem       = variables.getMemory()
         self.__variables = variables
         self.__tags      = tags
@@ -164,7 +164,9 @@ class ProgramDefinitions:
         if not self.__variables.inDeclarations(name):
             ErrorHandlerVariables.throw_var_no_declarada(name)
             return
-        print(self.__variables.getValue(name))
+        value = self.__variables.getValue(name)
+        self.runner.appendStdin(value)
+        # print(value)
 
     def imprima(self):  # !!!!!!!!
         pass
