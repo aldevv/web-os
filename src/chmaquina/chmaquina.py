@@ -24,7 +24,7 @@ class Chmaquina:
         return self.tags.getNames()
 
     def getMemory(self):
-        return self.mem
+        return self.mem.get_available_memory()
 
     def getAcumulador(self):
         return self.mem.getAcumulador()
