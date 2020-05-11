@@ -18,8 +18,20 @@
     <div class="container my-container">
         <div class="pb-2 mt-4 mb-2 border-bottom">
             <h2>Chmaquina <small> control</small></h2>
-        </div>
+            <form id="myform" action="http://localhost:8000/api/prog" enctype="multipart/form-data">
+                <div>
+                    <label for="myfile">Seleccionar programas</label>
+                    <br>
+                    <input type="file" id="myfile" accept=".ch" name="file" multiple> 
+                </div>
+                <br>
+                <input type="submit" value="Compilar" >
+                <button>Correr todo</button>
+                <button>Correr paso a paso</button>
+                <button>Limpiar</button>
+            </form>
 
+        </div>
         <div class="row">
                 <div class="col-6 side-A">
                     <div class="row nav-row">
@@ -197,17 +209,10 @@
                 </div>
         </div>
     </div>
-
-    <script>
-        // document.getElementById("var").innerHTML = 5+1;
-        // document.getElementById("tag").innerHTML = 4+3;
-    </script>
+    <!-- script for posting files-->
+    <script src="assets/js/submiting/submiting.js"> </script>
 
 </body>
 
-<!-- <script src="./assets/bootstrap-input-spinner/src/bootstrap-input-spinner.js"></script>
-<script>
-    $("input[type='number']").inputSpinner()
-</script> -->
 
 </html>
