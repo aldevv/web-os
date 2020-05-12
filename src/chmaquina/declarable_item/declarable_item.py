@@ -11,31 +11,28 @@ class Declarable_Item :
             print(f"{i+1}: {name} = {Declarable_Item.all_data[name]} ")
 
     def inDeclarations(self, name):
-        if name in Declarable_Item.all_data:
-            return True
-        else:
-            return False
+        return True if name in Declarable_Item.all_data else False
 
     def getValue(self, name):
         return Declarable_Item.all_data[name]
 
-    def setValue(self, name, value, tag=False):
+    def setValue(self, name, value):
         self.update_value_in_declarations(value, name)
         self.validate_in_declaration_name_list(name)
-        self.append_name(name)
 
     def update_value_in_declarations(self, value, name):
         Declarable_Item.all_data[name] = value
 
     def validate_in_declaration_name_list(self, name):
-        if name not in self.get_declaration_name_list():
+        if name not in self.get_all_declaration_names():
             self.__mem.reduce_memory_by_1()
             self.include_in_declaration_name_list(name)
+            self.append_name(name)
 
     def append_name(self, name):
         self.__names.append(name)
 
-    def get_declaration_name_list(self):
+    def get_all_declaration_names(self):
         return Declarable_Item.all_data_names
 
     def include_in_declaration_name_list(self, name):

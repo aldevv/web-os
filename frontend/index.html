@@ -18,7 +18,7 @@
     <div class="container my-container">
         <div class="pb-2 mt-4 mb-2 border-bottom">
             <h2>Chmaquina <small> control</small></h2>
-            <form id="myform" action="http://localhost:8000/api/prog" enctype="multipart/form-data">
+            <form id="myform" action="http://localhost:8000/api/compile" enctype="multipart/form-data">
                 <div>
                     <label for="myfile">Seleccionar programas</label>
                     <br>
@@ -26,7 +26,7 @@
                 </div>
                 <br>
                 <input type="submit" value="Compilar" >
-                <input type="button" value="Correr todo" >
+                <input id="correr"type="button" value="Correr todo" >
                 <input type="button" value="Correr paso a paso" >
                 <input type="button" value="Limpiar" >
             </form>
@@ -59,8 +59,7 @@
                     </div>
 
                     <div class="row align-items-center monitor-row">
-                        <div class="col-12 ">
-                            monitor
+                        <div id="monitor" class="col-12 ">
                         </div>
                     </div>
 
@@ -74,58 +73,30 @@
                         <div class="col-5 my-variables">
                             <div class="row">
                                 <div class="col-12">
-
-                                    <table class="table table-bordered table-dark">
-                                    <thead>
-                                        <tr>
-                                        <th scope="col">Id</th>
-                                        <th scope="col">Variable</th>
-                                        </tr>
-                                    </thead>
-                                    <tbody>
-                                        <tr>
-                                        <td>1</td>
-                                        <td>n</td>
-                                        </tr>
-                                    </tbody>
-                                    <tbody>
-                                        <tr>
-                                        <td>2</td>
-                                        <td>t</td>
-                                        </tr>
-                                    </tbody>
+                                    <table id="var"class="table table-bordered table-dark">
+                                        <thead>
+                                            <tr>
+                                                <th scope="col">Id</th>
+                                                <th scope="col">Variable</th>
+                                            </tr>
+                                        </thead>
+                                        <!-- variables here  -->
                                     </table>
                                 </div>
                             </div>
                         </div>
 
-                        <div id="tag" class="col-5 my-tags">
+                        <div class="col-5 my-tags">
                             <div class="row">
                                 <div class="col-12">
-                                    <table class="table table-bordered table-dark">
+                                    <table id="tag" class="table table-bordered table-dark">
                                     <thead>
                                         <tr>
                                         <th scope="col">Id</th>
                                         <th scope="col">tags</th>
                                         </tr>
                                     </thead>
-                                    <tbody>
-                                        <tr>
-                                        <td>1</td>
-                                        <td>fin</td>
-                                        </tr>
-                                    </tbody>
-                                    <tbody>
-                                        <tr>
-                                        <td>2</td>
-                                        <td>hasta</td>
-                                        </tr>
-                                    </tbody>
-                                    <tbody>
-                                        <tr>
-                                        <td>3</td>
-                                        <td>alli</td>
-                                        </tr>
+                                        <!-- tags here -->
                                     </table>
                                 </div>
                             </div>
@@ -135,52 +106,28 @@
 
                 <div class="col-md-6 side-B">
                     <div class="row justify-content-around info-row">
-                        <div class="col-md-5   my-instruction-col" >
-                            <table class="table table-bordered table-dark">
+                        <div class="col-md-12   my-instruction-col" >
+                            <table id='instruction' class="table table-bordered table-dark">
                                     <thead>
                                         <tr>
-                                        <th scope="col">Id</th>
-                                        <th scope="col">Variable</th>
+                                            <th scope="col">Id</th>
+                                            <th scope="col">Variable</th>
                                         </tr>
                                     </thead>
-                                    <tbody>
-                                        <tr>
-                                        <td>1</td>
-                                        <td>n</td>
-                                        </tr>
-                                    </tbody>
-                                    <tbody>
-                                        <tr>
-                                        <td>2</td>
-                                        <td>t</td>
-                                        </tr>
-                                    </tbody>
+                                    <!-- instructions here  -->
                                 </table>
-
                         </div>
 
-                        <div class="col-md-5 my-memory-col">
-                            <table class="table table-bordered table-dark">
-                                    <thead>
-                                        <tr>
+                        <!-- <div class="col-md-5 my-memory-col">
+                            <table id="memory" class="table table-bordered table-dark">
+                                <thead>
+                                    <tr>
                                         <th scope="col">Id</th>
                                         <th scope="col">Variable</th>
-                                        </tr>
-                                    </thead>
-                                    <tbody>
-                                        <tr>
-                                        <td>1</td>
-                                        <td>n</td>
-                                        </tr>
-                                    </tbody>
-                                    <tbody>
-                                        <tr>
-                                        <td>2</td>
-                                        <td>t</td>
-                                        </tr>
-                                    </tbody>
-                                </table>
-                        </div>
+                                    </tr>
+                                </thead>
+                             </table>
+                        </div> -->
                     </div>
                     <div class="row justify-content-around program-row top-marg">
                         <div class="col-md-12 my-program-col">
@@ -191,18 +138,7 @@
                                         <th scope="col">Variable</th>
                                         </tr>
                                     </thead>
-                                    <tbody>
-                                        <tr>
-                                        <td>1</td>
-                                        <td>n</td>
-                                        </tr>
-                                    </tbody>
-                                    <tbody>
-                                        <tr>
-                                        <td>2</td>
-                                        <td>t</td>
-                                        </tr>
-                                    </tbody>
+                                    <!-- programs here -->
                                 </table>
                         </div>
                     </div>
@@ -212,7 +148,7 @@
     <!-- script for posting files-->
     <script src="assets/js/submiting/submiting.js"> </script>
     <!-- script for getting data -->
-    <script src="assets/js/retrieving/data.js"> </script>
+    <script type="module" src="assets/js/update/variables.js"> </script>
 
 </body>
 

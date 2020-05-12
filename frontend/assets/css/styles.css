@@ -21,6 +21,7 @@ body {
 
 
 .nav-row, .declarable-row{
+    overflow: auto;
     padding: 10px 10px 10px 10px;
 }
 
@@ -56,6 +57,7 @@ body {
 }
 
 .declarable-row {
+    overflow: auto;
     text-align: center;
     border: 3px solid brown;
 }
@@ -67,20 +69,29 @@ table, thead, tbody {
 
 
 .side-B {
-    border: 1px dotted purple;
+    border: 1px dotted blue;
     background-color: var(--side-B-col);
+    height: 100%;
 }
 
 .info-row {
+    overflow: auto;
     text-align: center;
     margin-top: 2.2%;
-    height: 50%;
+    height: 30%;
 }
+
+.my-instruction-col {
+    height: 500px;
+}
+
 .my-instruction-col, .my-memory-col, .my-program-col {
+    overflow: auto;
     /* border: 2px dotted white; */
 }
 
 .program-row {
+    overflow: auto;
     /* text-align: center; */
     /* height: 39%; */
     /* why does it overflow the container height!!!?  */

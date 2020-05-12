@@ -74,7 +74,7 @@ class ProgramDefinitions:
         except:
             ErrorHandlerVariables.throw_operando_no_es_numero()
             exit()
-        self.__tags.setValue(name, value, tag=True)
+        self.__tags.setValue(name, value)
 
     def lea(self, name):
         if not self.__variables.inDeclarations(name):

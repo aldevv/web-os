@@ -17,7 +17,7 @@ class Compiler:
             self.parse_and_compile_line(line)
 
     def parseFile(self, path):
-        path = os.path.dirname(__file__) + '/../../../' + path
+        # path = os.path.dirname(__file__) + '/../../../' + path
         with open(path) as f:
             lines = [line.rstrip() for line in f]
         return lines
