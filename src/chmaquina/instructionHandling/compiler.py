@@ -1,4 +1,4 @@
-from ..errorHandling          import ErrorHandlerCompiler, ErrorHandlerVariables
+from ..errorHandling          import ErrorHandlerCompiler
 from ..factory               import Factory
 import os.path
 
@@ -13,8 +13,11 @@ class Compiler:
 
     def compileFile(self, path):
         lines = self.parseFile(path)
-        for line in lines:
-            self.parse_and_compile_line(line)
+        try:
+            for line in lines:
+                self.parse_and_compile_line(line)
+        except Exception as err:
+            print("Hubo un error y no se puede continuar", err.args)
 
     def parseFile(self, path):
         # path = os.path.dirname(__file__) + '/../../../' + path
@@ -34,7 +37,8 @@ class Compiler:
     def compile_(self,string):
         if self.mem.memory_isEmpty():
             ErrorHandlerCompiler.throw_not_enough_memory_comp(string)
-            return
+            raise Exception("Memoria")
+                
         self.mem.save_instruction_to_memory(string)
         self.validate_and_save(string)
 
@@ -50,6 +54,7 @@ class Compiler:
             self.possible_declarations[name](*instruction[1:])
         except TypeError:
             ErrorHandlerCompiler.throw_too_many_arguments(name, instruction)
+            raise
 
     def program_name(self, instruction):
         return instruction[0]

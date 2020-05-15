@@ -32,15 +32,15 @@ class InstructionRunner:
         }
 
     def run_all(self):
-        if self.__mem.memory_isEmpty():
-            ErrorHandlerCompiler.throw_not_enough_memory_runtime()
-            return
         self.run_saved_instructions()
 
     def run_saved_instructions(self):
-        while self.getIndex() < self.__mem.num_instructions_saved():
-            self.load_instruction(self.index)
-            self.nextPosition()
+        try:
+            while self.getIndex() < self.__mem.num_instructions_saved():
+                self.load_instruction(self.index)
+                self.nextPosition()
+        except Exception as err:
+            print("Hubo un error en runtime ", err.args)
 
     def getIndex(self):
         return self.index
@@ -64,6 +64,7 @@ class InstructionRunner:
             self.possible_operators[name](*instruction[1:])
         except TypeError:
             ErrorHandlerCompiler.throw_too_many_arguments(name, instruction)
+            raise
 
     def setIndex(self, value):
         self.index = value

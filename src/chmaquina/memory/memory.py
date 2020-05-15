@@ -42,5 +42,5 @@ class Memory:
 
 
     def memory_isEmpty(self):
-        return self.memory_available == 0
+        return self.memory_available <= 0
 
