@@ -6,6 +6,7 @@ class Memory:
         self.memory_available = memory_available - kernel - 1  # acumulador
         self.memory_slots     = []  # secuencia que guarda cada instruccion en respectiva posicion secuencial
         self.acumulador       = acumulador
+        self.step_by_step     = []
         self.memory_slots.append("acumulador")
 
     def get_used_memory(self):
@@ -13,12 +14,6 @@ class Memory:
 
     def get_available_memory(self):
         return self.memory_available
-
-    def getAcumulador(self):
-        return self.acumulador
-
-    def setAcumulador(self, value):
-        self.acumulador = value
 
     def reduce_memory_by_1(self):
         self.memory_available -= 1
@@ -34,13 +29,30 @@ class Memory:
     def access_memory(self, id_):
         return self.memory_slots[id_]
 
+    def memory_isEmpty(self):
+        return self.memory_available <= 0
+
     def instructions_saved(self):
         return self.memory_slots
 
     def num_instructions_saved(self):
         return len(self.memory_slots)  # because acumulador is not counted
 
+    def getAcumulador(self):
+        return self.acumulador
 
-    def memory_isEmpty(self):
-        return self.memory_available <= 0
+    def setAcumulador(self, value):
+        self.saveStep("Acumulador", self.getAcumulador(), value)
+        self.acumulador = value
+
+    def saveStep(self, name, old_value, new_value):
+        step = name + ": "+ str(old_value) + " => " + name + ": " + str(new_value)
+        self.append_step(step)
+
+    def append_step(self, step):
+        self.step_by_step.append(step)
+    
+    def getSteps(self):
+        return self.step_by_step
+
 

@@ -11,7 +11,7 @@ class MachinaRunner(object):
     def on_get(self, req, resp):
         self.ch.run_all()
         data = {
-            'stdout': self.ch.getStdin(),
+            'stdout': self.ch.getStdout(),
         }
         resp.media = data;
         resp.status = falcon.HTTP_201

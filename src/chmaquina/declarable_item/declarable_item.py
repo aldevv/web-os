@@ -17,8 +17,15 @@ class Declarable_Item :
         return Declarable_Item.all_data[name]
 
     def setValue(self, name, value):
+        self.check_and_save_step(name, value)
         self.update_value_in_declarations(value, name)
         self.validate_in_declaration_name_list(name)
+
+    def check_and_save_step(self, name, new_value):
+        if(name in Declarable_Item.all_data):
+            self.__mem.saveStep(name, Declarable_Item.all_data[name], new_value)
+        else:
+            self.__mem.saveStep(name, "create", new_value)
 
     def update_value_in_declarations(self, value, name):
         Declarable_Item.all_data[name] = value
