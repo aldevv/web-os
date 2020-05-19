@@ -11,14 +11,21 @@ class ProgramDefinitions:
         if not self.__variables.inDeclarations(name):
             ErrorHandlerVariables.throw_var_no_declarada(name)
             return
-        self.__mem.setAcumulador(self.__variables.getValue(name))
+        prev = self.__mem.getAcumulador()
+        new  = self.__variables.getValue(name)
+
+        self.__mem.setAcumulador(new)
+        self.__mem.saveStep("Acumulador", prev, new)
 
     def almacene(self, name):  # * works
         if not self.__variables.inDeclarations(name):
             ErrorHandlerVariables.throw_var_no_declarada(name)
             exit()  # ! must send index to the end of the file
             return
-        self.__variables.setValue(name, self.__mem.getAcumulador())
+        prev = self.__variables.getValue(name)
+        new  = self.__mem.getAcumulador()
+        self.__variables.setValue(name, new)
+        self.__mem.saveStep(name, prev, new)
 
     def nueva(self, name, type_, value):  # !
         if self.__variables.inDeclarations(name):
@@ -26,6 +33,7 @@ class ProgramDefinitions:
             return
         value = self.check_type(type_, value)
         self.__variables.setValue(name, value)
+        self.__mem.saveStep(name, value)
 
     def check_type(self, type_, value):
         try:
@@ -47,7 +55,7 @@ class ProgramDefinitions:
         if not self.__tags.inDeclarations(tag):
             ErrorHandlerVariables.throw_tag_no_declarada(tag)
             return
-        self.runner.setIndex(self.__tags.getValue(tag) -1)
+        self.runner.setLine(self.__tags.getValue(tag) -1)
 
     def vayasi(self, tag1, tag2):
         if not self.__tags.inDeclarations(tag1):
@@ -58,12 +66,16 @@ class ProgramDefinitions:
             ErrorHandlerVariables.throw_tag_no_declarada(tag2)
             exit()
             return
+        prev = self.runner.getCurrentLine()
         if self.__mem.getAcumulador() > 0:
-            self.runner.setIndex(self.__tags.getValue(tag1) -1) # makes it equal to the value in tag1
+            self.runner.setLine(self.__tags.getValue(tag1) -1) # makes it equal to the value in tag1
+            self.__mem.saveStep("vayasi",str(" desde " + str(prev)+ " hasta "), self.runner.getCurrentLine())
             return
         if self.__mem.getAcumulador() < 0:
-            self.runner.setIndex(self.__tags.getValue(tag2)-1) # makes it equal to the value in tag2
+            self.runner.setLine(self.__tags.getValue(tag2)-1) # makes it equal to the value in tag2
+            self.__mem.saveStep("vayasi", str(" desde " + str(prev)+ " hasta ") , self.runner.getCurrentLine())
             return
+        self.__mem.saveStep("vayasi",str("desde " + str(prev)+ " hasta ") , self.runner.getCurrentLine())
 
     def etiqueta(self, name, value):
         if self.__tags.inDeclarations(name):
@@ -75,34 +87,47 @@ class ProgramDefinitions:
             ErrorHandlerVariables.throw_operando_no_es_numero()
             exit()
         self.__tags.setValue(name, value)
+        self.__mem.saveStep(name, value)
 
     def lea(self, name):
         if not self.__variables.inDeclarations(name):
             ErrorHandlerVariables.throw_var_no_declarada(name)
             return
+        prev  = self.__variables.getValue(name)
         value = int(input("ingrese valor"))
+
         self.__variables.setValue(name, value)
+        self.__mem.saveStep(name, value)
+
 
     def sume(self, name):
         if not self.__variables.inDeclarations(name):
             ErrorHandlerVariables.throw_var_no_declarada(name)
             return
-        self.__mem.setAcumulador(
-            self.__mem.getAcumulador() + self.__variables.getValue(name))
+        prev = self.__mem.getAcumulador()
+        new  = self.__mem.getAcumulador() + self.__variables.getValue(name)
+
+        self.__mem.setAcumulador(new)
+        self.__mem.saveStep("Acumulador", prev, new)
 
     def reste(self, name):
         if not self.__variables.inDeclarations(name):
             ErrorHandlerVariables.throw_var_no_declarada(name)
             return
-        self.__mem.setAcumulador(
-            self.__mem.getAcumulador() - self.__variables.getValue(name))
+        prev = self.__mem.getAcumulador()
+        new  = self.__mem.getAcumulador() - self.__variables.getValue(name)
+        self.__mem.setAcumulador(new)
+        self.__mem.saveStep("Acumulador", prev, new)
 
     def multiplique(self, name):
         if not self.__variables.inDeclarations(name):
             ErrorHandlerVariables.throw_var_no_declarada(name)
             return
-        self.__mem.setAcumulador(
-            self.__mem.getAcumulador() * self.__variables.getValue(name))
+        prev = self.__mem.getAcumulador()
+        new = self.__mem.getAcumulador() * self.__variables.getValue(name)
+
+        self.__mem.setAcumulador(new)
+        self.__mem.saveStep("Acumulador", prev, new)
 
     def divida(self, name):
         if not self.__variables.inDeclarations(name):
@@ -112,30 +137,43 @@ class ProgramDefinitions:
             ErrorHandlerVariables.throw_division_por_cero(
                 self.__mem.getAcumulador(), self.__variables.getValue(name))
             return
-        self.__mem.setAcumulador(
-            self.__mem.getAcumulador() / self.__variables.getValue(name))
+        
+        prev = self.__mem.getAcumulador()
+        new  = self.__mem.getAcumulador() / self.__variables.getValue(name)
+
+        self.__mem.setAcumulador(new)
+        self.__mem.saveStep("Acumulador", prev, new)
 
     def potencia(self, name):
         if not self.__variables.inDeclarations(name):
             ErrorHandlerVariables.throw_var_no_declarada(name)
             return
-        self.__mem.setAcumulador(
-            self.__mem.getAcumulador() ** self.__variables.getValue(name))
+        prev = self.__mem.getAcumulador()
+        new  = self.__mem.getAcumulador() ** self.__variables.getValue(name)
+
+        self.__mem.setAcumulador(new)
+        self.__mem.saveStep("Acumulador", prev, new)
 
     def modulo(self, name):
         if not self.__variables.inDeclarations(name):
             ErrorHandlerVariables.throw_var_no_declarada(name)
             return
-        self.__mem.setAcumulador(self.__mem.getAcumulador() %
-                                 self.__variables.getValue(name))
+        prev = self.__mem.getAcumulador()
+        new  = self.__mem.getAcumulador() % self.__variables.getValue(name)
+
+        self.__mem.setAcumulador(new)
+        self.__mem.saveStep("Acumulador", prev, new)
 
     def concatene(self, name):  # ! variable value has to be a string
         if not self.__variables.inDeclarations(name):
             # if not a variable then is a normal string to concat
             self.__mem.setAcumulador(str(self.__mem.getAcumulador()) + name)
             return
-        self.__mem.setAcumulador(
-            str(self.__mem.getAcumulador()) + self.__variables.getValue(name))
+        prev = self.__mem.getAcumulador()
+        new = str(self.__mem.getAcumulador()) + self.__variables.getValue(name)
+
+        self.__mem.setAcumulador(new)
+        self.__mem.saveStep("Acumulador", prev, new)
 
     def elimine(self, to_delete):
         if type(self.__mem.getAcumulador()) != str:
@@ -165,8 +203,8 @@ class ProgramDefinitions:
             ErrorHandlerVariables.throw_var_no_declarada(name)
             return
         value = self.__variables.getValue(name)
-        self.runner.appendStdin(value)
-        # print(value)
+        self.runner.appendStdout(value)
+        self.__mem.saveStep(name, value)
 
     def imprima(self):  # !!!!!!!!
         pass
@@ -181,4 +219,5 @@ class ProgramDefinitions:
         return a if a > b else b
 
     def returne(self, value):
+        self.__mem.saveStep("returne", value)
         return

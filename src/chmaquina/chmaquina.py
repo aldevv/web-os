@@ -26,11 +26,22 @@ class Chmaquina:
     def getInstructions(self):
         return self.mem.instructions_saved()
 
+    def getInstructionsReadable(self):
+        return "\n".join([ str(i)+ " " + " ".join(instruction) for i, instruction in enumerate(self.mem.instructions_saved())])
+
     def getAcumulador(self):
         return self.mem.getAcumulador()
     
     def getStdout(self):
-        return self.instructionRunner.getStdin()
+        return self.instructionRunner.getStdout()
     
     def getSteps(self):
-        return self.mem.getSteps()
+        steps = self.mem.getSteps()
+        instructions_compiled = self.compiler.get_program_history()
+        instructions_ran = self.instructionRunner.get_program_history()
+        all_ = instructions_compiled +instructions_ran
+        return "\n".join([str(a[0]) + " " + str(a[1][0]) + " " + str(a[1][1]) + " | " + str(b) for a, b in zip(all_, steps)])
+        """
+        all_ = [(1, ['nueva', 'unidad', 'I', '1']), ...]
+        steps = [unidad: 1, ...]
+        """
