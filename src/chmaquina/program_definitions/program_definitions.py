@@ -15,7 +15,7 @@ class ProgramDefinitions:
         new  = self.__variables.getValue(name)
 
         self.__mem.setAcumulador(new)
-        self.__mem.saveStep("Acumulador", prev, new)
+        self.__mem.saveStepOneArg("Acumulador", prev, new)
 
     def almacene(self, name):  # * works
         if not self.__variables.inDeclarations(name):
@@ -25,7 +25,7 @@ class ProgramDefinitions:
         prev = self.__variables.getValue(name)
         new  = self.__mem.getAcumulador()
         self.__variables.setValue(name, new)
-        self.__mem.saveStep(name, prev, new)
+        self.__mem.saveStepOneArg(name, prev, new)
 
     def nueva(self, name, type_, value):  # !
         if self.__variables.inDeclarations(name):
@@ -33,7 +33,7 @@ class ProgramDefinitions:
             return
         value = self.check_type(type_, value)
         self.__variables.setValue(name, value)
-        self.__mem.saveStep(name, value)
+        self.__mem.saveStepOneArg(name, value)
 
     def check_type(self, type_, value):
         try:
@@ -69,13 +69,13 @@ class ProgramDefinitions:
         prev = self.runner.getCurrentLine()
         if self.__mem.getAcumulador() > 0:
             self.runner.setLine(self.__tags.getValue(tag1) -1) # makes it equal to the value in tag1
-            self.__mem.saveStep("vayasi",str(" desde " + str(prev)+ " hasta "), self.runner.getCurrentLine())
+            self.__mem.saveStepOneArg("vayasi",str(" desde " + str(prev)+ " hasta "), self.runner.getCurrentLine())
             return
         if self.__mem.getAcumulador() < 0:
             self.runner.setLine(self.__tags.getValue(tag2)-1) # makes it equal to the value in tag2
-            self.__mem.saveStep("vayasi", str(" desde " + str(prev)+ " hasta ") , self.runner.getCurrentLine())
+            self.__mem.saveStepOneArg("vayasi", str(" desde " + str(prev)+ " hasta ") , self.runner.getCurrentLine())
             return
-        self.__mem.saveStep("vayasi",str("desde " + str(prev)+ " hasta ") , self.runner.getCurrentLine())
+        self.__mem.saveStepOneArg("vayasi",str("desde " + str(prev)+ " hasta ") , self.runner.getCurrentLine())
 
     def etiqueta(self, name, value):
         if self.__tags.inDeclarations(name):
@@ -87,7 +87,7 @@ class ProgramDefinitions:
             ErrorHandlerVariables.throw_operando_no_es_numero()
             exit()
         self.__tags.setValue(name, value)
-        self.__mem.saveStep(name, value)
+        self.__mem.saveStepOneArg(name, value)
 
     def lea(self, name):
         if not self.__variables.inDeclarations(name):
@@ -97,7 +97,7 @@ class ProgramDefinitions:
         value = int(input("ingrese valor"))
 
         self.__variables.setValue(name, value)
-        self.__mem.saveStep(name, value)
+        self.__mem.saveStepOneArg(name, value)
 
 
     def sume(self, name):
@@ -108,7 +108,7 @@ class ProgramDefinitions:
         new  = self.__mem.getAcumulador() + self.__variables.getValue(name)
 
         self.__mem.setAcumulador(new)
-        self.__mem.saveStep("Acumulador", prev, new)
+        self.__mem.saveStepOneArg("Acumulador", prev, new)
 
     def reste(self, name):
         if not self.__variables.inDeclarations(name):
@@ -117,7 +117,7 @@ class ProgramDefinitions:
         prev = self.__mem.getAcumulador()
         new  = self.__mem.getAcumulador() - self.__variables.getValue(name)
         self.__mem.setAcumulador(new)
-        self.__mem.saveStep("Acumulador", prev, new)
+        self.__mem.saveStepOneArg("Acumulador", prev, new)
 
     def multiplique(self, name):
         if not self.__variables.inDeclarations(name):
@@ -127,7 +127,7 @@ class ProgramDefinitions:
         new = self.__mem.getAcumulador() * self.__variables.getValue(name)
 
         self.__mem.setAcumulador(new)
-        self.__mem.saveStep("Acumulador", prev, new)
+        self.__mem.saveStepOneArg("Acumulador", prev, new)
 
     def divida(self, name):
         if not self.__variables.inDeclarations(name):
@@ -142,7 +142,7 @@ class ProgramDefinitions:
         new  = self.__mem.getAcumulador() / self.__variables.getValue(name)
 
         self.__mem.setAcumulador(new)
-        self.__mem.saveStep("Acumulador", prev, new)
+        self.__mem.saveStepOneArg("Acumulador", prev, new)
 
     def potencia(self, name):
         if not self.__variables.inDeclarations(name):
@@ -152,7 +152,7 @@ class ProgramDefinitions:
         new  = self.__mem.getAcumulador() ** self.__variables.getValue(name)
 
         self.__mem.setAcumulador(new)
-        self.__mem.saveStep("Acumulador", prev, new)
+        self.__mem.saveStepOneArg("Acumulador", prev, new)
 
     def modulo(self, name):
         if not self.__variables.inDeclarations(name):
@@ -162,7 +162,7 @@ class ProgramDefinitions:
         new  = self.__mem.getAcumulador() % self.__variables.getValue(name)
 
         self.__mem.setAcumulador(new)
-        self.__mem.saveStep("Acumulador", prev, new)
+        self.__mem.saveStepOneArg("Acumulador", prev, new)
 
     def concatene(self, name):  # ! variable value has to be a string
         if not self.__variables.inDeclarations(name):
@@ -173,38 +173,49 @@ class ProgramDefinitions:
         new = str(self.__mem.getAcumulador()) + self.__variables.getValue(name)
 
         self.__mem.setAcumulador(new)
-        self.__mem.saveStep("Acumulador", prev, new)
+        self.__mem.saveStepOneArg("Acumulador", prev, new)
 
     def elimine(self, to_delete, ans):
         if not self.__variables.inDeclarations(ans):
             ErrorHandlerVariables.throw_var_no_declarada(ans)
             return
+        prev = self.__mem.getAcumulador()
         if not self.__variables.inDeclarations(to_delete):
             # if not a variable then is a normal string to concat
             substring = str(self.__mem.getAcumulador()).replace(to_delete, '')
             self.__variables.setValue(ans, substring)
+            self.__mem.saveStepOneArg("Elimine",prev, substring)
             return
+
         to_delete = self.__variables.getValue(to_delete)
         substring = str(self.__mem.getAcumulador()).replace(to_delete, '')
         self.__variables.setValue(ans, substring)
+        self.__mem.saveStepOneArg(ans, prev, substring)
 
     def extraiga(self, num_elem, ans):
         if not self.__variables.inDeclarations(ans):
             ErrorHandlerVariables.throw_var_no_declarada(ans)
             return
+        prev = self.__mem.getAcumulador()
+
         substring = self.__mem.getAcumulador()[:int(num_elem)]
         self.__variables.setValue(ans, substring)
+        self.__mem.saveStepOneArg(ans, prev, substring)
 
     def Y(self, first, second, ans):
-        self.__variables.setValue(ans, True if self.__variables.getValue(
-            first) and self.__variables.getValue(second) else False)
+        value = True if self.__variables.getValue(first) and self.__variables.getValue(second) else False
+        self.__variables.setValue(ans, value)
+        self.__mem.saveStepTwoArg("Y", first, second, value)
 
     def O(self, first, second, ans):
-        self.__variables.setValue(ans, True if self.__variables.getValue(
-            first) or self.__variables.getValue(second) else False)
+        value = True if self.__variables.getValue(first) or self.__variables.getValue(second) else False
+        self.__variables.setValue(ans, value)
+        self.__mem.saveStepTwoArg("O", first, second, value)
 
     def NO(self, first, ans):
-        self.__variables.setValue(ans, not self.__variables.getValue(first))
+        value = not self.__variables.getValue(first)
+        self.__variables.setValue(ans, value)
+        self.__mem.saveStepOneArg("NO", first, ans)
 
     def muestre(self, name):
         if(name == "acumulador"):
@@ -215,7 +226,7 @@ class ProgramDefinitions:
             return
         value = self.__variables.getValue(name)
         self.runner.appendStdout(value)
-        self.__mem.saveStep(name, value)
+        self.__mem.saveStepOneArg(name, value)
 
     def imprima(self):  # !!!!!!!!
         pass
@@ -234,5 +245,5 @@ class ProgramDefinitions:
         self.__variables.setValue(c, ans)
 
     def returne(self, value):
-        self.__mem.saveStep("returne", value)
+        self.__mem.saveStepOneArg("returne", value)
         return

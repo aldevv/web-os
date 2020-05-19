@@ -42,23 +42,22 @@ class Memory:
         return self.acumulador
 
     def setAcumulador(self, value):
-        # self.saveStep("Acumulador", self.getAcumulador(), value)
         self.acumulador = value
 
-    def saveStep(self, name, old_value, new_value=None):
+    def saveStepOneArg(self, name, old_value, new_value=None):
         if new_value != None:
-            step = name + ": "+ str(old_value) + " => " + str(new_value)
+            step = str(name) + ": "+ str(old_value) + " => " + str(new_value)
         else:
-            step = name + ": "+ str(old_value) 
+            step = str(name) + ": "+ str(old_value) 
+        self.append_step(step)
+    
+    def saveStepTwoArg(self, func_name, first, second, ans):
+        step = str(first) + " " + str(func_name) + " " + str(second) + " => " + str(ans)
         self.append_step(step)
 
     def append_step(self, step):
         self.step_by_step.append(step)
 
-    # def saveStep(self, name, old_value):
-    #     step = name + ": "+ str(old_value) 
-    #     self.append_step(step)
-    
     def getSteps(self):
         return self.step_by_step
 
