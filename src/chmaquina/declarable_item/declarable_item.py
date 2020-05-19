@@ -1,7 +1,7 @@
 class Declarable_Item :
     all_data = {}
     all_data_names = []
-    types = {} #!TODO check types every time you are gonna set a value
+    types = {} 
     def __init__(self, memory):
         self.__names =  []
         self.__mem = memory
@@ -21,6 +21,9 @@ class Declarable_Item :
         self.save_type_if_first_time(name, value)
         self.update_value_in_declarations(name, value)
         self.validate_in_declaration_name_list(name)
+    
+    def getType(self, name):
+        return Declarable_Item.types[name]
 
     def update_value_in_declarations(self, name, value):
         if type(value) == Declarable_Item.types[name]:

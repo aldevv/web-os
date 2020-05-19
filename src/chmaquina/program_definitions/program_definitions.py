@@ -1,4 +1,5 @@
 from ..errorHandling         import ErrorHandlerVariables
+import time, requests, json, urllib.request
 
 class ProgramDefinitions:
     def __init__(self , mem, variables, tags, runner=None):
@@ -31,11 +32,11 @@ class ProgramDefinitions:
         if self.__variables.inDeclarations(name):
             ErrorHandlerVariables.throw_var_ya_declarada(name)
             return
-        value = self.check_type(type_, value)
+        value = self.check_type_and_cast(type_, value)
         self.__variables.setValue(name, value)
         self.__mem.saveStepOneArg(name, value)
 
-    def check_type(self, type_, value):
+    def check_type_and_cast(self, type_, value):
         try:
             if(type_ == "C"):
                 value = str(value)
@@ -93,11 +94,38 @@ class ProgramDefinitions:
         if not self.__variables.inDeclarations(name):
             ErrorHandlerVariables.throw_var_no_declarada(name)
             return
+
+        # notifyApi = 'http://localhost:8000/api/leaCreateForm'
+        # data = json.dumps({'createForm': True})
+        # response = requests.post(notifyApi, data=data)
+        # try:
+        url_get = 'http://localhost:8000/api/lea'
+
+        # try:
+        response = requests.get(url_get, timeout=10)
+        # except requests.exceptions.Timeout:
+        #     print("Timeout occurred")
+        # with urllib.request.urlopen(url_get) as url:
+        #     s = url.read()
+            # response = s.decode('utf8')
         prev  = self.__variables.getValue(name)
-        value = int(input("ingrese valor"))
+        var_type = self.__variables.getType(name)
+        if(var_type == str):
+            value = str(response.json()['lea'])
+        if(var_type == bool):
+            value = bool(response.json()['lea'])
+        if(var_type == int):
+            value = int(response.json()['lea'])
+        if(var_type == float):
+            value = float(response.json()['lea'])
 
         self.__variables.setValue(name, value)
-        self.__mem.saveStepOneArg(name, value)
+        self.__mem.saveStepOneArg(name, prev, value)
+        # while(True):
+        #     if(response.json()['lea'] != None):
+        #         break
+        #     time.sleep(3)
+        #     response = requests.get(url)
 
 
     def sume(self, name):

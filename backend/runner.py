@@ -4,7 +4,6 @@ import falcon
 
 class MachinaRunner(object):
 
-
     def __init__(self, ch):
         self.ch = ch
 

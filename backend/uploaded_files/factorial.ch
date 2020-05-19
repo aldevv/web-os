@@ -7,7 +7,7 @@ almacene respuesta
 reste unidad
 almacene intermedia
 cargue respuesta
-# algo que no se debe leer
+//algo que no se debe leer
 multiplique intermedia
 almacene respuesta
 cargue intermedia

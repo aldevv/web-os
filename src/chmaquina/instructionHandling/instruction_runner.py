@@ -41,7 +41,7 @@ class InstructionRunner:
                 self.load_instruction()
                 self.nextPosition()
         except Exception as err:
-            print("Hubo un error en runtime ", err.args)
+            print("Hubo un error en runtime ", err.args, self.getCurrentLine())
 
     def getCurrentLine(self):
         return self.current_line
