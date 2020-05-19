@@ -26,6 +26,7 @@ getData()
 
     id = 0;
     data['instructions'].forEach(element => {
+        element = element.join(' ')
         instruction_table.innerHTML += "<tbody>\ <tr> \ <td>" + id++ + "</td> \ <td>" + element + "</td> \ </tr>\ </tbody>";
     });
 });

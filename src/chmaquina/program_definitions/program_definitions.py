@@ -135,7 +135,8 @@ class ProgramDefinitions:
             return
         if self.__variables.getValue(name) == 0:
             ErrorHandlerVariables.throw_division_por_cero(
-                self.__mem.getAcumulador(), self.__variables.getValue(name))
+                self.__mem.getAcumulador(), self.__variables.getValue(name)
+            )
             return
         
         prev = self.__mem.getAcumulador()

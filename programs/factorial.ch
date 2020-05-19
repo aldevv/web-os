@@ -1,13 +1,13 @@
 nueva unidad I 1
 nueva m I 5
-nueva respuesta I 1 
-nueva intermedia I 0  
+nueva respuesta I 1
+nueva intermedia I 0 
 cargue m
 almacene respuesta
-reste unidad 
+reste unidad
 almacene intermedia
 cargue respuesta
-# algo que no se debe leer
+//algo que no se debe leer
 multiplique intermedia
 almacene respuesta
 cargue intermedia

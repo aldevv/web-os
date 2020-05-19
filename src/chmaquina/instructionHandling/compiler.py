@@ -22,12 +22,11 @@ class Compiler:
                 self.parse_and_compile_line(line)
                 self.nextPosition()
         except Exception as err:
-            print("Hubo un error y no se puede continuar", err.args)
+            print("Hubo un error y no se puede continuar", err.args, "line " + str(self.current_line))
 
     def parseFile(self, path):
-        # path = os.path.dirname(__file__) + '/../../../' + path
         with open(path) as f:
-            lines = [line.rstrip() for line in f]
+            lines = [line.rstrip() for line in f if line not in ['\n', '\r\n']]
         return lines
 
     def parse_and_compile_line(self, string):
@@ -38,7 +37,7 @@ class Compiler:
         self.current_line += 1
 
     def isComment(self,string):
-        return True if string[0] == "#" else False
+        return True if string[0] == "#" or string[:2] == "//" else False
 
     def compile_(self,string):
         if self.mem.memory_isEmpty():
