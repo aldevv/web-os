@@ -1,6 +1,7 @@
 class Declarable_Item :
     all_data = {}
     all_data_names = []
+    types = {} #!TODO check types every time you are gonna set a value
     def __init__(self, memory):
         self.__names =  []
         self.__mem = memory
@@ -17,18 +18,19 @@ class Declarable_Item :
         return Declarable_Item.all_data[name]
 
     def setValue(self, name, value):
-        # self.check_and_save_step(name, value)
-        self.update_value_in_declarations(value, name)
+        self.save_type_if_first_time(name, value)
+        self.update_value_in_declarations(name, value)
         self.validate_in_declaration_name_list(name)
 
-    def check_and_save_step(self, name, new_value):
-        if(name in Declarable_Item.all_data):
-            self.__mem.saveStep(name, Declarable_Item.all_data[name], new_value)
+    def update_value_in_declarations(self, name, value):
+        if type(value) == Declarable_Item.types[name]:
+            Declarable_Item.all_data[name] = value
         else:
-            self.__mem.saveStep(name, "create", new_value)
+            print("wrong type!")
 
-    def update_value_in_declarations(self, value, name):
-        Declarable_Item.all_data[name] = value
+    def save_type_if_first_time(self, name, value):
+        if not self.inDeclarations(name):
+            Declarable_Item.types[name] = type(value)
 
     def validate_in_declaration_name_list(self, name):
         if name not in self.get_all_declaration_names():

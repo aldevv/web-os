@@ -175,14 +175,25 @@ class ProgramDefinitions:
         self.__mem.setAcumulador(new)
         self.__mem.saveStep("Acumulador", prev, new)
 
-    def elimine(self, to_delete):
-        if type(self.__mem.getAcumulador()) != str:
-            ErrorHandlerVariables.throw_acu_not_string()
+    def elimine(self, to_delete, ans):
+        if not self.__variables.inDeclarations(ans):
+            ErrorHandlerVariables.throw_var_no_declarada(ans)
             return
-        subcadena = self.__mem.getAcumulador().strip(to_delete)
+        if not self.__variables.inDeclarations(to_delete):
+            # if not a variable then is a normal string to concat
+            substring = str(self.__mem.getAcumulador()).replace(to_delete, '')
+            self.__variables.setValue(ans, substring)
+            return
+        to_delete = self.__variables.getValue(to_delete)
+        substring = str(self.__mem.getAcumulador()).replace(to_delete, '')
+        self.__variables.setValue(ans, substring)
 
-    def extraiga(self, substr):
-        subcadena = self.__mem.getAcumulador()[:substr]
+    def extraiga(self, num_elem, ans):
+        if not self.__variables.inDeclarations(ans):
+            ErrorHandlerVariables.throw_var_no_declarada(ans)
+            return
+        substring = self.__mem.getAcumulador()[:int(num_elem)]
+        self.__variables.setValue(ans, substring)
 
     def Y(self, first, second, ans):
         self.__variables.setValue(ans, True if self.__variables.getValue(
@@ -197,7 +208,7 @@ class ProgramDefinitions:
 
     def muestre(self, name):
         if(name == "acumulador"):
-            print(self.__mem.getAcumulador())
+            self.runner.appendStdout(self.__mem.getAcumulador())
             return
         if not self.__variables.inDeclarations(name):
             ErrorHandlerVariables.throw_var_no_declarada(name)
@@ -209,14 +220,18 @@ class ProgramDefinitions:
     def imprima(self):  # !!!!!!!!
         pass
 
-    def max_(self, a, b):
-        if(type(a) == str and type(b) == str):
-            return self.__variables.getValue(a) if self.__variables.getValue(a) > self.__variables.getValue(b) else self.__variables.getValue(b)
-        if(type(a) == str and b == int):
-            return self.__variables.getValue(a) if self.__variables.getValue(a) > b else b
-        if(a == int and type(b) == str):
-            return a if a > self.__variables.getValue(b) else self.__variables.getValue(b)
-        return a if a > b else b
+    def max_(self, a, b, c):
+        a = self.__variables.getValue(a)
+        b = self.__variables.getValue(b)
+        if(type(a) == str and type(b) == int):
+            ErrorHandlerVariables.throw_operando_no_es_numero()
+            return 
+        if(type(a) == int and type(b) == str):
+            ErrorHandlerVariables.throw_operando_no_es_numero()
+            return 
+
+        ans = a if a > b else b
+        self.__variables.setValue(c, ans)
 
     def returne(self, value):
         self.__mem.saveStep("returne", value)
