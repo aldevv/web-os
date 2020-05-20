@@ -45,3 +45,18 @@ class Chmaquina:
         all_ = [(1, ['nueva', 'unidad', 'I', '1']), ...]
         steps = [unidad: 1, ...]
         """
+    
+    def getFileLength(self):
+        return self.compiler.getProgramLength()
+    
+    def getInstructions(self): #sin comments
+        return len(self.mem.memory_slots)
+    
+    def getBaseRegister(self):
+        return self.mem.getKernel() + 1 # del acumulador
+
+    def getCodeLimitRegister(self):
+        return self.mem.getKernel() + self.getInstructions()
+
+    def getProgramLimitRegister(self):
+        return self.mem.getKernel() + self.getInstructions() + len(self.variables.all_data_names)

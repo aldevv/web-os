@@ -2,6 +2,7 @@
 
 class Memory:
     def __init__(self, memory_available, kernel, acumulador):
+        self.kernel           = kernel
         self.initial_memory   = memory_available - kernel
         self.memory_available = memory_available - kernel - 1  # acumulador
         self.memory_slots     = []  # secuencia que guarda cada instruccion en respectiva posicion secuencial
@@ -60,5 +61,8 @@ class Memory:
 
     def getSteps(self):
         return self.step_by_step
+    
+    def getKernel(self):
+        return self.kernel
 
 

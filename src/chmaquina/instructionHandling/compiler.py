@@ -7,6 +7,7 @@ class Compiler:
         self.mem                   = mem
         self.progDefs              = Factory.createProgramDefinitions(mem, variables, tags)
         self.current_line          = 1
+        self.programLength         = []
         self.program_history       = []
         self.possible_declarations = {
                         "nueva":self.progDefs.nueva,
@@ -15,6 +16,7 @@ class Compiler:
 
     def compileFile(self, path):
         lines = self.parseFile(path)
+        self.programLength.append(len(lines))
         try:
             for line in lines:
                 if self.isComment(line):
@@ -72,6 +74,9 @@ class Compiler:
 
     def num_prog_compiled(self):
         return len(self.program_history)
+    
+    def getProgramLength(self):
+        return self.programLength
 
 if __name__ == "__main__":
     #! TODO
