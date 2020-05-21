@@ -3,22 +3,21 @@ sys.path.append(os.path.dirname(os.path.abspath(__file__)) + "/..")
 from chmaquina import Chmaquina
 import unittest
 
-#test todos los operadores
+ch = Chmaquina()
+mem = ch.mem
 class MaxTest(unittest.TestCase):
-    def clearStaticVariables(self, var):
-        var.all_data.clear()
-        var.all_data_names.clear()
+
+    def clearMemory(self):
+        ch.declaration = None
+        ch.compiler    = None
 
     def testMax(self):
-        ch = Chmaquina()
-        variables = ch.variables
-        self.clearStaticVariables(ch.variables)
         lines = ["nueva m I 500", "nueva n1 I 100", "nueva ans I 0", "max m n1 ans"]
-        for instruction in lines:
-            ch.compileLine(instruction)
+        ch.compileLines(lines)
         ch.run_all()
-        self.assertEqual(500, variables.getValue("ans"))
-        self.clearStaticVariables(ch.variables)
+        declaration = ch.declaration
+        self.assertEqual(500, declaration.getVariable("ans"))
+        self.clearMemory()
     
 if __name__ == '__main__':
     unittest.main()

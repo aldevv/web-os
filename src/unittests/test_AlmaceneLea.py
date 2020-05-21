@@ -4,22 +4,20 @@ from   chmaquina import Chmaquina
 import unittest
 import unittest.mock
 
-# ingresa 5 para comprobar
+ch = Chmaquina()
+mem = ch.mem
 class Almacene_Lea_Test(unittest.TestCase):
-    def clearStaticVariables(self, var):
-        var.all_data.clear()
-        var.all_data_names.clear()
+    def clearMemory(self):
+        ch.declaration = None
+        ch.compiler    = None
 
     def testAlmacene(self):
-        ch = Chmaquina()
-        variables = ch.variables
-        self.clearStaticVariables(variables)
         lines = ["nueva m I 5", "nueva n I 20", "cargue m", "almacene n"]
-        for instruction in lines:
-            ch.compileLine(instruction)
+        ch.compileLines(lines)
         ch.run_all()
-        self.assertEqual(5, variables.getValue('n'))
-        self.clearStaticVariables(variables)
+        declaration = ch.declaration
+        self.assertEqual(5, declaration.getVariable('n'))
+        self.clearMemory()
 
     # def testLea(self):
     #     ch = Chmaquina()

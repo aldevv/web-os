@@ -5,6 +5,7 @@ class Memory:
         self.kernel           = kernel
         self.initial_memory   = memory_available - kernel
         self.memory_available = memory_available - kernel - 1  # acumulador
+        self.pre_compile_memory   = 0
         self.memory_slots     = []  # secuencia que guarda cada instruccion en respectiva posicion secuencial
         self.acumulador       = acumulador
         self.step_by_step     = []
@@ -64,5 +65,11 @@ class Memory:
     
     def getKernel(self):
         return self.kernel
+    
+    def setMemoryBeforeCompile(self):
+        self.pre_compile_memory = len(self.memory_slots)
+    
+    def getMemoryBeforeCompile(self):
+        return self.pre_compile_memory
 
 

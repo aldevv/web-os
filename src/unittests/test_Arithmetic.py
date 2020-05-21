@@ -3,100 +3,69 @@ sys.path.append(os.path.dirname(os.path.abspath(__file__)) + "/..")
 from chmaquina import Chmaquina
 import unittest
 
-#test todos los operadores
+ch = Chmaquina()
+mem = ch.mem
 class ArithmeticTest(unittest.TestCase):
-    def clearStaticVariables(self, var):
-        var.all_data.clear()
-        var.all_data_names.clear()
+
+    def clearMemory(self):
+        ch.declaration = None
+        ch.compiler    = None
 
     def testSume(self):
-        ch = Chmaquina()
-        mem = ch.mem
-        self.clearStaticVariables(ch.variables)
         lines = ["nueva m I 5", "nueva n1 I 10", "cargue m", "sume m"]
-        for instruction in lines:
-            ch.compileLine(instruction)
+        ch.compileLines(lines)
         ch.run_all()
         self.assertEqual(10, mem.getAcumulador())
-        self.clearStaticVariables(ch.variables)
+        self.clearMemory()
 
     def testReste(self):
-        instruction_loader = Chmaquina()
-        mem = instruction_loader.mem
-        self.clearStaticVariables(instruction_loader.variables)
         lines = ["nueva n1 I 25", "nueva m I 40", "cargue m", "reste n1"]
-        for instruction in lines:
-            instruction_loader.compileLine(instruction)
-        instruction_loader.run_all()
-        mem.getAcumulador()
+        ch.compileLines(lines)
+        ch.run_all()
         self.assertEqual(15, mem.getAcumulador()) # 40 - 25
-        self.clearStaticVariables(instruction_loader.variables)
+        self.clearMemory()
 
     def testMult(self):
-        instruction_loader = Chmaquina()
-        mem = instruction_loader.mem
-        self.clearStaticVariables(instruction_loader.variables)
         lines = ["nueva i I 2", "nueva m I 40", "cargue m", "multiplique i"]
-        for instruction in lines:
-            instruction_loader.compileLine(instruction)
-        instruction_loader.run_all()
+        ch.compileLines(lines)
+        ch.run_all()
         self.assertEqual(80, mem.getAcumulador()) # 40 * 2
-        self.clearStaticVariables(instruction_loader.variables)
+        self.clearMemory()
 
     def testDiv1(self):
-        instruction_loader = Chmaquina()
-        mem = instruction_loader.mem
-        self.clearStaticVariables(instruction_loader.variables)
         lines = ["nueva t I 2", "nueva m I 40", "cargue m", "divida t"]
-        for instruction in lines:
-            instruction_loader.compileLine(instruction)
-        instruction_loader.run_all()
+        ch.compileLines(lines)
+        ch.run_all()
         self.assertEqual(20, mem.getAcumulador()) # 40 / 2
-        self.clearStaticVariables(instruction_loader.variables)
+        self.clearMemory()
 
     def testDiv2(self):
-        instruction_loader = Chmaquina()
-        mem = instruction_loader.mem
-        self.clearStaticVariables(instruction_loader.variables)
         lines = ["nueva h R 5","nueva t I 2", "cargue h", "divida t"]
-        for instruction in lines:
-            instruction_loader.compileLine(instruction)
-        instruction_loader.run_all()
+        ch.compileLines(lines)
+        ch.run_all()
         self.assertEqual(2.5, mem.getAcumulador()) # 5.0 / 2
-        self.clearStaticVariables(instruction_loader.variables)
+        self.clearMemory()
 
     def testDiv3(self):
-        instruction_loader = Chmaquina()
-        mem = instruction_loader.mem
-        self.clearStaticVariables(instruction_loader.variables)
         lines = ["nueva h R 27","nueva t I 3", "cargue h", "divida t"]
-        for instruction in lines:
-            instruction_loader.compileLine(instruction)
-        instruction_loader.run_all()
+        ch.compileLines(lines)
+        ch.run_all()
         self.assertEqual(9, mem.getAcumulador()) # 5.0 / 2
-        self.clearStaticVariables(instruction_loader.variables)
+        self.clearMemory()
 
     def testPow(self):
-        instruction_loader = Chmaquina()
-        mem = instruction_loader.mem
-        self.clearStaticVariables(instruction_loader.variables)
         lines = ["nueva h R -9","nueva t I 2", "cargue h", "potencia t"]
-        for instruction in lines:
-            instruction_loader.compileLine(instruction)
-        instruction_loader.run_all()
+        ch.compileLines(lines)
+        ch.run_all()
         self.assertEqual(81, mem.getAcumulador()) # 5.0 / 2
-        self.clearStaticVariables(instruction_loader.variables)
+        self.clearMemory()
 
     def testMod(self):
-        instruction_loader = Chmaquina()
-        mem = instruction_loader.mem
-        self.clearStaticVariables(instruction_loader.variables)
         lines = ["nueva h R 0","nueva t I 2", "cargue h", "modulo t"]
-        for instruction in lines:
-            instruction_loader.compileLine(instruction)
-        instruction_loader.run_all()
+        ch.compileLines(lines)
+        ch.run_all()
         self.assertEqual(0, mem.getAcumulador()) # 5.0 / 2
-        self.clearStaticVariables(instruction_loader.variables)
+        self.clearMemory()
 
 if __name__ == '__main__':
     unittest.main()

@@ -2,26 +2,45 @@ from .factory import Factory
 
 class Chmaquina:
     def __init__(self, memory_available=80,kernel=10, acumulador=0):
-        self.mem               = Factory.createMemory(memory_available,kernel, acumulador)
-        self.variables         = Factory.createDeclarable(self.mem)
-        self.tags              = Factory.createDeclarable(self.mem)
-        self.compiler          = Factory.createCompiler(self.mem, self.variables, self.tags)
-        self.instructionRunner = Factory.createInstructionRunner(self.mem, self.variables, self.tags)
+        self.mem                = Factory.createMemory(memory_available,kernel, acumulador)
+        self.declaration        = None
+        self.compiler           = None
+        self.instructionRunner  = None
+        self.declarationHistory = {}
 
     def compileFile(self, path):
+        self.declaration       = Factory.createDeclaration(self.mem)
+        self.compiler          = Factory.createCompiler(self.mem, self.declaration)
         self.compiler.compileFile(path)
+        self.saveDeclaration(self.declaration)
+    
+    def saveDeclaration(self, declaration, update=None):
+        if update == True:
+            last_element = len(self.declarationHistory) - 1
+            self.declarationHistory[last_element] = declaration
+        else:
+            self.declarationHistory[len(self.declarationHistory)] = declaration
 
-    def compileLine(self, line):
-        self.compiler.parse_and_compile_line(line)
+    def compileLines(self, lines):
+        if(self.declaration == None):
+            self.declaration = Factory.createDeclaration(self.mem)
+        if(self.compiler == None):
+            self.compiler    = Factory.createCompiler(self.mem, self.declaration)
+        self.mem.setMemoryBeforeCompile()
+        for instruction in lines:
+            self.compiler.parse_and_compile_line(instruction)
+        
 
     def run_all(self):
+        self.instructionRunner = Factory.createInstructionRunner(self.mem, self.declaration)
         self.instructionRunner.run_all()
+        self.saveDeclaration(self.declaration, True)
 
     def getVariables(self):
-        return self.variables.getNames()
+        return self.declaration.getVariables()
 
     def getTags(self):
-        return self.tags.getNames()
+        return self.declaration.getTags()
 
     def getInstructions(self):
         return self.mem.instructions_saved()
@@ -49,14 +68,14 @@ class Chmaquina:
     def getFileLength(self):
         return self.compiler.getProgramLength()
     
-    def getInstructions(self): #sin comments
+    def getInstructionsLenNoComments(self): #sin comments
         return len(self.mem.memory_slots)
     
     def getBaseRegister(self):
         return self.mem.getKernel() + 1 # del acumulador
 
     def getCodeLimitRegister(self):
-        return self.mem.getKernel() + self.getInstructions()
+        return self.mem.getKernel() + self.getInstructionsLenNoComments()
 
     def getProgramLimitRegister(self):
-        return self.mem.getKernel() + self.getInstructions() + len(self.variables.all_data_names)
+        return self.mem.getKernel() + self.getInstructionsLenNoComments() + len(self.declaration.getAllNames())

@@ -1,1 +1,2 @@
-from .program_definitions import ProgramDefinitions
+from .operator_definitions    import OperatorDefinitions
+from .declaration_definitions import DeclarationDefinitions

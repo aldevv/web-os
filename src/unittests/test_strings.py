@@ -4,54 +4,43 @@ sys.path.append(os.path.dirname(os.path.abspath(__file__)) + "/..")
 from chmaquina import Chmaquina
 import unittest
 
-#test todos los operadores
+ch = Chmaquina()
+mem = ch.mem
 class StringTest(unittest.TestCase):
-    def clearStaticVariables(self, var):
-        var.all_data.clear()
-        var.all_data_names.clear()
+    def clearMemory(self):
+        ch.declaration = None
+        ch.compiler    = None
 
     def testConcatene(self):
-        ch = Chmaquina()
-        mem = ch.mem
-        self.clearStaticVariables(ch.variables)
         lines = ["nueva m C algo",  "concatene esto"]
-        for instruction in lines:
-            ch.compileLine(instruction)
+        ch.compileLines(lines)
         ch.run_all()
         self.assertEqual("0esto", mem.getAcumulador())
-        self.clearStaticVariables(ch.variables)
+        self.clearMemory()
 
     def testElimine1(self):
-        ch = Chmaquina()
-        variables = ch.variables
-        self.clearStaticVariables(ch.variables)
         lines = ["nueva m C algunaClasePizza", "nueva sub C algo", "cargue m", "elimine Clase sub"]
-        for instruction in lines:
-            ch.compileLine(instruction)
+        ch.compileLines(lines)
         ch.run_all()
-        self.assertEqual("algunaPizza", variables.getValue("sub"))
-        self.clearStaticVariables(ch.variables)
+        declaration = ch.declaration
+        self.assertEqual("algunaPizza", declaration.getVariable("sub"))
+        self.clearMemory()
 
     def testElimine2(self):
-        ch = Chmaquina()
-        variables = ch.variables
-        self.clearStaticVariables(ch.variables)
         lines = ["nueva m C algunaClasePizza", "nueva sub C Clase", "cargue m", "elimine sub sub"]
-        for instruction in lines:
-            ch.compileLine(instruction)
+        ch.compileLines(lines)
         ch.run_all()
-        self.assertEqual("algunaPizza", variables.getValue("sub"))
-        self.clearStaticVariables(ch.variables)
+        declaration = ch.declaration
+        self.assertEqual("algunaPizza", declaration.getVariable("sub"))
+        self.clearMemory()
 
     def testExtraiga(self):
-        ch = Chmaquina()
-        variables = ch.variables
-        self.clearStaticVariables(ch.variables)
         lines = ["nueva m C algunaClasePizza", "nueva sub C Clase", "cargue m", "extraiga 5 sub"]
-        for instruction in lines:
-            ch.compileLine(instruction)
+        ch.compileLines(lines)
         ch.run_all()
-        self.assertEqual("algun", variables.getValue("sub"))
-        self.clearStaticVariables(ch.variables)
+        declaration = ch.declaration
+        self.assertEqual("algun", declaration.getVariable("sub"))
+        self.clearMemory()
+
 if __name__ == '__main__':
     unittest.main()
