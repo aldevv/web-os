@@ -1,7 +1,8 @@
 from compiler        import MachinaCompiler
 from runner          import MachinaRunner
 from input           import MachinaInput
-from createInputForm import MachinaInputCreate
+from nav             import MachinaNav
+from clean           import MachinaClean
 import falcon, os, sys
 sys.path.append(os.path.dirname(os.path.abspath(__file__)) + "/../src")
 from chmaquina import Chmaquina
@@ -21,3 +22,5 @@ ch = Chmaquina()
 api.add_route('/api/lea'          , MachinaInput(ch))
 api.add_route('/api/compile'      , MachinaCompiler(ch))
 api.add_route('/api/run'          , MachinaRunner(ch))
+api.add_route('/api/nav'          , MachinaNav(ch))
+api.add_route('/api/clean'        , MachinaClean(ch))

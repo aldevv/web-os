@@ -52,6 +52,8 @@ class Chmaquina:
     
     def getSteps(self):
         steps = self.mem.getSteps()
+        if steps == []:
+            return None
         instructions_compiled = self.compiler.get_program_history()
         instructions_ran = self.instructionRunner.get_program_history()
         all_ = instructions_compiled +instructions_ran
@@ -63,6 +65,34 @@ class Chmaquina:
     
     def getFileLengthNoComments(self):
         return self.compiler.getProgramLengthNoComments()
+
+    def setMemory(self, value):
+        self.mem                = Factory.createMemory(value, self.mem.getKernel(), 0)
+        self.fileInfo           = Factory.createFileInfo(self.mem)
+        self.declaration        = None
+        self.compiler           = None
+        self.instructionRunner  = None
+
+    def setKernel(self, value):
+        self.mem                = Factory.createMemory(self.mem.initial_memory, value,0)
+        self.fileInfo           = Factory.createFileInfo(self.mem)
+        self.declaration        = None
+        self.compiler           = None
+        self.instructionRunner  = None
+
+    def setAcumulador(self, value):
+        self.mem                = Factory.createMemory(self.mem.initial_memory, self.mem.getKernel(), value)
+        self.fileInfo           = Factory.createFileInfo(self.mem)
+        self.declaration        = None
+        self.compiler           = None
+        self.instructionRunner  = None
+    
+    def clean(self, memory, kernel, acu):
+        self.mem                = Factory.createMemory(memory, kernel, acu)
+        self.fileInfo           = Factory.createFileInfo(self.mem)
+        self.declaration        = None
+        self.compiler           = None
+        self.instructionRunner  = None
 
     def getMemoryAvailable(self):
         return self.mem.get_available_memory()

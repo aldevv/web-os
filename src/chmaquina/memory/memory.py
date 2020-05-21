@@ -74,8 +74,9 @@ class Memory:
                 sum_ += len(program)
             return sum_-1 # because acu
 
-    
     def getMemoryBeforeCompile(self):
         return self.pre_compile_memory
+    
+
 
 

@@ -70,3 +70,7 @@ class FileInfo:
     
     def saveFilename(self, filename):
         self.filenames.append(filename)
+
+    def clear(self):
+        self.filenames = []
+        self.declarationHistory = {}

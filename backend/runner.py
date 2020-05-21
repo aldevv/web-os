@@ -11,6 +11,7 @@ class MachinaRunner(object):
         self.ch.run_all()
         data = {
             'stdout': self.ch.getStdout(),
+            'steps': self.ch.getSteps(),
         }
         resp.media = data;
         resp.status = falcon.HTTP_201

@@ -41,7 +41,7 @@
                     <input type="submit" value="Compilar" >
                     <input id="correr"type="button" value="Correr todo" >
                     <input type="button" value="Correr paso a paso" >
-                    <input type="button" value="Limpiar" >
+                    <input id="limpiar" type="button" value="Limpiar" >
                 </form>
             </div>
 
@@ -53,21 +53,21 @@
 
                         <!-- <form action="/action_page.php"> -->
                           <label for="points">Memoria</label>
-                          <input type="number" id="points" name="points" value="80" step="5" size="1">
+                          <input type="number" id="memoria" name="points" value="80" step="5" size="1">
                         <!-- </form> -->
                         </div>
 
                         <div class="col-4 input-buttons">
                         <!-- <form action="/action_page.php"> -->
                           <label for="points">Kernel</label>
-                          <input type="number" id="points" name="points" value="10" step="5" size="1">
+                          <input type="number" id="kernel" name="points" value="10" step="5" size="1">
                         <!-- </form> -->
                         </div>
 
                         <div class="col-4 input-buttons">
                         <!-- <form action="/action_page.php"> -->
                           <label for="points">Acumulador</label>
-                          <input type="number" id="points" name="points" value="0" step="5" size="1">
+                          <input type="number" id="acumulador" name="points" value="0" step="5" size="1">
                         <!-- </form> -->
                         </div>
                     </div>
@@ -167,6 +167,8 @@
     <script src="assets/js/submiting/upload_file.js"> </script>
     <!-- script for getting data -->
     <script type="module" src="assets/js/update/update_forms.js"> </script>
+    <!-- script for updating nav values -->
+    <script src="assets/js/nav/nav.js"> </script>
 
 </body>
 

@@ -12,11 +12,11 @@ body {
 .my-container {
     background: var(--side-A-col);
     color: white;
-    border: 2px dotted red;
+    border: 2px dotted var(--side-B-col);
 }
 
 .side-A {
-    border: 3px dotted violet
+    /* border: 3px dotted violet */
 }
 
 
@@ -59,25 +59,25 @@ body {
 
 .mode-row {
     text-align: center;
-    border: 3px solid gray;
+    /* border: 3px solid gray; */
 }
 
 .declarable-row {
     overflow: auto;
     text-align: center;
-    border: 3px solid brown;
+    /* border: 3px solid brown; */
 }
 
 table, thead, tbody {
     background-color: var(--side-A-col);
-    border: 2px solid rgb(102, 63, 102) !important;
+    /* border: 2px solid rgb(102, 63, 102) !important; */
 }
 
 
 .side-B {
-    border: 1px dotted blue;
-    background-color: var(--side-B-col);
+    /* border: 1px dotted blue; */
     height: 100%;
+    background-color: var(--side-B-col);
 }
 
 .info-row {

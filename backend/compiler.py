@@ -16,7 +16,9 @@ class MachinaCompiler(object):
             'variables': self.ch.getVariables(),
             'tags': self.ch.getTags(),
             'programs': self.ch.getPrograms(),
-            'registers': self.ch.getRegisters()
+            'registers': self.ch.getRegisters(),
+            'memoryAvailable': self.ch.getMemoryAvailable(),
+            'memoryUsed': self.ch.getMemoryUsed(),
         }
         resp.media = data
 
@@ -28,11 +30,11 @@ class MachinaCompiler(object):
         """
         input_file = req.get_param('file')
         print("cargué: ", input_file.filename)
-        if input_file.filename not in self.files:
-            self.files.add(input_file.filename)
-        else:
-            print("segui derecho con ", input_file.filename)
-            return
+        # if input_file.filename not in self.files:
+        #     self.files.add(input_file.filename)
+        # else:
+        #     print("segui derecho con ", input_file.filename)
+        #     return
 
         # Test if the file was uploaded
         if input_file.filename:
