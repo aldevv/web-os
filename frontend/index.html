@@ -35,7 +35,7 @@
                     <div>
                         <label for="myfile">Seleccionar programas</label>
                         <br>
-                        <input type="file" id="myfile" accept=".ch" name="file" multiple> 
+                        <input type="file" id="myfile" accept=".ch" name="file"> 
                     </div>
                     <br>
                     <input type="submit" value="Compilar" >
@@ -145,13 +145,15 @@
                     </div>
                     <div class="row justify-content-around program-row top-marg">
                         <div class="col-md-12 my-program-col">
-                            <table class="table table-bordered table-dark">
+                            <table id="registers" class="table table-bordered table-dark">
                                     <thead>
                                         <tr>
                                         <th scope="col">Id</th>
-                                        <th scope="col">RG</th>
-                                        <th scope="col">RLC</th>
-                                        <th scope="col">RLP</th>
+                                        <th scope="col">Nombre</th>
+                                        <th scope="col">#ins</th>
+                                        <th scope="col">rb</th>
+                                        <th scope="col">rlc</th>
+                                        <th scope="col">rlp</th>
                                         </tr>
                                     </thead>
                                     <!-- programs here -->

@@ -50,7 +50,7 @@ class InstructionRunner:
     def save_in_history(self, instruction):
         # if instruction[0] == "vaya" or instruction[0] == "vayasi":
         #     return
-        self.program_history.append((self.current_line, instruction))
+        self.program_history.append((self.current_line+1, instruction))
 
     def setLine(self, value):
         self.current_line = value

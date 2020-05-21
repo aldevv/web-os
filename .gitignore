@@ -1,4 +1,5 @@
 __pycache__/
+backend/uploaded_files/*
 .empty/
 .vscode/
 *.pyc

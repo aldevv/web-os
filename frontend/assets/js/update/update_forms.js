@@ -4,7 +4,8 @@ import {getData, runAll} from '../retrieving/data.js';
 
 let variables    = [];
 let tags         = [];
-let instructions = [];
+let programs     = [];
+let colors = ["#212121", "#330077",'#7a1b6c', '#303030', "blue", "green"];
 getData()
 .then(data => {
     consoleLogData(data);
@@ -18,8 +19,13 @@ getData()
     createTable(tags_table, tags);
 
     let instruction_table = document.getElementById('instruction')
-    data['instructions'].forEach(element => instructions.push(element));
-    createTableInstructions(instruction_table, instructions);
+    data['programs'].forEach(program => programs.push(program));
+    createTableInstructions(instruction_table, programs);
+
+    let registers_table = document.getElementById('registers')
+    createTableRegisters(registers_table, data['registers'])
+
+
 })
 .then(() => {
     const correrButton = document.getElementById("correr")
@@ -40,9 +46,10 @@ function consoleLogData(data) {
 
     console.log("All: ", data);
     console.log("acumulador: ", data['acumulador']);
-    console.log("tags: ", data['tags']);
-    console.log("instructions: ", data['instructions']);
     console.log("variables: ", data['variables']);
+    console.log("tags: ", data['tags']);
+    console.log("programs: ", data['programs']);
+    console.log("registers: ", data["registers"])
 }
 
 function createLeaForm() {
@@ -66,6 +73,8 @@ function createLeaForm() {
         .then(() => {
             // make it work for any number of lea
             // form.innerHTML = original;
+            console.log(original)
+            console.log(form.innerHTML)
         })
         .catch(console.error);
     });
@@ -74,23 +83,38 @@ function createLeaForm() {
 function createTable(table, listElements) {
     let id = 0;
     let current_color = 0;
-    let colors = ["#212121", '#303030', "purple", "blue", "green"];
     listElements.forEach(program => {
         program.forEach(element => {
-            table.innerHTML += '<tbody style="background-color:'+colors[current_color]+ '" >\ <tr> \ <td>' + id++ + '</td> \ <td>' + element + '</td> \ </tr>\ </tbody>';
+            table.innerHTML += '<tbody style="background-color:'+ colors[current_color] + '" >\ <tr> \ <td>' + id++ + '</td> \ <td>' + element + '</td> \ </tr>\ </tbody>';
         });
         current_color++;
     });
 }
 
-function createTableInstructions(table, listElements) {
+function createTableInstructions(table, listInstructions) {
 
     let id = 0;
-    listElements.forEach(element =>{
-        if(element[0] == "lea") {
-            createLeaForm()        
-        }
-        element = element.join(' ')
-        table.innerHTML += "<tbody>\ <tr> \ <td>" + id++ + "</td> \ <td>" + element + "</td> \ </tr>\ </tbody>";
+    let current_color = 0;
+    listInstructions.forEach(instruction =>{
+        instruction.forEach(element => {
+            if(element[0] == "lea") {
+                createLeaForm()        
+            }
+            element = element.join(' ')
+            table.innerHTML += '<tbody style="background-color:'+ colors[current_color] + '" >\ <tr> \ <td>' + id++ + '</td> \ <td>' + element + '</td> \ </tr>\ </tbody>';
+        });
+        current_color++;
     });
+}
+let idProg = 1;
+function createTableRegisters(table, registers) {
+    let filenames       = registers[0]
+    let instruction_num = registers[1]
+    let rb              = registers[2]
+    let rlc             = registers[3]
+    let rlp             = registers[4]
+    let length = rb.length
+    for(let i=0; i< length; i++) {
+            table.innerHTML += '<tbody style="background-color:'+colors[i]+ '" >\ <tr> \ <td> 000' + idProg++ + '</td> \ <td>' + filenames[i] + '</td> \ <td>' + instruction_num[i] + '</td> \ <td>' + rb[i] + '</td> \  <td>' + rlc[i] + '</td> \ <td>' + rlp[i] + '</td> \ </tr>\ </tbody>';
+    }
 }

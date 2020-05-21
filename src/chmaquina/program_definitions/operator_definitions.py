@@ -57,7 +57,7 @@ class OperatorDefinitions:
         if not self.__declaration.inDeclarations(tag):
             ErrorHandlerVariables.throw_tag_no_declarada(tag)
             return
-        self.runner.setLine(self.__declaration.getTag(tag) -1)
+        self.runner.setLine(self.__declaration.getTag(tag) -2)
 
     def vayasi(self, tag1, tag2):
         if not self.__declaration.inDeclarations(tag1):
@@ -70,11 +70,11 @@ class OperatorDefinitions:
             return
         prev = self.runner.getCurrentLine()
         if self.__mem.getAcumulador() > 0:
-            self.runner.setLine(self.__declaration.getTag(tag1) -1) # makes it equal to the value in tag1
+            self.runner.setLine(self.__declaration.getTag(tag1) -2) # makes it equal to the value in tag1
             self.__mem.saveStepOneArg("vayasi",str(" desde " + str(prev)+ " hasta "), self.runner.getCurrentLine())
             return
         if self.__mem.getAcumulador() < 0:
-            self.runner.setLine(self.__declaration.getTag(tag2)-1) # makes it equal to the value in tag2
+            self.runner.setLine(self.__declaration.getTag(tag2)-2) # makes it equal to the value in tag2
             self.__mem.saveStepOneArg("vayasi", str(" desde " + str(prev)+ " hasta ") , self.runner.getCurrentLine())
             return
         self.__mem.saveStepOneArg("vayasi",str("desde " + str(prev)+ " hasta ") , self.runner.getCurrentLine())

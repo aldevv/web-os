@@ -1,8 +1,8 @@
-const myform = document.getElementById("myform")
-const myfile = document.getElementById("myfile")
 
 myform.addEventListener("submit", e => {
     e.preventDefault();
+    const myform = document.getElementById("myform")
+    const myfile = document.getElementById("myfile")
     const endpoint  = myform.getAttribute("action")
     const formData  = new FormData();
     formData.append("file", myfile.files[0])

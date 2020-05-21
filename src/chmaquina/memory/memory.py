@@ -3,13 +3,13 @@
 class Memory:
     def __init__(self, memory_available, kernel, acumulador):
         self.kernel           = kernel
-        self.initial_memory   = memory_available - kernel
-        self.memory_available = memory_available - kernel - 1  # acumulador
+        self.initial_memory   = memory_available
+        self.memory_available = memory_available - kernel - 1 # del acumulador 
         self.pre_compile_memory   = 0
-        self.memory_slots     = []  # secuencia que guarda cada instruccion en respectiva posicion secuencial
+        self.memory_programs  = []  # secuencia que guarda cada instruccion en respectiva posicion secuencial
         self.acumulador       = acumulador
         self.step_by_step     = []
-        self.memory_slots.append(["acumulador"])
+        self.memory_programs.append(["acumulador"])
 
     def get_used_memory(self):
         return self.initial_memory - self.memory_available
@@ -17,13 +17,12 @@ class Memory:
     def get_available_memory(self):
         return self.memory_available
 
-    def save_instruction_to_memory(self, instruction):
-        self.add_to_memory_slot(instruction)
-        self.reduce_memory_by_1()
+    def saveProgram(self, program):
+        self.appendProgram(program)
 
-    def add_to_memory_slot(self, instruction):
+    def appendProgram(self, program):
         # saves the command int a slot so it can be loaded later with vaya (goto)
-        self.memory_slots.append(instruction)
+        self.memory_programs.append(program)
 
     def reduce_memory_by_1(self):
         self.memory_available -= 1
@@ -32,13 +31,13 @@ class Memory:
         return self.memory_available <= 0
 
     def find_instruction(self, id_):
-        return self.memory_slots[id_]
+        return self.memory_programs[-1][id_]
 
-    def instructions_saved(self):
-        return self.memory_slots
+    def programs_saved(self): # change to programs saved
+        return self.memory_programs[1:]
 
     def num_instructions_saved(self):
-        return len(self.memory_slots)  # because acumulador is not counted
+        return len(self.memory_programs[-1])
 
     def getAcumulador(self):
         return self.acumulador
@@ -67,7 +66,14 @@ class Memory:
         return self.kernel
     
     def setMemoryBeforeCompile(self):
-        self.pre_compile_memory = len(self.memory_slots)
+        if len(self.memory_programs) == 1:
+            self.pre_compile_memory = 0
+        else:
+            sum_ = 0
+            for program in self.memory_programs:
+                sum_ += len(program)
+            return sum_-1 # because acu
+
     
     def getMemoryBeforeCompile(self):
         return self.pre_compile_memory

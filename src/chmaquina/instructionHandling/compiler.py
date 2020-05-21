@@ -7,21 +7,24 @@ class Compiler:
         self.mem                   = mem
         self.progDefs              = progDefs
         self.current_line          = None
-        self.programLength         = {}
+        self.programLength         = []
         self.program_history       = []
+        self.currentProgram        = []
 
     def compileFile(self, path):
         self.current_line = self.startPosition()
         lines = self.parseFile(path)
-        self.programLength[path] = len(lines)
         try:
             for line in lines:
                 if self.isComment(line):
                     continue
                 self.parse_and_compile_line(line)
                 self.nextPosition()
+            self.mem.saveProgram(self.currentProgram)
+            self.programLength.append(len(self.currentProgram))
+            self.currentProgram = []
         except Exception as err:
-            print("Hubo un error y no se puede continuar", err.args, "line " + str(self.current_line))
+            print("Hubo un error y no se puede continuar(compilador)", err.args, "line " + str(self.current_line))
     
     def startPosition(self):
         self.mem.setMemoryBeforeCompile()
@@ -36,18 +39,20 @@ class Compiler:
         return True if string[0] == "#" or string[:2] == "//" else False
 
     def parse_and_compile_line(self, string):
+        if self.mem.memory_isEmpty():
+            ErrorHandlerCompiler.throw_not_enough_memory_comp(string)
+            raise Exception("Memoria")
+
         string = string.split()
+        self.currentProgram.append(string)
+        self.mem.reduce_memory_by_1()
         self.compile_(string)
     
     def nextPosition(self):
         self.current_line += 1
 
     def compile_(self,string):
-        if self.mem.memory_isEmpty():
-            ErrorHandlerCompiler.throw_not_enough_memory_comp(string)
-            raise Exception("Memoria")
                 
-        self.mem.save_instruction_to_memory(string)
         self.validate_and_save(string)
 
     def validate_and_save(self, instruction):
@@ -67,7 +72,8 @@ class Compiler:
             raise
 
     def save_in_history(self, instruction):
-        self.program_history.append((self.current_line, instruction))
+        if self.current_line != None:
+            self.program_history.append((self.current_line+1, instruction))
     
     def get_program_history(self):
         return self.program_history
@@ -75,7 +81,7 @@ class Compiler:
     def num_prog_compiled(self):
         return len(self.program_history)
     
-    def getProgramLength(self):
+    def getProgramLengthNoComments(self):
         return self.programLength
 
 if __name__ == "__main__":
