@@ -6,5 +6,5 @@
 ## pip install -r requirements.txt
 ## activar el ambiente virtual con source env/bin/activate en linux
 ### o el equivalente en windows con env/Scripts\activate.bat
-## ir a la carpeta backend y correr gunicorn run:api --worker-class gevent en el terminal
+## ir a la carpeta backend y correr -> gunicorn run:api --worker-class gevent
 ### abrir index.html en la carpeta frontend mientras se tiene activado gunicorn
