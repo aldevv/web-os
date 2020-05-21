@@ -9,6 +9,8 @@ def test():
     ch.run_all()
     print(ch.getStdout())
     print(ch.getInstructions())
+    print(ch.getVariablesHistory())
+    print(ch.getTagsHistory())
     # print(ch.getBaseRegister())
     # print(ch.getCodeLimitRegister())
     # print(ch.getProgramLimitRegister())

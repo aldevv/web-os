@@ -7,6 +7,7 @@ class Chmaquina:
         self.compiler           = None
         self.instructionRunner  = None
         self.declarationHistory = {}
+        self.filenames          = []
 
     def compileFile(self, path):
         self.declaration       = Factory.createDeclaration(self.mem)
@@ -20,6 +21,18 @@ class Chmaquina:
             self.declarationHistory[last_element] = declaration
         else:
             self.declarationHistory[len(self.declarationHistory)] = declaration
+    
+    def getVariablesHistory(self):
+        all_ = []
+        for id_ in self.declarationHistory:
+            all_.append(self.declarationHistory[id_].getVariables())
+        return all_
+
+    def getTagsHistory(self):
+        all_ = []
+        for id_ in self.declarationHistory:
+            all_.append(self.declarationHistory[id_].getTags())
+        return all_
 
     def compileLines(self, lines):
         if(self.declaration == None):
@@ -59,11 +72,11 @@ class Chmaquina:
         instructions_compiled = self.compiler.get_program_history()
         instructions_ran = self.instructionRunner.get_program_history()
         all_ = instructions_compiled +instructions_ran
-        return "\n".join([str(a[0]) + " " + str(a[1][0]) + " " + str(a[1][1]) + " | " + str(b) for a, b in zip(all_, steps)])
         """
         all_ = [(1, ['nueva', 'unidad', 'I', '1']), ...]
         steps = [unidad: 1, ...]
         """
+        return "\n".join([str(a[0]) + " " + str(a[1][0]) + " " + str(a[1][1]) + " | " + str(b) for a, b in zip(all_, steps)])
     
     def getFileLength(self):
         return self.compiler.getProgramLength()
@@ -72,10 +85,17 @@ class Chmaquina:
         return len(self.mem.memory_slots)
     
     def getBaseRegister(self):
-        return self.mem.getKernel() + 1 # del acumulador
+        return self.mem.getKernel() + self.mem.instructions_saved()
 
     def getCodeLimitRegister(self):
         return self.mem.getKernel() + self.getInstructionsLenNoComments()
 
     def getProgramLimitRegister(self):
         return self.mem.getKernel() + self.getInstructionsLenNoComments() + len(self.declaration.getAllNames())
+    
+    def saveFilename(self, filename):
+        self.filenames.append(filename)
+    
+    def fileData(self):
+        pass
+        

@@ -2,34 +2,24 @@ import {getData, runAll} from '../retrieving/data.js';
 
 // let memory_table = document.getElementById('memory')
 
+let variables    = [];
+let tags         = [];
+let instructions = [];
 getData()
 .then(data => {
-    console.log("All: ", data);
-    console.log("acumulador: ", data['acumulador']);
-    console.log("tags: ", data['tags']);
-    console.log("instructions: ", data['instructions']);
-    console.log("variables: ", data['variables']);
-    let id = 0;
-    let variables_table = document.getElementById('var')
-    data['variables'].forEach(element => {
-        variables_table.innerHTML += "<tbody>\ <tr> \ <td>" + id++ + "</td> \ <td>" + element + "</td> \ </tr>\ </tbody>";
-    });
+    consoleLogData(data);
 
-    id = 0;
-    let tags_table = document.getElementById('tag')
-    data['tags'].forEach(element => {
-        tags_table.innerHTML += "<tbody>\ <tr> \ <td>" + id++ + "</td> \ <td>" + element + "</td> \ </tr>\ </tbody>";
-    });
+    let variables_table = document.getElementById('var');
+    data['variables'].forEach(element => variables.push(element));
+    createTable(variables_table, variables);
 
-    id = 0;
+    let tags_table = document.getElementById('tag');
+    data['tags'].forEach(element => tags.push(element) );
+    createTable(tags_table, tags);
+
     let instruction_table = document.getElementById('instruction')
-    data['instructions'].forEach(element => {
-        if(element[0] == "lea") {
-            createLeaForm()        
-        }
-        element = element.join(' ')
-        instruction_table.innerHTML += "<tbody>\ <tr> \ <td>" + id++ + "</td> \ <td>" + element + "</td> \ </tr>\ </tbody>";
-    });
+    data['instructions'].forEach(element => instructions.push(element));
+    createTableInstructions(instruction_table, instructions);
 })
 .then(() => {
     const correrButton = document.getElementById("correr")
@@ -45,6 +35,15 @@ getData()
         });
     });
 });
+
+function consoleLogData(data) {
+
+    console.log("All: ", data);
+    console.log("acumulador: ", data['acumulador']);
+    console.log("tags: ", data['tags']);
+    console.log("instructions: ", data['instructions']);
+    console.log("variables: ", data['variables']);
+}
 
 function createLeaForm() {
     let form = document.getElementById('myform')
@@ -72,3 +71,26 @@ function createLeaForm() {
     });
 }
 
+function createTable(table, listElements) {
+    let id = 0;
+    let current_color = 0;
+    let colors = ["#212121", '#303030', "purple", "blue", "green"];
+    listElements.forEach(program => {
+        program.forEach(element => {
+            table.innerHTML += '<tbody style="background-color:'+colors[current_color]+ '" >\ <tr> \ <td>' + id++ + '</td> \ <td>' + element + '</td> \ </tr>\ </tbody>';
+        });
+        current_color++;
+    });
+}
+
+function createTableInstructions(table, listElements) {
+
+    let id = 0;
+    listElements.forEach(element =>{
+        if(element[0] == "lea") {
+            createLeaForm()        
+        }
+        element = element.join(' ')
+        table.innerHTML += "<tbody>\ <tr> \ <td>" + id++ + "</td> \ <td>" + element + "</td> \ </tr>\ </tbody>";
+    });
+}

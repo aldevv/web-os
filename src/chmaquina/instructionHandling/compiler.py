@@ -7,13 +7,13 @@ class Compiler:
         self.mem                   = mem
         self.progDefs              = progDefs
         self.current_line          = None
-        self.programLength         = []
+        self.programLength         = {}
         self.program_history       = []
 
     def compileFile(self, path):
         self.current_line = self.startPosition()
         lines = self.parseFile(path)
-        self.programLength.append(len(lines))
+        self.programLength[path] = len(lines)
         try:
             for line in lines:
                 if self.isComment(line):

@@ -12,9 +12,10 @@ class MachinaCompiler(object):
     def on_get(self, req, resp):
         data = {
             'acumulador': self.ch.getAcumulador(),
-            'variables': self.ch.getVariables(),
-            'tags': self.ch.getTags(),
+            'variables': self.ch.getVariablesHistory(),
+            'tags': self.ch.getTagsHistory(),
             'instructions': self.ch.getInstructions(),
+            'fileInfo': self.ch.getFilenames()
         }
         resp.media = data
 
@@ -29,6 +30,7 @@ class MachinaCompiler(object):
         # Test if the file was uploaded
         if input_file.filename:
             filename = input_file.filename
+            ch.saveFilename(filename)
 
             # Define file_path to save
             file_path = os.path.join(self._storage_path, filename)

@@ -25,6 +25,12 @@ body {
     padding: 10px 10px 10px 10px;
 }
 
+.nav-buttons {
+    overflow: auto;
+    padding: 10px 10px 10px 10px;
+
+}
+
 .input-buttons {
     text-align: center;
     color: black;

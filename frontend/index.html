@@ -16,20 +16,34 @@
     <!-- https://www.creative-tim.com/cheatsheet/bootstrap4 -->
 
     <div class="container my-container">
-        <div class="pb-2 mt-4 mb-2 border-bottom">
-            <h2>Chmaquina <small> control</small></h2>
-            <form id="myform" action="http://localhost:8000/api/compile" enctype="multipart/form-data">
-                <div>
-                    <label for="myfile">Seleccionar programas</label>
+        <div class="">
+            <div class="row pb-2 mt-4 mb-2 border-bottom">
+                <h2>Chmaquina <small> control</small></h2>
+            </div>
+
+                            <!-- <table class="table table-bordered table-dark">
+                                    <thead>
+                                        <tr>
+                                        <th scope="col">Id</th>
+                                        <th scope="col">Variable</th>
+                                        </tr>
+                                    </thead>
+                                    programs here
+                             </table> -->
+            <div class="row nav-buttons">
+                <form id="myform" action="http://localhost:8000/api/compile" enctype="multipart/form-data">
+                    <div>
+                        <label for="myfile">Seleccionar programas</label>
+                        <br>
+                        <input type="file" id="myfile" accept=".ch" name="file" multiple> 
+                    </div>
                     <br>
-                    <input type="file" id="myfile" accept=".ch" name="file" multiple> 
-                </div>
-                <br>
-                <input type="submit" value="Compilar" >
-                <input id="correr"type="button" value="Correr todo" >
-                <input type="button" value="Correr paso a paso" >
-                <input type="button" value="Limpiar" >
-            </form>
+                    <input type="submit" value="Compilar" >
+                    <input id="correr"type="button" value="Correr todo" >
+                    <input type="button" value="Correr paso a paso" >
+                    <input type="button" value="Limpiar" >
+                </form>
+            </div>
 
         </div>
         <div class="row">
@@ -73,7 +87,7 @@
                         <div class="col-5 my-variables">
                             <div class="row">
                                 <div class="col-12">
-                                    <table id="var"class="table table-bordered table-dark">
+                                    <table id="var"class="table table-bordered table-dark" >
                                         <thead>
                                             <tr>
                                                 <th scope="col">Id</th>
@@ -135,11 +149,13 @@
                                     <thead>
                                         <tr>
                                         <th scope="col">Id</th>
-                                        <th scope="col">Variable</th>
+                                        <th scope="col">RG</th>
+                                        <th scope="col">RLC</th>
+                                        <th scope="col">RLP</th>
                                         </tr>
                                     </thead>
                                     <!-- programs here -->
-                                </table>
+                            </table>
                         </div>
                     </div>
                 </div>
