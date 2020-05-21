@@ -12,37 +12,47 @@ class Chmaquina:
         self.declaration       = Factory.createDeclaration(self.mem)
         self.compiler          = Factory.createCompiler(self.mem, self.declaration)
         self.compiler.compileFile(path)
+        # the variables and tags for the program compiled
         self.fileInfo.saveDeclaration(self.declaration)
     
+    def compileLines(self, lines):
+        self.createDeclarationIfNone()
+        self.createCompilerIfNone()
+        self.compiler.compileLines(lines)
+
+    def createDeclarationIfNone(self):
+        if(self.declaration == None):
+            self.declaration = Factory.createDeclaration(self.mem)
+
+    def createCompilerIfNone(self):
+        if(self.compiler == None):
+            self.compiler    = Factory.createCompiler(self.mem, self.declaration)
+
+    def createRunnerIfNone(self):
+        if(self.instructionRunner == None):
+            self.instructionRunner    = Factory.createInstructionRunner(self.mem, self.declaration)
+
+    def run_line(self, atStart=False):
+        self.createRunnerIfNone()
+        ranOperator = self.instructionRunner.run_line(atStart)
+        return True if ranOperator == True else False
+
+    def run_all(self):
+        self.instructionRunner = Factory.createInstructionRunner(self.mem, self.declaration)
+        self.instructionRunner.run_all()
+        self.fileInfo.saveDeclaration(self.declaration, True)
+
     def getVariables(self):
         return self.fileInfo.getVariables()
 
     def getTags(self):
         return self.fileInfo.getTags()
 
-    def compileLines(self, lines):
-        if(self.declaration == None):
-            self.declaration = Factory.createDeclaration(self.mem)
-        if(self.compiler == None):
-            self.compiler    = Factory.createCompiler(self.mem, self.declaration)
-        self.mem.setMemoryBeforeCompile()
-        for instruction in lines:
-            self.compiler.parse_and_compile_line(instruction)
-        self.mem.saveProgram(self.compiler.currentProgram)
-        
-    def run_all(self):
-        self.instructionRunner = Factory.createInstructionRunner(self.mem, self.declaration)
-        self.instructionRunner.run_all()
-        self.fileInfo.saveDeclaration(self.declaration, True)
-
     def getPrograms(self): # create new class to encapsulate program related procedures
         return self.mem.programs_saved()
 
     def getRegisters(self):
         return self.fileInfo.getRegisters()
-    
-    # def getInstructionsReadable(self):
-    #     return "\n".join([ str(i)+ " " + " ".join(instruction) for i, instruction in enumerate(self.mem.instructions_saved())])
 
     def getAcumulador(self):
         return self.mem.getAcumulador()
@@ -57,10 +67,6 @@ class Chmaquina:
         instructions_compiled = self.compiler.get_program_history()
         instructions_ran = self.instructionRunner.get_program_history()
         all_ = instructions_compiled +instructions_ran
-        """
-        all_ = [(1, ['nueva', 'unidad', 'I', '1']), ...]
-        steps = [unidad: 1, ...]
-        """
         return "\n".join([str(a[0]) + " " + str(a[1][0]) + " " + str(a[1][1]) + " | " + str(b) for a, b in zip(all_, steps)])
     
     def getFileLengthNoComments(self):

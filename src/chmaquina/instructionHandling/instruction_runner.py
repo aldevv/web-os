@@ -9,12 +9,27 @@ class InstructionRunner:
         self.stdout             = []
         self.program_history    = []
 
+    def run_line(self, atStart=True):
+        last_history = self.program_history
+        if atStart:
+            self.setStartPosition()
+
+        if self.getCurrentLine() >= self.__mem.num_instructions_saved():
+            print("nothing more to run")
+            return
+        self.load_instruction()
+        self.nextPosition()
+        changed = self.program_history != last_history
+        if changed:
+            self.appendStdout(self.program_history[-1])
+        return changed
+
     def run_all(self):
-        self.current_line = self.startPosition()
+        self.setStartPosition()
         self.run_saved_instructions()
     
-    def startPosition(self):
-        return self.__mem.getMemoryBeforeCompile()
+    def setStartPosition(self):
+        self.current_line = self.__mem.getMemoryBeforeCompile()
 
     def run_saved_instructions(self):
         try:

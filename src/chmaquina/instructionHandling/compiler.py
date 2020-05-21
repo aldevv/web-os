@@ -11,7 +11,14 @@ class Compiler:
         self.program_history       = []
         self.currentProgram        = []
 
+    def compileLines(self, lines):
+        self.mem.setMemoryBeforeCompile()
+        for instruction in lines:
+            self.parse_and_compile_line(instruction)
+        self.mem.saveProgram(self.currentProgram)
+
     def compileFile(self, path):
+        self.mem.setMemoryBeforeCompile()
         self.current_line = self.startPosition()
         lines = self.parseFile(path)
         try:
@@ -27,7 +34,6 @@ class Compiler:
             print("Hubo un error y no se puede continuar(compilador)", err.args, "line " + str(self.current_line))
     
     def startPosition(self):
-        self.mem.setMemoryBeforeCompile()
         return self.mem.num_instructions_saved()
 
     def parseFile(self, path):
@@ -73,7 +79,7 @@ class Compiler:
 
     def save_in_history(self, instruction):
         if self.current_line != None:
-            self.program_history.append((self.current_line+1, instruction))
+            self.program_history.append((self.current_line, instruction))
     
     def get_program_history(self):
         return self.program_history

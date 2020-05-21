@@ -66,6 +66,7 @@ class Memory:
         return self.kernel
     
     def setMemoryBeforeCompile(self):
+        #used so that the runner knows where the program saved starts
         if len(self.memory_programs) == 1:
             self.pre_compile_memory = 0
         else:

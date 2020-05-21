@@ -1,4 +1,4 @@
-import {getData, runAll} from '../retrieving/data.js';
+import {getData, getRunAll, getPaso} from '../retrieving/data.js';
 
 // let memory_table = document.getElementById('memory')
 
@@ -12,6 +12,7 @@ let tags         = [];
 let programs     = [];
 let originals    = [];
 let colors = ["#212121", "#330077",'#7a1b6c', '#303030', "blue", "green"];
+
 getData()
 .then(data => {
     consoleLogData(data);
@@ -25,14 +26,15 @@ getData()
     data['programs'].forEach(program => programs.push(program));
     createTableInstructions(instruction_table, programs);
 
-    createTableRegisters(registers_table, data['registers'])
+    if(data['programs'].length >= 1)
+        createTableRegisters(registers_table, data['registers'])
 
 
 })
 .then(() => {
     const correrButton = document.getElementById("correr")
     correrButton.addEventListener("click", e => {
-        runAll()
+        getRunAll()
         .then(data => {
             console.log("after_run: ", data['stdout'])
             console.log("steps: ", data['steps'])
@@ -40,7 +42,19 @@ getData()
             data['stdout'].forEach(element => {
                 monitor.innerHTML += element+"\ ";
             });
+        });
+    });
 
+
+    const pasoButton = document.getElementById("paso")
+    pasoButton.addEventListener("click", e => {
+        getPaso()
+        .then(data => {
+            console.log("steps: ", data['steps'])
+            let monitor = document.getElementById('monitor')
+            data['steps'].forEach(element => {
+                monitor.innerHTML += element+"\ ";
+            });
         });
     });
 
@@ -68,14 +82,14 @@ getData()
 });
 function consoleLogData(data) {
 
-    console.log("All: ", data);
-    console.log("acumulador: ", data['acumulador']);
-    console.log("variables: ", data['variables']);
-    console.log("tags: ", data['tags']);
-    console.log("programs: ", data['programs']);
-    console.log("registers: ", data["registers"])
+    console.log("All: "             , data);
+    console.log("acumulador: "      , data['acumulador']);
+    console.log("variables: "       , data['variables']);
+    console.log("tags: "            , data['tags']);
+    console.log("programs: "        , data['programs']);
+    console.log("registers: "       , data["registers"])
     console.log("memory Available: ", data["memoryAvailable"])
-    console.log("memory used: ", data["memoryUsed"])
+    console.log("memory used: "     , data["memoryUsed"])
 }
 
 function createLeaForm() {

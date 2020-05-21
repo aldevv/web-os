@@ -8,7 +8,6 @@ class MachinaCompiler(object):
     def __init__(self, ch):
         self._storage_path = './uploaded_files'
         self.ch = ch
-        self.files = set()
 
     def on_get(self, req, resp):
         data = {
@@ -28,15 +27,9 @@ class MachinaCompiler(object):
         documentation
         https://github.com/yohanboniface/falcon-multipart
         """
-        input_file = req.get_param('file')
-        print("cargué: ", input_file.filename)
-        # if input_file.filename not in self.files:
-        #     self.files.add(input_file.filename)
-        # else:
-        #     print("segui derecho con ", input_file.filename)
-        #     return
 
-        # Test if the file was uploaded
+        input_file = req.get_param('file')
+        print("cargué el archivo: ", input_file.filename)
         if input_file.filename:
             filename = input_file.filename
             fileHandler = self.ch.fileInfo

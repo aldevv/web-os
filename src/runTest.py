@@ -15,7 +15,7 @@ def test():
     print(ch.getTags())
     print(ch.getRegisters())
     # print(ch.getAcumulador())
-    # print(ch.getSteps())
+    print(ch.getSteps())
 
 test()
 

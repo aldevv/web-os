@@ -18,15 +18,3 @@ class MachinaNav(object):
             self.ch.setAcumulador(int(raw_data.get('acumulador')))
         resp.status = falcon.HTTP_200
 
-
-    # def on_get(self, req, resp):
-    #     lea  = self.lea_value
-    #     data = {
-    #         'lea': lea,
-    #     }
-    #     if self.lea_value == None:
-    #         resp.media  = data;
-    #         resp.status = falcon.HTTP_200
-    #     else:
-    #         resp.media  = data;
-    #         resp.status = falcon.HTTP_200
