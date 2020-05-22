@@ -1,3 +1,5 @@
+import {getPaso} from '../retrieving/data.js';
+
 myform.addEventListener("submit", e => {
     e.preventDefault();
     const myform = document.getElementById("myform")
@@ -22,5 +24,18 @@ paso.addEventListener("click", e => {
     fetch(endpoint, {
         method: "POST",
         body:   formData
-    }).catch(console.error);
+    })
+    .catch(console.error)
+    .then(()=> {
+        getPaso()
+        .then(data => {
+            console.log("steps: ", data['steps'])
+            let monitor = document.getElementById('monitor')
+            if(data['steps'].length != 0){
+                let elem = data['steps'].pop();
+                monitor.innerHTML = elem +"\ ";
+            }
+        });
+    });
 });
+

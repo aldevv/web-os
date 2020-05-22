@@ -10,13 +10,14 @@ class InstructionRunner:
         self.program_history    = []
 
     def run_line(self, atStart=True):
-        last_history = self.program_history
+        last_history = self.program_history.copy()
         if atStart:
             self.setStartPosition()
-
         if self.getCurrentLine() >= self.__mem.num_instructions_saved():
             print("nothing more to run")
             return
+        instruction = self.__mem.find_instruction(self.current_line)
+        print("instruction: ", instruction)
         self.load_instruction()
         self.nextPosition()
         changed = self.program_history != last_history

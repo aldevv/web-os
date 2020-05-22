@@ -45,19 +45,6 @@ getData()
         });
     });
 
-
-    const pasoButton = document.getElementById("paso")
-    pasoButton.addEventListener("click", e => {
-        getPaso()
-        .then(data => {
-            console.log("steps: ", data['steps'])
-            let monitor = document.getElementById('monitor')
-            data['steps'].forEach(element => {
-                monitor.innerHTML += element+"\ ";
-            });
-        });
-    });
-
     const limpiarButton = document.getElementById("limpiar")
     limpiarButton.addEventListener("click", e => {
         e.preventDefault();
