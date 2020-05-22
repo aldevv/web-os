@@ -18,6 +18,7 @@ class InstructionRunner:
             return
         instruction = self.__mem.find_instruction(self.current_line)
         print("instruction: ", instruction)
+        print("step", self.__mem.getSteps())
         self.load_instruction()
         self.nextPosition()
         changed = self.program_history != last_history
