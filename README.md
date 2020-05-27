@@ -1,10 +1,29 @@
-# chmaquina
-## instalar python3
-## instalar python3-venv
-## instalar pip
-## python3 -m venv env
-## pip install -r requirements.txt
-## activar el ambiente virtual con source env/bin/activate en linux
-### o el equivalente en windows con env/Scripts\activate.bat
-## ir a la carpeta backend y correr -> gunicorn run:api --worker-class gevent
-### abrir index.html en la carpeta frontend mientras se tiene activado gunicorn
+# Instrucciones
+## instalar python
+```bash
+sudo apt-get install python3
+```
+## Crear ambiente virtual
+```bash
+python3 -m venv env
+```
+## Instalar requerimientos
+### Windows con WSL
+```bash
+pip install wheel && pip install -r requirements.txt
+```
+### Linux
+```bash
+pip install -r requirements.txt
+```
+## activar el ambiente virtual 
+```bash
+source env/bin/activate
+```
+## Correr el servidor
+ir a la carpeta backend y correr 
+```bash
+gunicorn run:api --worker-class gevent
+```
+### Abrir interfaz grafica
+abrir index.html en la carpeta frontend 
