@@ -1,4 +1,4 @@
-class ErrorHandlerVariables:
+class ErrorHandlerVariables: #TODO añadir linea en los argumentos(pos error) y añadir a una lista
     @staticmethod
     def throw_var_no_declarada(name):
         print("error: variable ",name," no declarada")

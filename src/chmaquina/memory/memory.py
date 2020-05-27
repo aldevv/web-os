@@ -6,10 +6,10 @@ class Memory:
         self.initial_memory   = memory_available
         self.memory_available = memory_available - kernel - 1 # del acumulador 
         self.pre_compile_memory   = 0
-        self.memory_programs  = []  # secuencia que guarda cada instruccion en respectiva posicion secuencial
+        self.instructions_saved  = []  # secuencia que guarda cada instruccion en respectiva posicion secuencial
         self.acumulador       = acumulador
         self.step_by_step     = []
-        self.memory_programs.append(["acumulador"])
+        # self.instructions_saved.append(["acumulador"])
 
     def get_used_memory(self):
         return self.initial_memory - self.memory_available
@@ -22,7 +22,7 @@ class Memory:
 
     def appendProgram(self, program):
         # saves the command int a slot so it can be loaded later with vaya (goto)
-        self.memory_programs.append(program)
+        self.instructions_saved.append(program)
 
     def reduce_memory_by_1(self):
         self.memory_available -= 1
@@ -31,13 +31,14 @@ class Memory:
         return self.memory_available <= 0
 
     def find_instruction(self, id_):
-        return self.memory_programs[-1][id_]
+        return self.instructions_saved[-1][id_]
 
     def programs_saved(self): # change to programs saved
-        return self.memory_programs[1:]
+        # return self.instructions_saved[1:]
+        return self.instructions_saved
 
     def num_instructions_saved(self):
-        return len(self.memory_programs[-1])
+        return len(self.instructions_saved[-1]) if len(self.instructions_saved) != 0 else 0
 
     def getAcumulador(self):
         return self.acumulador
@@ -67,11 +68,11 @@ class Memory:
     
     def setMemoryBeforeCompile(self):
         #used so that the runner knows where the program saved starts
-        if len(self.memory_programs) == 1:
+        if len(self.instructions_saved) == 0:
             self.pre_compile_memory = 0
         else:
             sum_ = 0
-            for program in self.memory_programs:
+            for program in self.instructions_saved:
                 sum_ += len(program)
             return sum_-1 # because acu
 

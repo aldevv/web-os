@@ -1,5 +1,6 @@
 from ..errorHandling          import ErrorHandlerCompiler, ErrorHandlerVariables
 from ..factory               import Factory
+import traceback
 
 class InstructionRunner:
     def __init__(self, mem):
@@ -39,13 +40,18 @@ class InstructionRunner:
                 self.load_instruction()
                 self.nextPosition()
         except Exception as err:
-            print("Hubo un error en runtime ", err.args, self.getCurrentLine())
+            print(traceback.format_exc())
+            # print(self.__mem.instructions_saved)
+            # print(self.__mem.find_instruction(self.getCurrentLine()-1))
+            # print(len(self.__mem.instructions_saved[-1]))
+            # print(self.__mem.find_instruction(self.getCurrentLine()))
+            print("Hubo un error en runtime ", err.args, self.getCurrentLine(), err)
 
     def getCurrentLine(self):
         return self.current_line
 
     def load_instruction(self):
-        instruction = self.__mem.find_instruction(self.current_line)
+        instruction = self.__mem.find_instruction(self.getCurrentLine())
         operator = self.program_name(instruction)
         if operator in self.progDefs.get_possible_operators():
             self.run_operator(operator, instruction)
