@@ -7,6 +7,10 @@ sudo apt-get install python3
 ```bash
 python3 -m venv env
 ```
+## activar el ambiente virtual 
+```bash
+source env/bin/activate
+```
 ## Instalar requerimientos
 ### Windows con WSL
 ```bash
@@ -15,10 +19,6 @@ pip install wheel && pip install -r requirements.txt
 ### Linux
 ```bash
 pip install -r requirements.txt
-```
-## activar el ambiente virtual 
-```bash
-source env/bin/activate
 ```
 ## Correr el servidor
 ir a la carpeta backend y correr 
