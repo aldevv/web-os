@@ -36,17 +36,23 @@ class Chmaquina:
         self.createRunnerIfNone()
         ranOperator = self.instructionRunner.run_line(atStart)
         return True if ranOperator == True else False
+        #!save declaration?
 
     def run_all(self):
         self.instructionRunner = Factory.createInstructionRunner(self.mem, self.declaration)
         self.instructionRunner.run_all()
         self.mem.saveDeclaration(self.declaration, True)
 
-    def getVariables(self):
-        return self.mem.getVariables()
+    def getVariables(self): #!change in front!
+        # return self.mem.getVariables()
+        return self.mem.getVariablesNoPos()
 
     def getTags(self):
-        return self.mem.getTags()
+        # return self.mem.getTags()
+        return self.mem.getTagsNoPos()
+
+    def getMemory(self): 
+        return self.mem.getMemory()
 
     def getPrograms(self): # create new class to encapsulate program related procedures
         return self.mem.get_programs()
@@ -100,16 +106,6 @@ class Chmaquina:
         self.compiler           = None
         self.instructionRunner  = None
 
-    def getMemory(self):
-        memory = self.mem.get_all()
-        declarationHistory = self.mem.getDeclarationHistory()
-        for id_ in declarationHistory:
-            memory += self.mem.getInstructionFromDeclaration(declarationHistory[id_])
-            variables = declarationHistory[id_].getVariables()
-            memory += [[declarationHistory[id_].getVariable(var)] for var in variables]
-        return memory
-
-        
 
     def getMemoryAvailable(self):
         return self.mem.get_available_memory()
