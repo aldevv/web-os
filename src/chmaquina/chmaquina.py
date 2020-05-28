@@ -13,7 +13,7 @@ class Chmaquina:
         self.compiler          = Factory.createCompiler(self.mem, self.declaration)
         self.compiler.compileFile(path)
         # the variables and tags for the program compiled
-        self.fileInfo.saveDeclaration(self.declaration)
+        self.mem.saveDeclaration(self.declaration)
     
     def compileLines(self, lines):
         self.createDeclarationIfNone()
@@ -40,16 +40,16 @@ class Chmaquina:
     def run_all(self):
         self.instructionRunner = Factory.createInstructionRunner(self.mem, self.declaration)
         self.instructionRunner.run_all()
-        self.fileInfo.saveDeclaration(self.declaration, True)
+        self.mem.saveDeclaration(self.declaration, True)
 
     def getVariables(self):
-        return self.fileInfo.getVariables()
+        return self.mem.getVariables()
 
     def getTags(self):
-        return self.fileInfo.getTags()
+        return self.mem.getTags()
 
     def getPrograms(self): # create new class to encapsulate program related procedures
-        return self.mem.programs_saved()
+        return self.mem.get_programs()
 
     def getRegisters(self):
         return self.fileInfo.getRegisters()
@@ -99,6 +99,17 @@ class Chmaquina:
         self.declaration        = None
         self.compiler           = None
         self.instructionRunner  = None
+
+    def getMemory(self):
+        memory = self.mem.get_all()
+        declarationHistory = self.mem.getDeclarationHistory()
+        for id_ in declarationHistory:
+            memory += self.mem.getInstructionFromDeclaration(declarationHistory[id_])
+            variables = declarationHistory[id_].getVariables()
+            memory += [[declarationHistory[id_].getVariable(var)] for var in variables]
+        return memory
+
+        
 
     def getMemoryAvailable(self):
         return self.mem.get_available_memory()

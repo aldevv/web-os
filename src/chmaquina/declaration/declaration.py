@@ -35,3 +35,6 @@ class Declaration:
     def clear(self):
         self.variables.clearData()
         self.tags.clearData()
+    
+    def __hash__(self):
+        return hash(str(self))
