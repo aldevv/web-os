@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
+    <title>Chmaquina</title>
     <link rel="stylesheet" href="assets/css/styles.css">
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css">
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
@@ -20,16 +20,6 @@
             <div class="row pb-2 mt-4 mb-2 border-bottom">
                 <h2>Chmaquina <small> control</small></h2>
             </div>
-
-                            <!-- <table class="table table-bordered table-dark">
-                                    <thead>
-                                        <tr>
-                                        <th scope="col">Id</th>
-                                        <th scope="col">Variable</th>
-                                        </tr>
-                                    </thead>
-                                    programs here
-                             </table> -->
             <div class="row nav-buttons">
                 <form id="myform" action="http://localhost:8000/api/compile" enctype="multipart/form-data">
                     <div>
@@ -41,7 +31,8 @@
                     <input id="compilar"            type="submit" value="Compilar" >
                     <input id="correr"  type="button" value="Correr todo" >
                     <input id="paso"    type="button" value="Correr paso a paso" >
-                    <input id="limpiar" type="button" value="Limpiar" >
+                    <input id="mostrarMemoria" type="button" value="Mostrar memoria" >
+                    <input id="limpiar" type="button" value="Limpiar">
                 </form>
             </div>
 
@@ -107,7 +98,7 @@
                                     <thead>
                                         <tr>
                                         <th scope="col">Id</th>
-                                        <th scope="col">tags</th>
+                                        <th scope="col">Tag</th>
                                         </tr>
                                     </thead>
                                         <!-- tags here -->
@@ -131,17 +122,6 @@
                                     <!-- instructions here  -->
                                 </table>
                         </div>
-
-                        <!-- <div class="col-md-5 my-memory-col">
-                            <table id="memory" class="table table-bordered table-dark">
-                                <thead>
-                                    <tr>
-                                        <th scope="col">Id</th>
-                                        <th scope="col">Variable</th>
-                                    </tr>
-                                </thead>
-                             </table>
-                        </div> -->
                     </div>
                     <div class="row justify-content-around program-row top-marg">
                         <div class="col-md-12 my-program-col">
@@ -162,7 +142,33 @@
                     </div>
                 </div>
         </div>
+        
+        <!-- show memory -->
+        
+        <div id="popup-memory" class="popup-memory">
+            <div class="row memory-row" id="memory-row">
+                <div class="col-12">
+                        <div class="col-md-12   my-memory-col" >
+                            <table id='memory-table' class="table table-bordered table-dark">
+                                    <thead>
+                                        <tr>
+                                            <th scope="col">Memoria</th>
+                                            <th scope="col">Elemento</th>
+                                        </tr>
+                                    </thead>
+                                    <!-- instructions here  -->
+                                </table>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+    
+
     </div>
+    <!-- script for showing memory-->
+    <script src="assets/js/memory/button.js"> </script>
     <!-- script for posting files-->
     <script type="module" src="assets/js/submiting/upload_file.js"> </script>
     <!-- script for getting data -->

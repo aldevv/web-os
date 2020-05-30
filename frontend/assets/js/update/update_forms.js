@@ -28,8 +28,6 @@ getData()
 
     if(data['programs'].length >= 1)
         createTableRegisters(registers_table, data['registers'])
-
-
 })
 .then(() => {
     const correrButton = document.getElementById("correr")
@@ -67,6 +65,7 @@ getData()
 
     });
 });
+
 function consoleLogData(data) {
 
     console.log("All: "             , data);
@@ -82,9 +81,10 @@ function consoleLogData(data) {
 function createLeaForm() {
     let form = document.getElementById('myform')
     // originals.push(form.innerHTML)
-    form.innerHTML += '<input id="lea" type="input" placeholder="ingrese un valor" ">'
+    form.innerHTML += '<input id="lea" type="input" placeholder="ingrese un valor">\n '
     form.innerHTML += '<input id="leaButton" type="button" value="enter" ></input>';
     let leaButton = document.getElementById('leaButton');
+    console.log(form.innerHTML)
     leaButton.addEventListener("click", e => {
         e.preventDefault();
         let lea = document.getElementById('lea');
@@ -97,10 +97,10 @@ function createLeaForm() {
             },
             body: JSON.stringify(data),
         })
-        .then(() => {
+        // .then(() => {
             // make it work for any number of lea
             // form.innerHTML = original;
-        })
+        // })
         .catch(console.error);
     });
 }
