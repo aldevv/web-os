@@ -73,7 +73,7 @@ class Chmaquina:
         instructions_compiled = self.compiler.get_program_history()
         instructions_ran = self.instructionRunner.get_program_history()
         all_ = instructions_compiled +instructions_ran
-        return "\n".join([str(a[0]) + " " + str(a[1][0]) + " " + str(a[1][1]) + " | " + str(b) for a, b in zip(all_, steps)])
+        return "\n".join(["line: " + str(a[0]) + " " + str(a[1][0]) + " " + str(a[1][1]) + " | " + str(b) for a, b in zip(all_, steps)])
     
     def getFileLengthNoComments(self):
         return self.compiler.getProgramLengthNoComments()

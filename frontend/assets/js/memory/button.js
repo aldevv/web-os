@@ -1,10 +1,6 @@
 let memory = document.getElementById("mostrarMemoria");
 memory.addEventListener("click", ()=> {
-
-    // toggleProgram();
-    console.log("i will toggle!");
     toggleMemory();
-    console.log("i toggled!");
 });
 
 // function toggleProgram() {

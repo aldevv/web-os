@@ -6,6 +6,7 @@ class OperatorDefinitions:
         self.__mem         = mem
         self.__declaration = declaration
         self.runner        = runner
+        self.lea_values    = None
         self.possible_operators = { 
                         "cargue":       self.cargar, 
                         "almacene":     self.almacene,
@@ -84,22 +85,39 @@ class OperatorDefinitions:
             ErrorHandlerVariables.throw_var_no_declarada(name)
             return
 
-        url_get = 'http://localhost:8000/api/lea'
-        response = requests.get(url_get, timeout=10)
-
+        value = None
+        if self.lea_values == None:
+            value = self.getValues(name)
+        if value == None:
+            return
         prev  = self.__declaration.getVariable(name)
-        var_type = self.__declaration.getVariableType(name)
-        if(var_type == str):
-            value = str(response.json()['lea'])
-        if(var_type == bool):
-            value = bool(response.json()['lea'])
-        if(var_type == int):
-            value = int(response.json()['lea'])
-        if(var_type == float):
-            value = float(response.json()['lea'])
 
         self.__declaration.setVariable(name, value)
         self.__mem.saveStepOneArg(name, prev, value)
+
+    def getValues(self, name):
+
+        url_get = 'http://localhost:8000/api/lea'
+        response = requests.get(url_get, timeout=10)
+        self.lea_values = response.json()['lea']
+        if self.lea_values == None:
+            print("error obteniendo valores")
+            return None
+
+        value = self.lea_values.pop(0)
+        var_type = self.__declaration.getVariableType(name)
+        if(var_type == str):
+            value = str(value)
+        if(var_type == bool):
+            value = bool(value)
+        if(var_type == int):
+            value = int(value)
+        if(var_type == float):
+            value = float(value)
+
+        if len(self.lea_values) == 0:
+            self.lea_values = None
+        return value
 
     def sume(self, name):
         if not self.__declaration.inDeclarations(name):

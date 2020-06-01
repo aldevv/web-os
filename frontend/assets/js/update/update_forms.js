@@ -78,17 +78,19 @@ function consoleLogData(data) {
     console.log("memory used: "     , data["memoryUsed"])
 }
 
-function createLeaForm() {
-    // let form = document.getElementById('myform')
-    // originals.push(form.innerHTML)
-    // form.innerHTML += '<input id="lea" type="input" placeholder="ingrese un valor">\n '
-    // form.innerHTML += '<input id="leaButton" type="button" value="enter" ></input>';
+function createLeaForm(leaItems) { // pasa la liista, cuando presione el boton ok, continuar con next
+    let numLea = leaItems.length;
     let lea = document.getElementById('lea');
     let leaButton = document.getElementById('leaButton');
+    if(numLea == 0) {
+        lea.setAttribute('style', "display: none");
+        leaButton.setAttribute('style', "display: none");
+        return;
+    }
     lea.setAttribute('style', "display: block");
     leaButton.setAttribute('style', "display: block");
-    leaButton.addEventListener("click", e => {
-        e.preventDefault();
+    lea.setAttribute('placeholder', "ingrese un valor para " + leaItems[0]);
+    leaButton.addEventListener("click", function press() {
         let data = {'lea': lea.value};
         const endpoint  = 'http://localhost:8000/api/lea';
         fetch(endpoint, {
@@ -98,10 +100,12 @@ function createLeaForm() {
             },
             body: JSON.stringify(data),
         })
-        // .then(() => {
-            // make it work for any number of lea
-            // form.innerHTML = original;
-        // })
+        .then(() => {
+            lea.value = "";
+            leaItems.shift();
+            leaButton.removeEventListener("click", press);
+            createLeaForm(leaItems);
+        })
         .catch(console.error);
     });
 }
@@ -109,7 +113,7 @@ function createLeaForm() {
 function createTable(table, listElements) {
     let id = 0;
     let current_color = 0;
-    originals.push(table.innerHTML);
+    originals.push(table.innerHTML); //for the clean button
     listElements.forEach(program => {
         program.forEach(element => {
             table.innerHTML += '<tbody style="background-color:'+ colors[current_color] + '" >\ <tr> \ <td>' + id++ + '</td> \ <td>' + element + '</td> \ </tr>\ </tbody>';
@@ -122,17 +126,27 @@ function createTableInstructions(table, listInstructions) {
 
     let id = 0;
     let current_color = 0;
-    originals.push(table.innerHTML);
+    let leaItems = []
+    let numInstructions = listInstructions.length
+    let current_instruction = 0;
+    originals.push(table.innerHTML); // for the clean button
+    
     listInstructions.forEach(instruction =>{
+        current_instruction++;
         instruction.forEach(element => {
-            if(element[0] == "lea") {
-                createLeaForm()        
+            
+            if(current_instruction == numInstructions) { // if last instruction check lea
+                if(element[0] == "lea") {
+                    leaItems.push(element[1]);
+                }
             }
             element = element.join(' ')
             table.innerHTML += '<tbody style="background-color:'+ colors[current_color] + '" >\ <tr> \ <td>' + id++ + '</td> \ <td>' + element + '</td> \ </tr>\ </tbody>';
         });
         current_color++;
     });
+
+    createLeaForm(leaItems);       
 }
 let idProg = 1;
 function createTableRegisters(table, registers) {
