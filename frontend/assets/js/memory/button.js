@@ -1,4 +1,4 @@
-const memory = document.getElementById("mostrarMemoria");
+let memory = document.getElementById("mostrarMemoria");
 memory.addEventListener("click", ()=> {
 
     // toggleProgram();

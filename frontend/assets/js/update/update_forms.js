@@ -79,15 +79,16 @@ function consoleLogData(data) {
 }
 
 function createLeaForm() {
-    let form = document.getElementById('myform')
+    // let form = document.getElementById('myform')
     // originals.push(form.innerHTML)
-    form.innerHTML += '<input id="lea" type="input" placeholder="ingrese un valor">\n '
-    form.innerHTML += '<input id="leaButton" type="button" value="enter" ></input>';
+    // form.innerHTML += '<input id="lea" type="input" placeholder="ingrese un valor">\n '
+    // form.innerHTML += '<input id="leaButton" type="button" value="enter" ></input>';
+    let lea = document.getElementById('lea');
     let leaButton = document.getElementById('leaButton');
-    console.log(form.innerHTML)
+    lea.setAttribute('style', "display: block");
+    leaButton.setAttribute('style', "display: block");
     leaButton.addEventListener("click", e => {
         e.preventDefault();
-        let lea = document.getElementById('lea');
         let data = {'lea': lea.value};
         const endpoint  = 'http://localhost:8000/api/lea';
         fetch(endpoint, {

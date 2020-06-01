@@ -10,8 +10,11 @@ myform.addEventListener("submit", e => {
     // console.log(myfile.files)
     fetch(endpoint, {
         method: "POST",
-        body:   formData
-    }).catch(console.error);
+        body:   formData,
+
+    })
+    .then(text => console.log(text))
+    .catch(console.error);
 });
 
 paso.addEventListener("click", e => {

@@ -112,3 +112,7 @@ table, thead, tbody {
     display: none;
     margin-top: 5%;
 }
+
+form > #lea, form > #leaButton {
+    display: none;
+}
