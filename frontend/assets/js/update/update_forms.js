@@ -13,7 +13,7 @@ let variables = [];
 let tags      = [];
 let programs  = [];
 let memory    = [];
-let originals = [];
+let originalHtml = {'variables': null, 'tags': null, 'instruction': null, 'registers': null, 'memory': null};
 let colors = ["#212121", "#330077",'#7a1b6c', '#303030', "blue", "green"];
 
 getData()
@@ -44,7 +44,7 @@ getData()
             showLogDataRun(data);
             showMonitorResults(data);
             memory = [];
-            memory_table.innerHTML = " ";
+            memory_table.innerHTML = originalHtml['memory'];
             data['memory'].forEach(slot => memory.push(slot));
             createTableMemory(memory);
         });
@@ -54,10 +54,12 @@ getData()
     limpiarButton.addEventListener("click", e => {
         e.preventDefault();
         const endpoint  = 'http://localhost:8000/api/clean';
-        variables_table.innerHTML   = originals[0];
-        tags_table.innerHTML        = originals[1];
-        instruction_table.innerHTML = originals[2];
-        registers_table.innerHTML   = originals[3];
+        monitor.innerHTML           = "";
+        variables_table.innerHTML   = originalHtml['variables'];
+        tags_table.innerHTML        = originalHtml['tags'];
+        instruction_table.innerHTML = originalHtml['instruction'];
+        registers_table.innerHTML   = originalHtml['register'];
+        memory_table.innerHTML      = originalHtml['memory'];
         const memoria = document.getElementById("memoria");
         const kernel = document.getElementById("kernel");
         const acumulador = document.getElementById("acumulador");
@@ -80,19 +82,11 @@ function showLogDataRun(data) {
 }
 
 function showMonitorResults(data) {
-    monitor.innerHTML = " ";
     data['stdout'].forEach(element => {
-        monitor.innerHTML += element + "\n ";
+        monitor.innerHTML += element + "<br>";
     });
 }
 
-function createTableMemory(memory) {
-    let id = 0;
-    let current_color = 0;
-    memory.forEach(slot => {
-        memory_table.innerHTML += '<tbody style="background-color:' + colors[current_color] + '" >\ <tr> \ <td>' + slot[0] + '</td> \ <td>' + slot[1] + '</td> \ </tr>\ </tbody>';
-    });
-}
 
 function createTableRegisters(data) {
     if (data['programs'].length >= 1)
@@ -145,9 +139,13 @@ function createLeaForm(leaItems) { // pasa la liista, cuando presione el boton o
 }
 
 function createTable(table, listElements) {
-    let id = 0;
     let current_color = 0;
-    originals.push(table.innerHTML); //for the clean button
+    if(table['id'] == 'var') {
+        saveOriginalHtml('variables', table.innerHTML);
+    } else {
+        saveOriginalHtml('tags', table.innerHTML);
+
+    }
     listElements.forEach(program => {
         program.forEach(element => {
             let pos = element[0];
@@ -165,7 +163,7 @@ function createTableInstructions(listInstructions) {
     let leaItems = []
     let numInstructions = listInstructions.length
     let current_instruction = 0;
-    originals.push(instruction_table.innerHTML); // for the clean button
+    saveOriginalHtml('instruction', instruction_table.innerHTML);
     
     listInstructions.forEach(instruction =>{
         current_instruction++;
@@ -184,6 +182,7 @@ function createTableInstructions(listInstructions) {
 
     createLeaForm(leaItems);       
 }
+
 let idProg = 1;
 function formatRegisters(registers) {
     let filenames       = registers[0];
@@ -192,8 +191,21 @@ function formatRegisters(registers) {
     let rlc             = registers[3];
     let rlp             = registers[4];
     let length = rb.length;
-    originals.push(registers_table.innerHTML);
+    saveOriginalHtml('register', registers_table.innerHTML);
     for(let i=0; i< length; i++) {
             registers_table.innerHTML += '<tbody style="background-color:'+colors[i]+ '" >\ <tr> \ <td> 000' + idProg++ + '</td> \ <td>' + filenames[i] + '</td> \ <td>' + instruction_num[i] + '</td> \ <td>' + rb[i] + '</td> \  <td>' + rlc[i] + '</td> \ <td>' + rlp[i] + '</td> \ </tr>\ </tbody>';
     }
+}
+
+function createTableMemory(memory) {
+    saveOriginalHtml('memory', memory_table.innerHTML);
+    let current_color = 0;
+    memory.forEach(slot => {
+        memory_table.innerHTML += '<tbody style="background-color:' + colors[current_color] + '" >\ <tr> \ <td>' + slot[0] + '</td> \ <td>' + slot[1] + '</td> \ </tr>\ </tbody>';
+    });
+}
+
+function saveOriginalHtml(type, table) {
+    if (originalHtml[type] == null)
+        originalHtml[type] = table;
 }
