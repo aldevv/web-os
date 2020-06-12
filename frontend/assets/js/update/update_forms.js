@@ -150,7 +150,9 @@ function createTable(table, listElements) {
     originals.push(table.innerHTML); //for the clean button
     listElements.forEach(program => {
         program.forEach(element => {
-            table.innerHTML += '<tbody style="background-color:'+ colors[current_color] + '" >\ <tr> \ <td>' + id++ + '</td> \ <td>' + element + '</td> \ </tr>\ </tbody>';
+            let pos = element[0];
+            let varName = element[1];
+            table.innerHTML += '<tbody style="background-color:'+ colors[current_color] + '" >\ <tr> \ <td>' + pos + '</td> \ <td>' + varName + '</td> \ </tr>\ </tbody>';
         });
         current_color++;
     });

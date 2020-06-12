@@ -44,12 +44,12 @@ class Chmaquina:
         self.mem.saveDeclaration(self.declaration, True)
 
     def getVariables(self): #!change in front!
-        # return self.mem.getVariables()
-        return self.mem.getVariablesNoPos()
+        return self.mem.getVariables()
+        # return self.mem.getVariablesNoPos()
 
     def getTags(self):
-        # return self.mem.getTags()
-        return self.mem.getTagsNoPos()
+        return self.mem.getTags()
+        # return self.mem.getTagsNoPos()
 
     def getMemory(self): 
         return self.mem.getMemory()
