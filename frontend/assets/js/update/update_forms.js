@@ -2,20 +2,23 @@ import {getData, getRunAll, getPaso} from '../retrieving/data.js';
 
 // let memory_table = document.getElementById('memory')
 
-let variables_table = document.getElementById('var');
-let tags_table = document.getElementById('tag');
-let instruction_table = document.getElementById('instruction')
-let registers_table = document.getElementById('registers')
+let variables_table   = document.getElementById('var');
+let tags_table        = document.getElementById('tag');
+let instruction_table = document.getElementById('instruction');
+let registers_table   = document.getElementById('registers');
+let memory_table      = document.getElementById('memory-table');
+let monitor           = document.getElementById('monitor');
 
-let variables    = [];
-let tags         = [];
-let programs     = [];
-let originals    = [];
+let variables = [];
+let tags      = [];
+let programs  = [];
+let memory    = [];
+let originals = [];
 let colors = ["#212121", "#330077",'#7a1b6c', '#303030', "blue", "green"];
 
 getData()
 .then(data => {
-    consoleLogData(data);
+    consoleLogDataCompile(data);
 
     data['variables'].forEach(element => variables.push(element));
     createTable(variables_table, variables);
@@ -24,22 +27,26 @@ getData()
     createTable(tags_table, tags);
 
     data['programs'].forEach(program => programs.push(program));
-    createTableInstructions(instruction_table, programs);
+    createTableInstructions(programs);
 
-    if(data['programs'].length >= 1)
-        createTableRegisters(registers_table, data['registers'])
+    createTableRegisters(data);
+
+    data['memory'].forEach(slot => memory.push(slot));
+    createTableMemory(memory);
+
+    
 })
 .then(() => {
     const correrButton = document.getElementById("correr")
     correrButton.addEventListener("click", e => {
         getRunAll()
         .then(data => {
-            console.log("after_run: ", data['stdout'])
-            console.log("steps: ", data['steps'])
-            let monitor = document.getElementById('monitor')
-            data['stdout'].forEach(element => {
-                monitor.innerHTML += element+"\ ";
-            });
+            showLogDataRun(data);
+            showMonitorResults(data);
+            memory = [];
+            memory_table.innerHTML = " ";
+            data['memory'].forEach(slot => memory.push(slot));
+            createTableMemory(memory);
         });
     });
 
@@ -66,7 +73,33 @@ getData()
     });
 });
 
-function consoleLogData(data) {
+function showLogDataRun(data) {
+    console.log("after_run: " , data['stdout']);
+    console.log("steps: "     , data['steps']);
+    console.log("memory: "    , data['memory']);
+}
+
+function showMonitorResults(data) {
+    monitor.innerHTML = " ";
+    data['stdout'].forEach(element => {
+        monitor.innerHTML += element + "\n ";
+    });
+}
+
+function createTableMemory(memory) {
+    let id = 0;
+    let current_color = 0;
+    memory.forEach(slot => {
+        memory_table.innerHTML += '<tbody style="background-color:' + colors[current_color] + '" >\ <tr> \ <td>' + slot[0] + '</td> \ <td>' + slot[1] + '</td> \ </tr>\ </tbody>';
+    });
+}
+
+function createTableRegisters(data) {
+    if (data['programs'].length >= 1)
+        formatRegisters(data['registers']);
+}
+
+function consoleLogDataCompile(data) {
 
     console.log("All: "             , data);
     console.log("acumulador: "      , data['acumulador']);
@@ -74,6 +107,7 @@ function consoleLogData(data) {
     console.log("tags: "            , data['tags']);
     console.log("programs: "        , data['programs']);
     console.log("registers: "       , data["registers"])
+    console.log("memory: "          , data["memory"])
     console.log("memory Available: ", data["memoryAvailable"])
     console.log("memory used: "     , data["memoryUsed"])
 }
@@ -122,14 +156,14 @@ function createTable(table, listElements) {
     });
 }
 
-function createTableInstructions(table, listInstructions) {
+function createTableInstructions(listInstructions) {
 
     let id = 0;
     let current_color = 0;
     let leaItems = []
     let numInstructions = listInstructions.length
     let current_instruction = 0;
-    originals.push(table.innerHTML); // for the clean button
+    originals.push(instruction_table.innerHTML); // for the clean button
     
     listInstructions.forEach(instruction =>{
         current_instruction++;
@@ -141,7 +175,7 @@ function createTableInstructions(table, listInstructions) {
                 }
             }
             element = element.join(' ')
-            table.innerHTML += '<tbody style="background-color:'+ colors[current_color] + '" >\ <tr> \ <td>' + id++ + '</td> \ <td>' + element + '</td> \ </tr>\ </tbody>';
+            instruction_table.innerHTML += '<tbody style="background-color:'+ colors[current_color] + '" >\ <tr> \ <td>' + id++ + '</td> \ <td>' + element + '</td> \ </tr>\ </tbody>';
         });
         current_color++;
     });
@@ -149,15 +183,15 @@ function createTableInstructions(table, listInstructions) {
     createLeaForm(leaItems);       
 }
 let idProg = 1;
-function createTableRegisters(table, registers) {
+function formatRegisters(registers) {
     let filenames       = registers[0];
     let instruction_num = registers[1];
     let rb              = registers[2];
     let rlc             = registers[3];
     let rlp             = registers[4];
     let length = rb.length;
-    originals.push(table.innerHTML);
+    originals.push(registers_table.innerHTML);
     for(let i=0; i< length; i++) {
-            table.innerHTML += '<tbody style="background-color:'+colors[i]+ '" >\ <tr> \ <td> 000' + idProg++ + '</td> \ <td>' + filenames[i] + '</td> \ <td>' + instruction_num[i] + '</td> \ <td>' + rb[i] + '</td> \  <td>' + rlc[i] + '</td> \ <td>' + rlp[i] + '</td> \ </tr>\ </tbody>';
+            registers_table.innerHTML += '<tbody style="background-color:'+colors[i]+ '" >\ <tr> \ <td> 000' + idProg++ + '</td> \ <td>' + filenames[i] + '</td> \ <td>' + instruction_num[i] + '</td> \ <td>' + rb[i] + '</td> \  <td>' + rlc[i] + '</td> \ <td>' + rlp[i] + '</td> \ </tr>\ </tbody>';
     }
 }

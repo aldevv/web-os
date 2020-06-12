@@ -16,6 +16,7 @@ class MachinaCompiler(object):
             'tags': self.ch.getTags(),
             'programs': self.ch.getPrograms(),
             'registers': self.ch.getRegisters(),
+            'memory': self.ch.getMemory(),
             'memoryAvailable': self.ch.getMemoryAvailable(),
             'memoryUsed': self.ch.getMemoryUsed(),
         }

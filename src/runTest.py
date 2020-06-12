@@ -8,7 +8,7 @@ def test():
     # ch.compileFile( os.path.dirname(__file__) + '/../programs/testLea.ch')
     ch.run_all()
     print(ch.getStdout())
-    # print(ch.getMemory())
+    print(ch.getMemory())
     # print(ch.getVariables())
     # print(ch.getTags())
     # print(ch.getMemoryAvailable())
@@ -18,7 +18,7 @@ def test():
     # print(ch.getTags())
     # print(ch.getRegisters())
     # print(ch.getAcumulador())
-    print(ch.getSteps())
+    # print(ch.getSteps())
 
 test()
 

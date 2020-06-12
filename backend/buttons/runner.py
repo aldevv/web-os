@@ -12,6 +12,7 @@ class MachinaRunner(object):
         data = {
             'stdout': self.ch.getStdout(),
             'steps': self.ch.getSteps(),
+            'memory': self.ch.getMemory(),
         }
         resp.media = data;
         resp.status = falcon.HTTP_201

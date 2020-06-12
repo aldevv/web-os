@@ -1,6 +1,6 @@
 import falcon, json
 
-class MachinaNav(object):
+class MachinaSettings(object):
 
     def __init__(self, ch):
         self.ch        = ch

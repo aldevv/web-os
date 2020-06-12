@@ -1,9 +1,6 @@
-from compiler        import MachinaCompiler
-from runner          import MachinaRunner
-from input           import MachinaInput
-from nav             import MachinaNav
-from clean           import MachinaClean
-from stepByStep      import MachinaStep
+from buttons              import MachinaCompiler, MachinaRunner, MachinaClean, MachinaStep
+from lea                  import MachinaInput
+from chmaquina_settings   import MachinaSettings
 import falcon, os, sys
 sys.path.append(os.path.dirname(os.path.abspath(__file__)) + "/../src")
 from chmaquina import Chmaquina
@@ -23,6 +20,6 @@ ch = Chmaquina()
 api.add_route('/api/lea'          , MachinaInput(ch))
 api.add_route('/api/compile'      , MachinaCompiler(ch))
 api.add_route('/api/run'          , MachinaRunner(ch))
-api.add_route('/api/nav'          , MachinaNav(ch))
+api.add_route('/api/nav'          , MachinaSettings(ch))
 api.add_route('/api/clean'        , MachinaClean(ch))
 api.add_route('/api/step'         , MachinaStep(ch))
