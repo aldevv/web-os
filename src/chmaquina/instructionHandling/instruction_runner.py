@@ -10,18 +10,21 @@ class InstructionRunner:
         self.stdout             = []
         self.operators_executed_history    = []
 
-    def run_line(self, atStart=True):
+    def run_line(self):
         last_history = self.operators_executed_history.copy()
-        if atStart:
-            self.setStartPosition()
         if self.getCurrentLine() >= self.__mem.num_instructions_saved():
             print("nothing more to run")
             return
         instruction = self.__mem.find_instruction(self.current_line)
-        print("instruction: ", instruction)
-        print("step", self.__mem.getSteps())
         self.load_instruction()
         self.nextPosition()
+        print("instruction: ", instruction)
+        print("step", self.__mem.getSteps())
+        print("\n____________\n")
+        if instruction[0] in self.progDefs.possible_operators:
+            return True
+        else:
+            return False
 
     def run_all(self):
         self.setStartPosition()

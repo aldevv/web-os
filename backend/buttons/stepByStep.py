@@ -10,27 +10,30 @@ class MachinaStep(object):
     def on_post(self, req, resp):
         
         if self.instructions == None:
-            input_file = req.get_param('file')
-            print("cargué el archivo paso a paso: ", input_file.filename)
-            if input_file.filename:
-                filename = input_file.filename
-                self.instructions = input_file.file.read().decode('utf8').split('\n')
-                self.ch.run_line(atStart=True)
-                print("stdout: ", self.ch.getStdout())
-                return
+            self.instructions = self.ch.getPrograms()
+            print("instructions", self.instructions)
 
         if len(self.instructions) == 0:
             self.instructions = None
             return
-        print("i ran it") 
+
         self.ch.run_line()
-        print("stdout: ", self.ch.getStdout())
+        # print("i ran it") 
+        # print("stdout: ", self.ch.getStdout())
         resp.status = falcon.HTTP_201
 
 
     def on_get(self, req, resp):
         if self.ch.instructionRunner != None:
             data = {
+                'acumulador': self.ch.getAcumulador(),
+                'variables': self.ch.getVariables(),
+                'tags': self.ch.getTags(),
+                'programs': self.ch.getPrograms(),
+                'registers': self.ch.getRegisters(),
+                'memory': self.ch.getMemory(),
+                'memoryAvailable': self.ch.getMemoryAvailable(),
+                'memoryUsed': self.ch.getMemoryUsed(),
                 'steps': self.ch.getStdout(),
             }
             resp.media = data;

@@ -32,22 +32,25 @@ class Chmaquina:
         if(self.instructionRunner == None):
             self.instructionRunner    = Factory.createInstructionRunner(self.mem, self.declaration)
 
-    def run_line(self, atStart=False):
+    def run_line(self):
         self.createRunnerIfNone()
-        self.instructionRunner.run_line(atStart)
-        stepsInCompiler = self.compiler.get_declarations_executed_history()
-        stepsInRunner = self.instructionRunner.get_operators_executed_history()
-        if len(stepsInCompiler) > 0:
-            step = stepsInCompiler.pop(0)
-            line = step[0]
-            instructionName = " ".join(step[1])
-            self.instructionRunner.appendStdout( "line: " + str(line) + " " + str(instructionName) + " | " + self.mem.getSteps().pop(0))
-        else:
+        if(self.instructionRunner.getCurrentLine() == None):
+            self.instructionRunner.current_line = 0
+        didItRun = self.instructionRunner.run_line()
+        if  didItRun == True: #true si era un operador, false si era declaracion
+            stepsInRunner = self.instructionRunner.get_operators_executed_history()
             step = stepsInRunner.pop(0)
             line = step[0]
             instructionName = step[1]
             instructionName = " ".join(step[1])
-            self.instructionRunner.appendStdout( "line: " + str(line) + " " + str(instructionName) + " | " + self.mem.getSteps().pop(0))
+            self.instructionRunner.appendStdout( "line: " + str(line) + " " + str(instructionName) + " | " + self.mem.getSteps().pop())
+        else:
+            stepsInCompiler = self.compiler.get_declarations_executed_history()
+            if len(stepsInCompiler) > 0:
+                step = stepsInCompiler.pop(0)
+                line = step[0]
+                instructionName = " ".join(step[1])
+                self.instructionRunner.appendStdout( "line: " + str(line) + " " + str(instructionName) + " | " + self.mem.getSteps().pop(0))
 
         #!save declaration?
 

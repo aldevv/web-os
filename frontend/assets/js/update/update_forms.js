@@ -18,23 +18,7 @@ let colors = ["#212121", "#330077",'#7a1b6c', '#303030', "blue", "green"];
 
 getData()
 .then(data => {
-    consoleLogDataCompile(data);
-
-    data['variables'].forEach(element => variables.push(element));
-    createTable(variables_table, variables);
-
-    data['tags'].forEach(element => tags.push(element) );
-    createTable(tags_table, tags);
-
-    data['programs'].forEach(program => programs.push(program));
-    createTableInstructions(programs);
-
-    createTableRegisters(data);
-
-    data['memory'].forEach(slot => memory.push(slot));
-    createTableMemory(memory);
-
-    
+    update_forms(data);
 })
 .then(() => {
     const correrButton = document.getElementById("correr")
@@ -43,10 +27,26 @@ getData()
         .then(data => {
             showLogDataRun(data);
             showMonitorResults(data);
-            memory = [];
-            memory_table.innerHTML = originalHtml['memory'];
-            data['memory'].forEach(slot => memory.push(slot));
-            createTableMemory(memory);
+            refreshMemory(data);
+        });
+    });
+
+    const paso   = document.getElementById("paso")
+    paso.addEventListener("click", e => {
+        e.preventDefault();
+        const endpoint  = 'http://localhost:8000/api/step'
+        fetch(endpoint, {
+            method: "POST",
+            body:   null,
+        })
+        .catch(console.error)
+        .then(()=> {
+            getPaso()
+            .then(data => {
+                let monitor = document.getElementById('monitor')
+                showInMonitor(data, monitor);
+                refreshMemory(data);
+            });
         });
     });
 
@@ -71,9 +71,35 @@ getData()
             },
             body: JSON.stringify(data),
         }).catch(console.error);
-
     });
 });
+
+function refreshMemory(data) {
+    memory = [];
+    memory_table.innerHTML = originalHtml['memory'];
+    data['memory'].forEach(slot => memory.push(slot));
+    createTableMemory(memory);
+}
+
+function showInMonitor(data, monitor) {
+    if (data['steps'].length != 0) {
+        let elem = data['steps'].pop();
+        monitor.innerHTML = elem + "\ ";
+    }
+}
+
+export function update_forms(data) {
+    consoleLogDataCompile(data);
+    data['variables'].forEach(element => variables.push(element));
+    createTable(variables_table, variables);
+    data['tags'].forEach(element => tags.push(element));
+    createTable(tags_table, tags);
+    data['programs'].forEach(program => programs.push(program));
+    createTableInstructions(programs);
+    createTableRegisters(data);
+    data['memory'].forEach(slot => memory.push(slot));
+    createTableMemory(memory);
+}
 
 function showLogDataRun(data) {
     console.log("after_run: " , data['stdout']);

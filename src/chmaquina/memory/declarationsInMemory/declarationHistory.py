@@ -29,7 +29,7 @@ class DeclarationHistory:
         return self.os_memory
 
     def set_all(self, kernel):
-        return [["Acumulador"]] + [["OS " + str(i)] for i in range(kernel)]
+        return [[self.mem.getAcumulador()]] + [["OS " + str(i)] for i in range(kernel)]
 
     def getVariables(self):
         memory = self.get_all()

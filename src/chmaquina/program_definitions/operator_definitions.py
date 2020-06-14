@@ -72,13 +72,13 @@ class OperatorDefinitions:
         prev = self.runner.getCurrentLine()
         if self.__mem.getAcumulador() > 0:
             self.runner.setLine(self.__declaration.getTag(tag1) -2) # makes it equal to the value in tag1
-            self.__mem.saveStepOneArg("vayasi",str(" desde " + str(prev)+ " hasta "), self.runner.getCurrentLine())
+            self.__mem.saveStepOneArg("vayasi",str(" desde " + str(prev+1)+ " hasta "), self.runner.getCurrentLine()+1)
             return
         if self.__mem.getAcumulador() < 0:
             self.runner.setLine(self.__declaration.getTag(tag2)-2) # makes it equal to the value in tag2
-            self.__mem.saveStepOneArg("vayasi", str(" desde " + str(prev)+ " hasta ") , self.runner.getCurrentLine())
+            self.__mem.saveStepOneArg("vayasi", str(" desde " + str(prev+1)+ " hasta ") , self.runner.getCurrentLine()+1)
             return
-        self.__mem.saveStepOneArg("vayasi",str("desde " + str(prev)+ " hasta ") , self.runner.getCurrentLine())
+        self.__mem.saveStepOneArg("vayasi",str("desde " + str(prev+1)+ " hasta ") , self.runner.getCurrentLine()+1)
 
     def lea(self, name):
         if not self.__declaration.inDeclarations(name):
