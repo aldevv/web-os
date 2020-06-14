@@ -35,6 +35,20 @@ class Chmaquina:
     def run_line(self, atStart=False):
         self.createRunnerIfNone()
         self.instructionRunner.run_line(atStart)
+        stepsInCompiler = self.compiler.get_declarations_executed_history()
+        stepsInRunner = self.instructionRunner.get_operators_executed_history()
+        if len(stepsInCompiler) > 0:
+            step = stepsInCompiler.pop(0)
+            line = step[0]
+            instructionName = " ".join(step[1])
+            self.instructionRunner.appendStdout( "line: " + str(line) + " " + str(instructionName) + " | " + self.mem.getSteps().pop(0))
+        else:
+            step = stepsInRunner.pop(0)
+            line = step[0]
+            instructionName = step[1]
+            instructionName = " ".join(step[1])
+            self.instructionRunner.appendStdout( "line: " + str(line) + " " + str(instructionName) + " | " + self.mem.getSteps().pop(0))
+
         #!save declaration?
 
     def run_all(self):

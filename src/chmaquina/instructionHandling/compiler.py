@@ -12,6 +12,7 @@ class Compiler:
         self.currentProgram        = []
 
     def compileLines(self, lines):
+        self.current_line = len(lines)
         self.mem.setMemoryBeforeCompile()
         for instruction in lines:
             self.parse_and_compile_line(instruction)
@@ -58,7 +59,6 @@ class Compiler:
         self.current_line += 1
 
     def compile_(self,string):
-                
         self.validate_and_save(string)
 
     def validate_and_save(self, instruction):

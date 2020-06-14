@@ -22,7 +22,6 @@ class InstructionRunner:
         print("step", self.__mem.getSteps())
         self.load_instruction()
         self.nextPosition()
-        self.appendStdout(self.__mem.step_by_step.pop(0))
 
     def run_all(self):
         self.setStartPosition()

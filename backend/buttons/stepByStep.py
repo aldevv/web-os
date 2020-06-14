@@ -15,9 +15,8 @@ class MachinaStep(object):
             if input_file.filename:
                 filename = input_file.filename
                 self.instructions = input_file.file.read().decode('utf8').split('\n')
-                self.ch.compileLines(self.instructions)
                 self.ch.run_line(atStart=True)
-                print(self.ch.getStdout())
+                print("stdout: ", self.ch.getStdout())
                 return
 
         if len(self.instructions) == 0:
@@ -25,7 +24,7 @@ class MachinaStep(object):
             return
         print("i ran it") 
         self.ch.run_line()
-        print(self.ch.getStdout())
+        print("stdout: ", self.ch.getStdout())
         resp.status = falcon.HTTP_201
 
 
