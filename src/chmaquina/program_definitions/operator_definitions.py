@@ -59,6 +59,7 @@ class OperatorDefinitions:
             ErrorHandlerVariables.throw_tag_no_declarada(tag)
             return
         self.runner.setLine(self.__declaration.getTag(tag) -2)
+        self.__mem.saveStepOneArg("vaya",str(" desde " + str(prev+1)+ " hasta "), self.runner.getCurrentLine()+1)
 
     def vayasi(self, tag1, tag2):
         if not self.__declaration.inDeclarations(tag1):
