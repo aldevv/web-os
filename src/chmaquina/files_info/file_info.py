@@ -30,7 +30,7 @@ class FileInfo:
         registers.append(base)
         if len(programs) > 1: #!
             for i in range(1, len(programs)):
-                registers.append( registers[-1] + len(programs[i-1]) + len(self.mem.declarationHistory[i-1].getAllNames())) # minus the last one which is the current one
+                registers.append( registers[-1] + len(programs[i-1]) + len(self.mem.getDeclarationHistory()[i-1].getAllNames())) # minus the last one which is the current one
         return registers
 
     def getCodeLimitRegisters(self):
@@ -44,8 +44,8 @@ class FileInfo:
     def getProgramLimitRegisters(self):
         registers = []
         rcl = self.getCodeLimitRegisters()
-        for r, id_ in zip(rcl, self.mem.declarationHistory):
-            registers.append(r + len(self.mem.declarationHistory[id_].getAllNames()))
+        for r, id_ in zip(rcl, self.mem.getDeclarationHistory()):
+            registers.append(r + len(self.mem.getDeclarationHistory()[id_].getAllNames()))
         return registers
     
     def saveFilename(self, filename):
@@ -53,4 +53,4 @@ class FileInfo:
 
     def clear(self):
         self.filenames = []
-        self.mem.declarationHistory = {}
+        self.mem.declarationHistory.setDeclarationHistory({})

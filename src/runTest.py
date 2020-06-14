@@ -11,12 +11,12 @@ def test():
     print(ch.getMemory())
     print(ch.getVariables())
     print(ch.getTags())
-    # print(ch.getMemoryAvailable())
-    # print(ch.getMemoryUsed())
-    # print(ch.getPrograms())
-    # print(ch.getRegisters())
-    # print(ch.getAcumulador())
-    # print(ch.getSteps())
+    print(ch.getMemoryAvailable())
+    print(ch.getMemoryUsed())
+    print(ch.getPrograms())
+    print(ch.getRegisters())
+    print(ch.getAcumulador())
+    print(ch.getSteps())
 
 test()
 
