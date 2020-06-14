@@ -34,8 +34,7 @@ class Chmaquina:
 
     def run_line(self, atStart=False):
         self.createRunnerIfNone()
-        ranOperator = self.instructionRunner.run_line(atStart)
-        return True if ranOperator == True else False
+        self.instructionRunner.run_line(atStart)
         #!save declaration?
 
     def run_all(self):
@@ -70,8 +69,8 @@ class Chmaquina:
         steps = self.mem.getSteps()
         if steps == []:
             return None
-        instructions_compiled = self.compiler.get_program_history()
-        instructions_ran = self.instructionRunner.get_program_history()
+        instructions_compiled = self.compiler.get_declarations_executed_history()
+        instructions_ran = self.instructionRunner.get_operators_executed_history()
         all_ = instructions_compiled +instructions_ran
         return "\n".join(["line: " + str(a[0]) + " " + str(a[1][0]) + " " + str(a[1][1]) + " | " + str(b) for a, b in zip(all_, steps)])
     

@@ -8,10 +8,10 @@ class InstructionRunner:
         self.progDefs           = None
         self.current_line       = None # represents the current instruction
         self.stdout             = []
-        self.program_history    = []
+        self.operators_executed_history    = []
 
     def run_line(self, atStart=True):
-        last_history = self.program_history.copy()
+        last_history = self.operators_executed_history.copy()
         if atStart:
             self.setStartPosition()
         if self.getCurrentLine() >= self.__mem.num_instructions_saved():
@@ -22,10 +22,7 @@ class InstructionRunner:
         print("step", self.__mem.getSteps())
         self.load_instruction()
         self.nextPosition()
-        changed = self.program_history != last_history
-        if changed:
-            self.appendStdout(self.program_history[-1])
-        return changed
+        self.appendStdout(self.__mem.step_by_step.pop(0))
 
     def run_all(self):
         self.setStartPosition()
@@ -73,7 +70,7 @@ class InstructionRunner:
     def save_in_history(self, instruction):
         # if instruction[0] == "vaya" or instruction[0] == "vayasi":
         #     return
-        self.program_history.append((self.current_line+1, instruction))
+        self.operators_executed_history.append((self.current_line+1, instruction))
 
     def setLine(self, value):
         self.current_line = value
@@ -84,11 +81,11 @@ class InstructionRunner:
     def getStdout(self):
         return self.stdout
 
-    def get_program_history(self):
-        return self.program_history
+    def get_operators_executed_history(self):
+        return self.operators_executed_history
 
     def num_prog_ran(self):
-        return len(self.program_history)
+        return len(self.operators_executed_history)
 
     def setProgdefs(self, progDefs):
         self.progDefs = progDefs

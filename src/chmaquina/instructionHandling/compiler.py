@@ -8,7 +8,7 @@ class Compiler:
         self.progDefs              = progDefs
         self.current_line          = None
         self.programLength         = []
-        self.program_history       = []
+        self.declarations_executed_history       = []
         self.currentProgram        = []
 
     def compileLines(self, lines):
@@ -79,13 +79,13 @@ class Compiler:
 
     def save_in_history(self, instruction):
         if self.current_line != None:
-            self.program_history.append((self.current_line, instruction))
+            self.declarations_executed_history.append((self.current_line, instruction))
     
-    def get_program_history(self):
-        return self.program_history
+    def get_declarations_executed_history(self):
+        return self.declarations_executed_history
 
     def num_prog_compiled(self):
-        return len(self.program_history)
+        return len(self.declarations_executed_history)
     
     def getProgramLengthNoComments(self):
         return self.programLength

@@ -76,7 +76,6 @@ class Memory:
             memory += [[declarationHistory[id_].getTag(tag)] for tag in tagsNoPos]
         return all_tags
 
-
     def saveDeclaration(self, declaration, update=None):
         if update == True:
             last_element = len(self.declarationHistory) - 1
