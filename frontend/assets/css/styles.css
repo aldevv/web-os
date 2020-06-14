@@ -54,11 +54,13 @@ body {
     border: 3px solid violet;
     height: 200px;
     text-align: center;
+    vertical-align: center;
     
 }
 
 .mode-row {
     text-align: center;
+    margin-top: 1%;
     /* border: 3px solid gray; */
 }
 
@@ -115,4 +117,11 @@ table, thead, tbody {
 
 form > #lea, form > #leaButton {
     display: none;
+}
+
+.printer {
+    vertical-align: bottom;
+    background-color: var(--side-B-col);
+    height: 4.5%;
+    border: 3px dotted var(--side-A-col);
 }

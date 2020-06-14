@@ -3,11 +3,13 @@ import os.path
 
 def test():
     ch = Chmaquina()
-    ch.compileFile( os.path.dirname(__file__) + '/../programs/factorial.ch')
+    # ch.compileFile( os.path.dirname(__file__) + '/../programs/factorial.ch')
+    ch.compileFile( os.path.dirname(__file__) + '/../programs/printerTest.ch')
     # ch.compileFile( os.path.dirname(__file__) + '/../programs/miProgTest.ch')
     # ch.compileFile( os.path.dirname(__file__) + '/../programs/testLea.ch')
     ch.run_all()
-    print(ch.getStdout())
+    print("stdout:", ch.getStdout())
+    print("printer:", ch.getPrinter())
     print(ch.getMemory())
     print(ch.getVariables())
     print(ch.getTags())

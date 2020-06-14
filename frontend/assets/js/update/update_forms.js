@@ -8,6 +8,8 @@ let instruction_table = document.getElementById('instruction');
 let registers_table   = document.getElementById('registers');
 let memory_table      = document.getElementById('memory-table');
 let monitor           = document.getElementById('monitor');
+let printer           = document.getElementById('printer');
+export let mode              = document.getElementById('mode');
 
 let variables = [];
 let tags      = [];
@@ -26,8 +28,9 @@ getData()
         getRunAll()
         .then(data => {
             showLogDataRun(data);
-            showMonitorResults(data);
+            showMonitorAndPrinter(data);
             refreshMemory(data);
+            mode.setAttribute("src", "assets/images/Usuario.png")
         });
     });
 
@@ -43,7 +46,6 @@ getData()
         .then(()=> {
             getPaso()
             .then(data => {
-                let monitor = document.getElementById('monitor')
                 showInMonitor(data, monitor);
                 refreshMemory(data);
             });
@@ -86,6 +88,13 @@ function showInMonitor(data, monitor) {
         let elem = data['steps'].pop();
         monitor.innerHTML = elem + "\ ";
     }
+
+    if (data['printer'].length > 0) {
+        printer.innerHTML = "impresora: ";
+        data['printer'].forEach(element => {
+            printer.innerHTML +=  element + " |  ";
+        });
+    }
 }
 
 export function update_forms(data) {
@@ -107,10 +116,17 @@ function showLogDataRun(data) {
     console.log("memory: "    , data['memory']);
 }
 
-function showMonitorResults(data) {
+function showMonitorAndPrinter(data) {
     data['stdout'].forEach(element => {
         monitor.innerHTML += element + "<br>";
     });
+
+    if (data['printer'].length > 0) {
+        printer.innerHTML = "impresora: ";
+        data['printer'].forEach(element => {
+            printer.innerHTML +=  element + " |  ";
+        });
+    }
 }
 
 

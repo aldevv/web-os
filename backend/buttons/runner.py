@@ -11,6 +11,7 @@ class MachinaRunner(object):
         self.ch.run_all()
         data = {
             'stdout': self.ch.getStdout(),
+            'printer': self.ch.getPrinter(),
             'steps': self.ch.getSteps(),
             'memory': self.ch.getMemory(),
         }

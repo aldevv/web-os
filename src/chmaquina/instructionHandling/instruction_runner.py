@@ -8,6 +8,7 @@ class InstructionRunner:
         self.progDefs           = None
         self.current_line       = None # represents the current instruction
         self.stdout             = []
+        self.printer            = []
         self.operators_executed_history    = []
 
     def run_line(self):
@@ -40,10 +41,6 @@ class InstructionRunner:
                 self.nextPosition()
         except Exception as err:
             print(traceback.format_exc())
-            # print(self.__mem.instructions_saved)
-            # print(self.__mem.find_instruction(self.getCurrentLine()-1))
-            # print(len(self.__mem.instructions_saved[-1]))
-            # print(self.__mem.find_instruction(self.getCurrentLine()))
             print("Hubo un error en runtime ", err.args, self.getCurrentLine(), err)
 
     def getCurrentLine(self):
@@ -70,8 +67,6 @@ class InstructionRunner:
             raise
 
     def save_in_history(self, instruction):
-        # if instruction[0] == "vaya" or instruction[0] == "vayasi":
-        #     return
         self.operators_executed_history.append((self.current_line+1, instruction))
 
     def setLine(self, value):
@@ -80,6 +75,12 @@ class InstructionRunner:
     def appendStdout(self, string):
         self.stdout.append(string)
     
+    def appendPrinter(self, string):
+        self.printer.append(string)
+
+    def getPrinter(self):
+        return self.printer
+
     def getStdout(self):
         return self.stdout
 

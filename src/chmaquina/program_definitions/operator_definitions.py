@@ -249,8 +249,16 @@ class OperatorDefinitions:
         self.runner.appendStdout(value)
         self.__mem.saveStepOneArg(name, value)
 
-    def imprima(self):  # !!!!!!!!
-        pass
+    def imprima(self, name):
+        if(name == "acumulador"):
+            self.runner.appendPrinter(self.__mem.getAcumulador())
+            return
+        if not self.__declaration.inDeclarations(name):
+            ErrorHandlerVariables.throw_var_no_declarada(name)
+            return
+        value = self.__declaration.getVariable(name)
+        self.runner.appendPrinter(value)
+        self.__mem.saveStepOneArg(name, value)
 
     def max_(self, a, b, c):
         a = self.__declaration.getVariable(a)

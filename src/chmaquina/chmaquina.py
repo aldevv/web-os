@@ -81,6 +81,9 @@ class Chmaquina:
     
     def getStdout(self):
         return self.instructionRunner.getStdout()
+
+    def getPrinter(self):
+        return self.instructionRunner.getPrinter()
     
     def getSteps(self):
         steps = self.mem.getSteps()
