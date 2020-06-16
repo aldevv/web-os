@@ -24,6 +24,9 @@ class Memory:
     def addDeclarationToPending(self, declaration):
         self.declarationHistory.addToPending(declaration)
 
+    def getPendingDeclarations(self):
+        return self.declarationHistory.getPending()
+
     def getTags(self): 
         return self.declarationHistory.getTags()
 

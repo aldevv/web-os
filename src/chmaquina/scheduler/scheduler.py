@@ -1,9 +1,9 @@
 
 class Scheduler:
     def __init__(self):
-        self.run_instances         = []
-        self.compile_instances     = []
-        self.pending_run_instances = []
+        self.run_instances                = []
+        self.compile_instances            = []
+        self.pending_run_instances        = []
         self.programs_to_run = None
         self.algorithm       = None
 
@@ -39,3 +39,8 @@ class Scheduler:
     
     def run(self):
         self.algorithm.run()
+    
+    def getCompilerFromDeclaration(self, declaration):
+        for compiler in self.compile_instances:
+            if compiler.progDefs.getDeclaration() == declaration:
+                return compiler

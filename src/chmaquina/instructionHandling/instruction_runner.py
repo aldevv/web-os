@@ -13,18 +13,22 @@ class InstructionRunner:
         self.operators_executed_history    = []
 
     def run_line(self):
-        if self.current_program == None:
-            self.current_program = 0
-        if self.getCurrentLine() >= self.__mem.num_instructions_saved(self.current_program):
-            self.current_program += 1
-            self.current_line = 0
-            if self.current_program == len(self.__mem.get_programs()):
+        programs_to_run = self.__mem.pending_programs
+        if len(programs_to_run) == 0:
                 print("nothing more to run")
                 return
-        instruction = self.__mem.find_instruction(self.current_program , self.current_line)
-        self.load_instruction()
+        
+        # print("current Line", self.getCurrentLine())
+        # print("num Instruct", len(programs_to_run[0])-1)
+
+        instruction = self.find_instruction(programs_to_run, self.current_line)
+        self.load_instruction(programs_to_run)
         self.nextPosition()
+        if self.getCurrentLine() == len(programs_to_run[0]):
+            programs_to_run.pop(0)
+            self.current_line = None
         print("instruction: ", instruction)
+        # print("pending_ programs", programs_to_run)
         print("step", self.__mem.getSteps())
         print("\n____________\n")
         if instruction[0] in self.progDefs.possible_operators:

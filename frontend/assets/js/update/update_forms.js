@@ -46,6 +46,8 @@ getData()
         .then(()=> {
             getPaso()
             .then(data => {
+                console.log("steps", data['steps']);
+                console.log("all_step", data);
                 showInMonitor(data, monitor);
                 refreshMemory(data);
             });

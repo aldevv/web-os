@@ -42,28 +42,52 @@ class Chmaquina:
 
     def createRunnerIfNone(self):
         if(self.instructionRunner == None):
-            self.instructionRunner    = Factory.createInstructionRunner(self.mem, self.declaration)
+            pendingDeclarations = self.mem.getPendingDeclarations()
+            print("this declaration's variables: ", pendingDeclarations[0].getVariables())
+            self.instructionRunner    = Factory.createInstructionRunner(self.mem, pendingDeclarations.pop(0))
 
     def run_line(self):
-        self.createRunnerIfNone()
+        self.createRunnerIfNone() ## need to create it according to the first declaration in the first file sent
+        declaration = self.instructionRunner.progDefs.getDeclaration()
+        compiler = self.scheduler.getCompilerFromDeclaration(declaration)
+        stepsInCompiler = compiler.get_declarations_executed_history()
+
         if(self.instructionRunner.getCurrentLine() == None):
             self.instructionRunner.current_line = 0
+        step = None
+        programs_to_run = self.mem.pending_programs.copy()
         didItRun = self.instructionRunner.run_line()
+        # print("did it run ", didItRun, "\n")
         if  didItRun == True: #true si era un operador, false si era declaracion
             stepsInRunner = self.instructionRunner.get_operators_executed_history()
             step = stepsInRunner.pop(0)
             line = step[0]
             instructionName = step[1]
             instructionName = " ".join(step[1])
-            self.instructionRunner.appendStdout( "line: " + str(line) + " " + str(instructionName) + " | " + self.mem.getSteps().pop())
+            message = "line: " + str(line) + " " + str(instructionName) + " | " + self.mem.getSteps().pop()
+            # print("message: ", message)
+            self.instructionRunner.appendStdout(message)
+            print("stdout:", self.getStdout(), "\n")
+            if self.instructionRunner not in self.scheduler.getRunInstances():
+                self.scheduler.appendRunInstance(self.instructionRunner)
         else:
-            stepsInCompiler = self.compiler.get_declarations_executed_history()
             if len(stepsInCompiler) > 0:
                 step = stepsInCompiler.pop(0)
                 line = step[0]
+                instructionName = step[1]
                 instructionName = " ".join(step[1])
-                self.instructionRunner.appendStdout( "line: " + str(line) + " " + str(instructionName) + " | " + self.mem.getSteps().pop(0))
+                message = "line: " + str(line) + " " + str(instructionName) + " | " + self.mem.getSteps().pop(0)
+                self.instructionRunner.appendStdout(message)
 
+                if self.instructionRunner not in self.scheduler.getRunInstances():
+                    self.scheduler.appendRunInstance(self.instructionRunner)
+
+        if len(self.mem.pending_programs) != len(programs_to_run):
+            pendingDeclarations = self.mem.getPendingDeclarations()
+            if pendingDeclarations != []:
+                print("this declaration's variables: ", pendingDeclarations[0].getVariables())
+                self.instructionRunner    = Factory.createInstructionRunner(self.mem, pendingDeclarations.pop(0))
+        
         #!save declaration?
 
     def run_all(self):

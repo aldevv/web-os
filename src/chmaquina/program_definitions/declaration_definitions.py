@@ -8,6 +8,9 @@ class DeclarationDefinitions:
                         "nueva":self.nueva,
                         "etiqueta":self.etiqueta,
         }
+
+    def getDeclaration(self):
+        return self.__declaration
     
     def get_possible_declarations(self):
         return self.possible_declarations
