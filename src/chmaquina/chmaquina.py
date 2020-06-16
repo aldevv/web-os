@@ -19,6 +19,7 @@ class Chmaquina:
     def compileFile(self, path):
         self.declaration       = Factory.createDeclaration(self.mem)
         self.compiler          = Factory.createCompiler(self.mem, self.declaration)
+        self.scheduler.appendCompileInstance(self.compiler)
         self.compiler.compileFile(path)
         # the variables and tags for the program compiled
         self.mem.saveDeclaration(self.declaration)
@@ -114,9 +115,15 @@ class Chmaquina:
         # print(self.mem.getSteps())
         if steps == []:
             return None
-        instructions_compiled = self.compiler.get_declarations_executed_history()
-        instructions_ran = self.instructionRunner.get_operators_executed_history()
-        all_ = instructions_compiled +instructions_ran
+        instructions_compiled = []
+        instructions_ran      =  []
+        num_progs = len(self.scheduler.getCompileInstances())
+        compilers = self.scheduler.getCompileInstances()
+        runners = self.scheduler.getRunInstances()
+        for i in range(num_progs):
+            instructions_compiled += compilers[i].get_declarations_executed_history()
+            instructions_ran      += runners[i].get_operators_executed_history()
+        all_ = instructions_compiled + instructions_ran
         return "\n".join(["line: " + str(a[0]) + " " + str(a[1][0]) + " " + str(a[1][1]) + " | " + str(b) for a, b in zip(all_, steps)])
     
     def getFileLengthNoComments(self):

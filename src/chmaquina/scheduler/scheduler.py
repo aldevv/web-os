@@ -2,6 +2,7 @@
 class Scheduler:
     def __init__(self):
         self.run_instances         = []
+        self.compile_instances     = []
         self.pending_run_instances = []
         self.programs_to_run = None
         self.algorithm       = None
@@ -10,8 +11,14 @@ class Scheduler:
         self.run_instances.append(runner_instance)
         self.pending_run_instances.append(runner_instance)
 
+    def appendCompileInstance(self, compile_instance):
+        self.compile_instances.append(compile_instance)
+
     def getRunInstances(self):
         return self.run_instances
+
+    def getCompileInstances(self):
+        return self.compile_instances
 
     def getStdout(self):
         stdout = []

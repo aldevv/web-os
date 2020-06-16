@@ -6,7 +6,7 @@ def test():
     ch.compileFile( os.path.dirname(__file__) + '/../programs/printerTest.ch')
     ch.compileFile( os.path.dirname(__file__) + '/../programs/printerTest.ch')
     ch.compileFile( os.path.dirname(__file__) + '/../programs/factorial.ch')
-    ch.compileFile( os.path.dirname(__file__) + '/../programs/miProgTest.ch')
+    # ch.compileFile( os.path.dirname(__file__) + '/../programs/miProgTest.ch')
     # ch.compileFile( os.path.dirname(__file__) + '/../programs/testLea.ch')
     ch.run_all()
     print("stdout:", ch.getStdout())
@@ -19,8 +19,6 @@ def test():
     print(ch.getPrograms())
     # print(ch.getRegisters())
     # print(ch.getAcumulador())
-    # print(ch.getSteps()) #! not working for all
+    print(ch.getSteps()) 
 
 test()
-
-#TODO make it work for any program uploaded
