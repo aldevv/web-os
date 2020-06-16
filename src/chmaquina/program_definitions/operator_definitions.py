@@ -89,21 +89,22 @@ class OperatorDefinitions:
             ErrorHandlerVariables.throw_var_no_declarada(name)
             return
 
-        value = None
-        if self.lea_values == None:
-            value = self.getValues(name)
+        value = self.getValues(name)
         if value == None:
             return
         prev  = self.__declaration.getVariable(name)
 
         self.__declaration.setVariable(name, value)
+        some  = self.__declaration.getVariable(name)
         self.__mem.saveStepOneArg(name, prev, value)
 
     def getValues(self, name):
 
-        url_get = 'http://localhost:8000/api/lea'
-        response = requests.get(url_get, timeout=10)
-        self.lea_values = response.json()['lea']
+        if self.lea_values == None:
+            url_get = 'http://localhost:8000/api/lea'
+            response = requests.get(url_get, timeout=10)
+            self.lea_values = response.json()['lea']
+
         if self.lea_values == None:
             print("error obteniendo valores")
             return None
