@@ -1,7 +1,8 @@
-from ..memory                import Memory
-from ..declaration           import Declaration, Declarable_Item
-from ..program_definitions   import DeclarationDefinitions, OperatorDefinitions
-from ..files_info            import FileInfo
+from ..memory              import Memory
+from ..declaration         import Declaration, Declarable_Item
+from ..program_definitions import DeclarationDefinitions, OperatorDefinitions
+from ..files_info          import FileInfo
+from ..scheduler           import Scheduler
 
 class Factory:
     @staticmethod
@@ -40,3 +41,6 @@ class Factory:
     def createFileInfo(mem):
         return FileInfo(mem)
 
+    @staticmethod
+    def createScheduler():
+        return Scheduler()

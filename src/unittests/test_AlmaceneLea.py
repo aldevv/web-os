@@ -7,9 +7,6 @@ import unittest.mock
 ch = Chmaquina()
 mem = ch.mem
 class Almacene_Lea_Test(unittest.TestCase):
-    def clearMemory(self):
-        ch.declaration = None
-        ch.compiler    = None
 
     def testAlmacene(self):
         lines = ["nueva m I 5", "nueva n I 20", "cargue m", "almacene n"]
@@ -17,7 +14,7 @@ class Almacene_Lea_Test(unittest.TestCase):
         ch.run_all()
         declaration = ch.declaration
         self.assertEqual(5, declaration.getVariable('n'))
-        self.clearMemory()
+        ch.resetMaquina()
 
     # def testLea(self):
     #     ch = Chmaquina()

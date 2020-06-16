@@ -1,4 +1,4 @@
-nueva unidad I 1
-nueva m I 5
-imprima m
-imprima unidad
+nueva unidads I 2
+nueva ms I 10
+imprima ms
+imprima unidads

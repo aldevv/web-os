@@ -33,6 +33,9 @@ class OperatorDefinitions:
     
     def get_possible_operators(self):
         return self.possible_operators
+    
+    def getDeclaration(self):
+        return self.__declaration
 
     def cargar(self, name):
         if not self.__declaration.inDeclarations(name):

@@ -5,18 +5,15 @@ from chmaquina import Chmaquina
 import unittest
 
 ch = Chmaquina()
-mem = ch.mem
 class StringTest(unittest.TestCase):
-    def clearMemory(self):
-        ch.declaration = None
-        ch.compiler    = None
 
     def testConcatene(self):
         lines = ["nueva m C algo",  "concatene esto"]
         ch.compileLines(lines)
         ch.run_all()
+        mem = ch.mem
         self.assertEqual("0esto", mem.getAcumulador())
-        self.clearMemory()
+        ch.resetMaquina()
 
     def testElimine1(self):
         lines = ["nueva m C algunaClasePizza", "nueva sub C algo", "cargue m", "elimine Clase sub"]
@@ -24,7 +21,7 @@ class StringTest(unittest.TestCase):
         ch.run_all()
         declaration = ch.declaration
         self.assertEqual("algunaPizza", declaration.getVariable("sub"))
-        self.clearMemory()
+        ch.resetMaquina()
 
     def testElimine2(self):
         lines = ["nueva m C algunaClasePizza", "nueva sub C Clase", "cargue m", "elimine sub sub"]
@@ -32,7 +29,7 @@ class StringTest(unittest.TestCase):
         ch.run_all()
         declaration = ch.declaration
         self.assertEqual("algunaPizza", declaration.getVariable("sub"))
-        self.clearMemory()
+        ch.resetMaquina()
 
     def testExtraiga(self):
         lines = ["nueva m C algunaClasePizza", "nueva sub C Clase", "cargue m", "extraiga 5 sub"]
@@ -40,7 +37,7 @@ class StringTest(unittest.TestCase):
         ch.run_all()
         declaration = ch.declaration
         self.assertEqual("algun", declaration.getVariable("sub"))
-        self.clearMemory()
+        ch.resetMaquina()
 
 if __name__ == '__main__':
     unittest.main()

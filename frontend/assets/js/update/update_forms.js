@@ -117,10 +117,12 @@ function showLogDataRun(data) {
 }
 
 function showMonitorAndPrinter(data) {
+    monitor.innerHTML = " ";
     data['stdout'].forEach(element => {
         monitor.innerHTML += element + "<br>";
     });
 
+    printer.innerHTML = " ";
     if (data['printer'].length > 0) {
         printer.innerHTML = "impresora: ";
         data['printer'].forEach(element => {

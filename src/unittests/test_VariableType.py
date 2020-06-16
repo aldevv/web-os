@@ -6,9 +6,6 @@ import unittest
 ch = Chmaquina()
 mem = ch.mem
 class VariableTypeTest(unittest.TestCase):
-    def clearMemory(self):
-        ch.declaration = None
-        ch.compiler    = None
 
     def testInt(self):
         lines = ["nueva m I 5", "cargue m"]
@@ -16,7 +13,7 @@ class VariableTypeTest(unittest.TestCase):
         declaration = ch.declaration
         self.assertEqual(5, declaration.getVariable('m'))
         self.assertTrue(type(declaration.getVariable('m')) is int)
-        self.clearMemory()
+        ch.resetMaquina()
 
 
     def testString(self):
@@ -25,7 +22,7 @@ class VariableTypeTest(unittest.TestCase):
         declaration = ch.declaration
         self.assertEqual("5", declaration.getVariable('n'))
         self.assertTrue(type(declaration.getVariable('n')) is str)
-        self.clearMemory()
+        ch.resetMaquina()
 
 
 
@@ -35,7 +32,7 @@ class VariableTypeTest(unittest.TestCase):
         declaration = ch.declaration
         self.assertEqual(False, declaration.getVariable('o'))
         self.assertTrue(type(declaration.getVariable('o')) is bool)
-        self.clearMemory()
+        ch.resetMaquina()
 
     def testFloat(self):
         lines = ["nueva o R 2.5", "cargue o"]
@@ -43,7 +40,7 @@ class VariableTypeTest(unittest.TestCase):
         declaration = ch.declaration
         self.assertEqual(2.5, declaration.getVariable('o'))
         self.assertTrue(type(declaration.getVariable('o')) is float)
-        self.clearMemory()
+        ch.resetMaquina()
 
 if __name__ == '__main__':
     unittest.main()

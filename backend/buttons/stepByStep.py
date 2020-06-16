@@ -3,23 +3,22 @@ import falcon, json
 class MachinaStep(object):
 
     def __init__(self, ch):
-        self.ch           = ch
-        self.instructions = None
-        self.atStart      = True
+        self.ch              = ch
+        self.instructions    = None
+        self.numPrograms     = None
     
     def on_post(self, req, resp):
         
         if self.instructions == None:
             self.instructions = self.ch.getPrograms()
-            print("instructions", self.instructions)
+            self.numPrograms  = len(self.instructions)
+            print("instructions", self.instructions, "\n\n")
 
         if len(self.instructions) == 0:
             self.instructions = None
             return
 
         self.ch.run_line()
-        # print("i ran it") 
-        # print("stdout: ", self.ch.getStdout())
         resp.status = falcon.HTTP_201
 
 
@@ -35,6 +34,7 @@ class MachinaStep(object):
                 'memoryAvailable': self.ch.getMemoryAvailable(),
                 'memoryUsed': self.ch.getMemoryUsed(),
                 'steps': self.ch.getStdout(),
+                'printer': self.ch.getPrinter(),
             }
             resp.media = data;
         else:

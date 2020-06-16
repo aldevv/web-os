@@ -7,16 +7,21 @@ class InstructionRunner:
         self.__mem              = mem
         self.progDefs           = None
         self.current_line       = None # represents the current instruction
+        self.current_program    = None
         self.stdout             = []
         self.printer            = []
         self.operators_executed_history    = []
 
     def run_line(self):
-        last_history = self.operators_executed_history.copy()
-        if self.getCurrentLine() >= self.__mem.num_instructions_saved():
-            print("nothing more to run")
-            return
-        instruction = self.__mem.find_instruction(self.current_line)
+        if self.current_program == None:
+            self.current_program = 0
+        if self.getCurrentLine() >= self.__mem.num_instructions_saved(self.current_program):
+            self.current_program += 1
+            self.current_line = 0
+            if self.current_program == len(self.__mem.get_programs()):
+                print("nothing more to run")
+                return
+        instruction = self.__mem.find_instruction(self.current_program , self.current_line)
         self.load_instruction()
         self.nextPosition()
         print("instruction: ", instruction)
@@ -27,18 +32,29 @@ class InstructionRunner:
         else:
             return False
 
-    def run_all(self):
+    def run_all(self, ):
+        self.current_program = 0
         self.setStartPosition()
+        # print("programs saved:", self.__mem.programs_saved)
+        # print("acu1: ", self.__mem.getAcumulador(), "\n\n")
         self.run_saved_instructions()
+        # print("acu2: ", self.__mem.getAcumulador(), "\n\n")
     
     def setStartPosition(self):
         self.current_line = self.__mem.getMemoryBeforeCompile()
 
     def run_saved_instructions(self):
         try:
-            while self.getCurrentLine() < self.__mem.num_instructions_saved():
-                self.load_instruction()
+            # print("programs to run !!!", programs_to_run)
+            # print("variables", self.progDefs.getDeclaration().getVariables())
+            # print("pending programs:", self.__mem.pending_programs)
+            # print("variables pending", self.progDefs.getDeclaration().getVariables(), "\n\n")
+            programs_to_run = self.__mem.pending_programs
+            while self.getCurrentLine() < len(programs_to_run[0]):
+                self.load_instruction(programs_to_run)
                 self.nextPosition()
+            programs_to_run.pop(0)
+            self.__mem.saveDeclaration(self.progDefs.getDeclaration(), True)
         except Exception as err:
             print(traceback.format_exc())
             print("Hubo un error en runtime ", err.args, self.getCurrentLine(), err)
@@ -46,12 +62,15 @@ class InstructionRunner:
     def getCurrentLine(self):
         return self.current_line
 
-    def load_instruction(self):
-        instruction = self.__mem.find_instruction(self.getCurrentLine())
+    def load_instruction(self, programs_to_run):
+        instruction = self.find_instruction(programs_to_run, self.getCurrentLine())
         operator = self.program_name(instruction)
         if operator in self.progDefs.get_possible_operators():
             self.run_operator(operator, instruction)
             self.save_in_history(instruction)
+
+    def find_instruction(self, programs_to_run, id_):
+        return programs_to_run[0][id_]
 
     def program_name(self, instruction):
         return instruction[0]

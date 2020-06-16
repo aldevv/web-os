@@ -8,6 +8,7 @@ class Memory:
         self.memory_available = memory_available - kernel - 1 #TODO volver len(self.getMemory)
         self.pre_compile_memory = 0
         self.declarationHistory = DeclarationHistory(self)
+        self.pending_programs   = []
         self.programs_saved     = []  
         self.step_by_step       = []
 
@@ -16,6 +17,12 @@ class Memory:
 
     def getVariables(self): 
         return self.declarationHistory.getVariables()
+    
+    def addToPending(self, program):
+        self.pending_programs.append(program)
+
+    def addDeclarationToPending(self, declaration):
+        self.declarationHistory.addToPending(declaration)
 
     def getTags(self): 
         return self.declarationHistory.getTags()
@@ -45,15 +52,14 @@ class Memory:
     def memory_isEmpty(self):
         return self.memory_available <= 0
 
-    def find_instruction(self, id_):
-        return self.programs_saved[-1][id_]
+    def find_instruction(self, program, id_):
+        return self.programs_saved[program][id_]
 
-    def get_programs(self): # change to programs saved
-        # return self.programs_saved[1:]
+    def get_programs(self): 
         return self.programs_saved
 
-    def num_instructions_saved(self):
-        return len(self.programs_saved[-1]) if len(self.programs_saved) != 0 else 0
+    def num_instructions_saved(self, program):
+        return len(self.programs_saved[program]) if len(self.programs_saved) != 0 else 0
 
     def getAcumulador(self):
         return self.acumulador

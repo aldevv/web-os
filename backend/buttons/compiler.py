@@ -41,11 +41,12 @@ class MachinaCompiler(object):
             print("cargué el archivo: ", input_file.filename)
             if input_file.filename:
                 filename = input_file.filename
-                fileHandler = self.ch.fileInfo
-                fileHandler.saveFilename(filename)
 
             # Define file_path to save
             file_path = os.path.join(self._storage_path, filename)
+            fileHandler = self.ch.fileInfo
+            fileHandler.saveFilename(filename)
+            fileHandler.saveFilePath(file_path)
 
             # Write to a temporary file to prevent incomplete files
             # from being used.

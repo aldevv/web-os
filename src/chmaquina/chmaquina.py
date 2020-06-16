@@ -1,4 +1,6 @@
 from .factory import Factory
+from .scheduler.algorithms import FIFO
+import copy
 
 class Chmaquina:
     def __init__(self, memory_available=80,kernel=10, acumulador=0):
@@ -7,6 +9,12 @@ class Chmaquina:
         self.declaration        = None
         self.compiler           = None
         self.instructionRunner  = None
+        self.scheduler          = Factory.createScheduler()
+        self.original           = [copy.deepcopy(self.mem), copy.deepcopy(self.fileInfo), None, None, None, copy.deepcopy(self.scheduler)]
+
+    def resetMaquina(self):
+        self.mem, self.fileInfo, self.declaration, self.compiler, self.instructionRunner, self.scheduler = self.original
+        self.original           = [copy.deepcopy(self.mem), copy.deepcopy(self.fileInfo), None, None, None, copy.deepcopy(self.scheduler)]
 
     def compileFile(self, path):
         self.declaration       = Factory.createDeclaration(self.mem)
@@ -14,11 +22,14 @@ class Chmaquina:
         self.compiler.compileFile(path)
         # the variables and tags for the program compiled
         self.mem.saveDeclaration(self.declaration)
+        self.mem.addDeclarationToPending(self.declaration)
     
     def compileLines(self, lines):
-        self.createDeclarationIfNone()
+        self.declaration       = Factory.createDeclaration(self.mem)
         self.createCompilerIfNone()
         self.compiler.compileLines(lines)
+        self.mem.saveDeclaration(self.declaration)
+        self.mem.addDeclarationToPending(self.declaration)
 
     def createDeclarationIfNone(self):
         if(self.declaration == None):
@@ -55,9 +66,19 @@ class Chmaquina:
         #!save declaration?
 
     def run_all(self):
-        self.instructionRunner = Factory.createInstructionRunner(self.mem, self.declaration)
-        self.instructionRunner.run_all()
-        self.mem.saveDeclaration(self.declaration, True)
+        self.createRunners()
+        self.scheduler.setAlgorithm(FIFO(self.scheduler.pending_run_instances))
+        self.scheduler.run()
+
+    def createRunners(self):
+        all_declarations = self.mem.declarationHistory
+        num_declaration_pending = len(all_declarations.getPending())
+        pending = all_declarations.getPending()
+        # print("num declarations pending: ", num_declaration_pending)
+        for i in range(num_declaration_pending):
+            # print("the pending variables: before ", pending[0].getVariables())
+            self.instructionRunner = Factory.createInstructionRunner(self.mem, pending.pop(0))
+            self.scheduler.appendRunInstance(self.instructionRunner)
 
     def getVariables(self): #!change in front!
         return self.mem.getVariables()
@@ -80,13 +101,17 @@ class Chmaquina:
         return self.mem.getAcumulador()
     
     def getStdout(self):
-        return self.instructionRunner.getStdout()
+        # return self.instructionRunner.getStdout()  # get it from the scheduler!
+        return self.scheduler.getStdout()  # get it from the scheduler!
 
     def getPrinter(self):
-        return self.instructionRunner.getPrinter()
+        # return self.instructionRunner.getPrinter()
+        return self.scheduler.getPrinter()  
     
-    def getSteps(self):
+    def getSteps(self): #! only shows the last program steps, but all the steps are saved in mem
+        #TODO make the steps for each compiler and instructionRunner made
         steps = self.mem.getSteps()
+        # print(self.mem.getSteps())
         if steps == []:
             return None
         instructions_compiled = self.compiler.get_declarations_executed_history()
@@ -124,7 +149,6 @@ class Chmaquina:
         self.declaration        = None
         self.compiler           = None
         self.instructionRunner  = None
-
 
     def getMemoryAvailable(self):
         return self.mem.get_available_memory()

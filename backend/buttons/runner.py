@@ -8,7 +8,8 @@ class MachinaRunner(object):
         self.ch = ch
 
     def on_get(self, req, resp):
-        self.ch.run_all()
+        self.ch.run_all() 
+        print("in runner stdout", self.ch.getStdout())
         data = {
             'stdout': self.ch.getStdout(),
             'printer': self.ch.getPrinter(),

@@ -3,6 +3,7 @@ class FileInfo:
     def __init__(self, mem):
         self.mem = mem
         self.filenames = []
+        self.filepaths = []
 
     def getRegisters(self):
         files = self.getFilenames()
@@ -51,6 +52,10 @@ class FileInfo:
     def saveFilename(self, filename):
         self.filenames.append(filename)
 
+    def saveFilePath(self, filepath):
+        self.filepaths.append(filepath)
+
     def clear(self):
         self.filenames = []
+        self.filepaths = []
         self.mem.declarationHistory.setDeclarationHistory({})

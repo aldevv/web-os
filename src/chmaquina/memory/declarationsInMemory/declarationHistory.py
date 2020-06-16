@@ -6,6 +6,7 @@ class DeclarationHistory:
         self.os_memory = None
         self.declarationHistory = {}
         self.declarationHashInstruction = {}
+        self.pending_declarations = []
 
     def getMemory(self): 
         memory = self.get_all()
@@ -103,3 +104,9 @@ class DeclarationHistory:
 
     def getInstructionFromDeclaration(self, declaration):
         return self.declarationHashInstruction[declaration]
+
+    def addToPending(self, declaration):
+        self.pending_declarations.append(declaration)
+    
+    def getPending(self):
+        return self.pending_declarations
