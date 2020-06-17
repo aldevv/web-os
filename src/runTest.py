@@ -3,9 +3,10 @@ import os.path
 
 def test():
     ch = Chmaquina()
-    ch.compileFile( os.path.dirname(__file__) + '/../programs/printerTest.ch')
-    ch.compileFile( os.path.dirname(__file__) + '/../programs/printerTest.ch')
-    ch.compileFile( os.path.dirname(__file__) + '/../programs/factorial.ch')
+    # ch.compileFile( os.path.dirname(__file__) + '/../programs/printerTest.ch')
+    # ch.compileFile( os.path.dirname(__file__) + '/../programs/printerTest.ch')
+    # ch.compileFile( os.path.dirname(__file__) + '/../programs/factorial.ch')
+    ch.compileFile( os.path.dirname(__file__) + '/../programs/testNueva.ch')
     # ch.compileFile( os.path.dirname(__file__) + '/../programs/miProgTest.ch')
     # ch.compileFile( os.path.dirname(__file__) + '/../programs/testLea.ch')
     ch.run_all()

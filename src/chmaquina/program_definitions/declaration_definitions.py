@@ -15,10 +15,13 @@ class DeclarationDefinitions:
     def get_possible_declarations(self):
         return self.possible_declarations
 
-    def nueva(self, name, type_, value):  # !
+    def nueva(self, name, type_, value=None): 
         if self.__declaration.inDeclarations(name):
             ErrorHandlerVariables.throw_var_ya_declarada(name)
             return
+        if value == None:
+            value = 0
+
         value = self.check_type_and_cast(type_, value)
         self.__declaration.setVariable(name, value)
         self.__mem.saveStepOneArg(name, value)
