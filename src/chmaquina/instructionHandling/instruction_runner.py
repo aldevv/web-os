@@ -12,6 +12,9 @@ class InstructionRunner:
         self.printer            = []
         self.operators_executed_history    = []
 
+    def getMemory(self):
+        return self.__mem
+
     def run_line(self):
         programs_to_run = self.__mem.pending_programs
         if len(programs_to_run) == 0:
@@ -49,10 +52,6 @@ class InstructionRunner:
 
     def run_saved_instructions(self):
         try:
-            # print("programs to run !!!", programs_to_run)
-            # print("variables", self.progDefs.getDeclaration().getVariables())
-            # print("pending programs:", self.__mem.pending_programs)
-            # print("variables pending", self.progDefs.getDeclaration().getVariables(), "\n\n")
             programs_to_run = self.__mem.pending_programs
             while self.getCurrentLine() < len(programs_to_run[0]):
                 self.load_instruction(programs_to_run)

@@ -1,5 +1,6 @@
 from .factory import Factory
 from .scheduler.algorithms import FIFO
+from .scheduler.algorithms import Priority
 import copy
 
 class Chmaquina:
@@ -24,6 +25,7 @@ class Chmaquina:
         # the variables and tags for the program compiled
         self.mem.saveDeclaration(self.declaration)
         self.mem.addDeclarationToPending(self.declaration)
+        self.createRunners()
     
     def compileLines(self, lines):
         self.declaration       = Factory.createDeclaration(self.mem)
@@ -31,6 +33,7 @@ class Chmaquina:
         self.compiler.compileLines(lines)
         self.mem.saveDeclaration(self.declaration)
         self.mem.addDeclarationToPending(self.declaration)
+        self.createRunners()
 
     def createDeclarationIfNone(self):
         if(self.declaration == None):
@@ -91,9 +94,19 @@ class Chmaquina:
         #!save declaration?
 
     def run_all(self):
-        self.createRunners()
-        self.scheduler.setAlgorithm(FIFO(self.scheduler.pending_run_instances))
+        if self.scheduler.getAlgorithm() == None:
+            self.scheduler.setAlgorithm(FIFO(self.scheduler.pending_run_instances))
         self.scheduler.run()
+
+    def setAlgorithm(self, name):
+        if name == 'FIFO' or name == 'fifo':
+            self.scheduler.setAlgorithm(FIFO(self.scheduler.pending_run_instances))
+        if name == 'Priority' or name == 'priority':
+            self.scheduler.setAlgorithm(Priority(self.scheduler.pending_run_instances))
+
+    def getSchedulerReport(self):
+        print("Algoritmo: ", type(self.scheduler.getAlgorithm()).__name__)
+        print("Info: ", self.scheduler.getAlgorithmInfo())
 
     def createRunners(self):
         all_declarations = self.mem.declarationHistory

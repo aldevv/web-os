@@ -37,7 +37,7 @@ class Memory:
         return self.declarationHistory.getDeclarationHistory()
 
     def getInstructionFromDeclaration(self, declaration):
-        return self.declarationHistory.getInstructionFromDeclaration()
+        return self.declarationHistory.getInstructionFromDeclaration(declaration)
 
     def get_used_memory(self):
         return self.initial_memory - self.memory_available

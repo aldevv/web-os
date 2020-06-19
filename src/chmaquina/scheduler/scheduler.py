@@ -36,11 +36,23 @@ class Scheduler:
 
     def setAlgorithm(self, algorithm):
         self.algorithm = algorithm
-    
-    def run(self):
-        self.algorithm.run()
+        self.algorithm.setup()
+
+    def getAlgorithm(self):
+        return self.algorithm
+
+    def getAlgorithmInfo(self):
+        return self.algorithm.getInfo()
     
     def getCompilerFromDeclaration(self, declaration):
         for compiler in self.compile_instances:
             if compiler.progDefs.getDeclaration() == declaration:
                 return compiler
+
+    def run(self):
+
+        try:
+            self.algorithm.run()
+        except Exception as err:
+            print(traceback.format_exc())
+            print("Hubo un error en runtime ", err.args, err)

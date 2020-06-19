@@ -17,7 +17,6 @@ class Compiler:
         for instruction in lines:
             self.parse_and_compile_line(instruction)
         self.mem.saveProgram(self.currentProgram)
-        self.mem.addToPending(self.currentProgram)
         # print("before run programs saved:",self.mem.programs_saved)
 
     def compileFile(self, path):
@@ -31,7 +30,6 @@ class Compiler:
                 self.parse_and_compile_line(line)
                 self.nextPosition()
             self.mem.saveProgram(self.currentProgram)
-            self.mem.addToPending(self.currentProgram)
             self.programLength.append(len(self.currentProgram))
             self.currentProgram = []
         except Exception as err:
