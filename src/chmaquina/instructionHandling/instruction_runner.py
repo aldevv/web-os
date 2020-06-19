@@ -7,7 +7,6 @@ class InstructionRunner:
         self.__mem              = mem
         self.progDefs           = None
         self.current_line       = None # represents the current instruction
-        self.current_program    = None
         self.stdout             = []
         self.printer            = []
         self.operators_executed_history    = []
@@ -40,12 +39,8 @@ class InstructionRunner:
             return False
 
     def run_all(self, ):
-        self.current_program = 0
         self.setStartPosition()
-        # print("programs saved:", self.__mem.programs_saved)
-        # print("acu1: ", self.__mem.getAcumulador(), "\n\n")
         self.run_saved_instructions()
-        # print("acu2: ", self.__mem.getAcumulador(), "\n\n")
     
     def setStartPosition(self):
         self.current_line = self.__mem.getMemoryBeforeCompile()

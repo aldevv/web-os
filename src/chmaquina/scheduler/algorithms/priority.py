@@ -1,17 +1,32 @@
+from .algorithm import Algorithm
 from random import randint
-class Priority:
-    def __init__(self, run_instances):
-        self.run_instances = run_instances
+
+class Priority(Algorithm):
+    def __init__(self, run_instances, expropiativo=False):
+        self.run_instances          = run_instances
         self.priotity_and_instances = None
+        self.expropiativo           = expropiativo
+
+    def setSlice(self, slice_):
+        self.time.setSlice(slice_)
 
     def setPriorities(self):
-        priority_queue = self.genPriorities()
-        # sort according to priority
-        priority_queue.sort(key= lambda tuple: tuple[0], reverse=True)
-        self.priotity_and_instances = priority_queue
+        if not self.expropiativo:
+            priority_queue = self.genPriorities() # [(priority_num, run_instance), ...]
+            # sort according to priority
+            priority_queue.sort(key= lambda tuple: tuple[0], reverse=True)
+            self.priotity_and_instances = priority_queue
+            #put the runner instance in the correct order
+            self.orderRunInstances()
+        # else:
+        #     priority_queue = self.genPriorities()
 
-        #put the runner instance in the correct order
-        self.orderRunInstances()
+
+    def genPriorities(self):
+        priority_queue = []
+        for instance in self.run_instances:
+            priority_queue.append((randint(0,100), instance)) # (priority, run_instance), example: (8, run_instance of factorial.ch)
+        return priority_queue
         
     def orderRunInstances(self):
         self.run_instances.clear()
@@ -26,12 +41,6 @@ class Priority:
             instruction = mem.getInstructionFromDeclaration(declaration)
             mem.addToPending(instruction)
 
-    def genPriorities(self):
-        priority_queue = []
-        for instance in self.run_instances:
-            priority_queue.append((randint(0,100), instance)) # (priority, run_instance), example: (8, run_instance of factorial.ch)
-        return priority_queue
-
     def getInfo(self):
         return self.priotity_and_instances
 
@@ -43,4 +52,4 @@ class Priority:
         for i in range(num_instances):
             instance = self.run_instances.pop(0)
             instance.run_all()
-
+    

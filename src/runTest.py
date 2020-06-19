@@ -9,6 +9,7 @@ def test():
     # ch.compileFile( os.path.dirname(__file__) + '/../programs/testNueva.ch')
     ch.compileFile( os.path.dirname(__file__) + '/../programs/miProgTest.ch')
     # ch.compileFile( os.path.dirname(__file__) + '/../programs/testLea.ch')
+    # ch.setAlgorithm("fifo")
     ch.setAlgorithm("priority")
     for instance in ch.scheduler.pending_run_instances:
         print(instance.progDefs.getDeclaration().getVariables())

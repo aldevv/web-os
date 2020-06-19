@@ -1,11 +1,13 @@
-
+import traceback
 class Scheduler:
     def __init__(self):
-        self.run_instances                = []
-        self.compile_instances            = []
-        self.pending_run_instances        = []
-        self.programs_to_run = None
-        self.algorithm       = None
+        self.run_instances         = []
+        self.compile_instances     = []
+        self.pending_run_instances = []
+        self.algorithm             = None
+
+    def setSlice(self, slice_):
+        self.algorithm.setSlice(slice_)
 
     def appendRunInstance(self, runner_instance):
         self.run_instances.append(runner_instance)
