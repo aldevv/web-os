@@ -42,6 +42,6 @@ class FIFO(Algorithm):
                     raise Exception()
         except Exception as err:
             print(traceback.format_exc())
-            print("not enough time!, program: ", self.time.calculate_program_time(instance), " vs slice: ", self.time.getSlice())
+            print("not enough time!, program: ",instance.getFilename(), ", cpu burst: ", self.time.cpu_burst[instance], " vs slice: ", self.time.getSlice())
 
 

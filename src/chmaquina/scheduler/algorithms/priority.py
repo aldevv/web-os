@@ -1,5 +1,6 @@
 from .algorithm import Algorithm
 from random import randint
+import traceback
 
 class Priority(Algorithm):
     def __init__(self, run_instances, expropiativo=False):
@@ -50,4 +51,4 @@ class Priority(Algorithm):
                     raise Exception()
         except Exception as err:
             print(traceback.format_exc())
-            print("not enough time!, program: ", self.time.calculate_program_time(instance), " vs slice: ", self.time.getSlice())
+            print("not enough time!, program: ",instance.getFilename(), ", cpu burst: ", self.time.cpu_burst[instance], " vs slice: ", self.time.getSlice(), "error of: ", self.time.getSlice() - self.time.cpu_burst[instance])

@@ -55,7 +55,6 @@ class Compiler:
 
         string = string.split()
         self.currentProgram.append(string)
-        self.mem.reduce_memory_by_1()
         self.compile_(string)
     
     def nextPosition(self):

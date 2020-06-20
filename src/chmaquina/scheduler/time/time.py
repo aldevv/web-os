@@ -1,7 +1,7 @@
 from random import randint
 class Time:
     # def __init__(self, slice_=5):
-    def __init__(self, slice_=45):
+    def __init__(self, slice_=65):
         self.slice                = slice_
         self.IOfunctionExceptions = {'lea', 'imprima', 'muestre'} 
         self.arrive_times         = {}
@@ -67,21 +67,18 @@ class Time:
             for instance in run_instances:
                 self.cpu_burst[instance] = self.calculate_program_time(instance)
 
-    def setArriveTime(self, run_instance, prev_time, first_time = False):
+    def setArriveTime(self, run_instance, prev_time):
         program = self.getProgramFromInstance(run_instance)
         num_instructions = 0
-        if first_time:
-            return 0
         for line in program:
             num_instructions += 1
-        return (prev_time + num_instructions) / 4
+        return round((prev_time + num_instructions) / 4)
 
     def setArrivalTimes(self, run_instances):
         time = 0
         first = True
         for instance in run_instances:
             if first:
-                time = self.setArriveTime(instance, time, first)
                 self.arrive_times[instance] = time
                 first = False
                 continue

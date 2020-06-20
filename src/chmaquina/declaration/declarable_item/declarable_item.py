@@ -25,7 +25,6 @@ class Declarable_Item :
     def save_type_and_use_memory_if_first_time(self, name, value):
         if not self.inDeclarations(name):
             self.types[name] = type(value)
-            self.__mem.reduce_memory_by_1()
 
     def update_value_in_declarations(self, name, value):
         if type(value) == self.types[name]:

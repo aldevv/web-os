@@ -51,20 +51,17 @@ class Memory:
         return self.declarationHistory.getInstructionFromDeclaration(declaration)
 
     def get_used_memory(self):
-        return self.initial_memory - self.memory_available
+        return len(self.getMemory())
 
     def get_available_memory(self):
-        return self.memory_available
+        return len(self.getMemory())
 
     def saveProgram(self, program):
         # saves the command int a slot so it can be loaded later with vaya (goto)
         self.programs_saved.append(program)
 
-    def reduce_memory_by_1(self):
-        self.memory_available -= 1
-
     def memory_isEmpty(self):
-        return self.memory_available <= 0
+        return self.initial_memory - len(self.getMemory())<= 0
 
     def find_instruction(self, program, id_):
         return self.programs_saved[program][id_]
