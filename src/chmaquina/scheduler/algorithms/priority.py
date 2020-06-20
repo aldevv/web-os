@@ -7,20 +7,14 @@ class Priority(Algorithm):
         self.priotity_and_instances = None
         self.expropiativo           = expropiativo
 
-    def setSlice(self, slice_):
-        self.time.setSlice(slice_)
-
     def setPriorities(self):
+        priority_queue = self.genPriorities() # [(priority_num, run_instance), ...]
         if not self.expropiativo:
-            priority_queue = self.genPriorities() # [(priority_num, run_instance), ...]
             # sort according to priority
             priority_queue.sort(key= lambda tuple: tuple[0], reverse=True)
             self.priotity_and_instances = priority_queue
             #put the runner instance in the correct order
-            self.orderRunInstances()
         # else:
-        #     priority_queue = self.genPriorities()
-
 
     def genPriorities(self):
         priority_queue = []
@@ -32,20 +26,16 @@ class Priority(Algorithm):
         self.run_instances.clear()
         for i in range(len(self.priotity_and_instances)):
             self.run_instances.append(self.priotity_and_instances[i][1])
-        self.orderPendingInstructions()
-
-    def orderPendingInstructions(self):
-        mem = self.run_instances[0].getMemory()
-        for instance in self.run_instances:
-            declaration = instance.progDefs.getDeclaration()
-            instruction = mem.getInstructionFromDeclaration(declaration)
-            mem.addToPending(instruction)
 
     def getInfo(self):
         return self.priotity_and_instances
 
     def setup(self):
         self.setPriorities()
+        self.time.setArrivalTimes(self.run_instances)
+        self.time.setCpuBursts(self.run_instances)
+        self.orderRunInstances()
+        self.orderPendingInstructions(self.run_instances)
 
     def run(self):
         num_instances = len(self.run_instances)

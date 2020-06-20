@@ -5,9 +5,14 @@ class Scheduler:
         self.compile_instances     = []
         self.pending_run_instances = []
         self.algorithm             = None
-
+    
     def setSlice(self, slice_):
         self.algorithm.setSlice(slice_)
+
+
+    def getSchedulerReport(self):
+        print("Algoritmo: ", type(self.getAlgorithm()).__name__)
+        print("Info: ", self.getAlgorithmInfo())
 
     def appendRunInstance(self, runner_instance):
         self.run_instances.append(runner_instance)

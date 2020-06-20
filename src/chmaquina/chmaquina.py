@@ -97,6 +97,9 @@ class Chmaquina:
         if self.scheduler.getAlgorithm() == None:
             self.scheduler.setAlgorithm(FIFO(self.scheduler.pending_run_instances))
         self.scheduler.run()
+    
+    def getScheduler(self):
+        return self.scheduler
 
     def setAlgorithm(self, name):
         if name == 'FIFO' or name == 'fifo':
@@ -106,9 +109,6 @@ class Chmaquina:
         if name == 'PriorityEx' or name == 'priorityex':
             self.scheduler.setAlgorithm(Priority(self.scheduler.pending_run_instances, expropiativo=True))
 
-    def getSchedulerReport(self):
-        print("Algoritmo: ", type(self.scheduler.getAlgorithm()).__name__)
-        print("Info: ", self.scheduler.getAlgorithmInfo())
 
     def createRunners(self):
         all_declarations = self.mem.declarationHistory

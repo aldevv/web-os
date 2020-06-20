@@ -15,6 +15,13 @@ class Memory:
     def getMemory(self): 
         return self.declarationHistory.getMemory()
 
+    
+    def orderPendingInstructions(self, run_instances):
+        for instance in run_instances:
+            declaration = instance.progDefs.getDeclaration()
+            instruction = self.getInstructionFromDeclaration(declaration)
+            self.addToPending(instruction)
+
     def getVariables(self): 
         return self.declarationHistory.getVariables()
     
