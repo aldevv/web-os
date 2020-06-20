@@ -44,9 +44,9 @@ class MachinaCompiler(object):
 
             # Define file_path to save
             file_path = os.path.join(self._storage_path, filename)
-            fileHandler = self.ch.fileInfo
-            fileHandler.saveFilename(filename)
-            fileHandler.saveFilePath(file_path)
+            fileHandler = self.ch.mem.getFileInfo()
+            # fileHandler.saveFilename(filename)
+            # fileHandler.saveFilePath(file_path)
 
             # Write to a temporary file to prevent incomplete files
             # from being used.

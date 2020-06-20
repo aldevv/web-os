@@ -21,6 +21,7 @@ class Compiler:
 
     def compileFile(self, path):
         self.mem.setMemoryBeforeCompile()
+        self.mem.fileInfo.saveFilePath(path)
         self.current_line = self.startPosition()
         lines = self.parseFile(path)
         try:

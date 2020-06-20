@@ -1,13 +1,15 @@
 from .declarationsInMemory import DeclarationHistory
+from .files_info           import FileInfo
 
 class Memory:
     def __init__(self, memory_available, kernel, acumulador):
-        self.kernel           = kernel
-        self.acumulador       = acumulador
-        self.initial_memory   = memory_available #! do i need this?
-        self.memory_available = memory_available - kernel - 1 #TODO volver len(self.getMemory)
-        self.pre_compile_memory = 0
+        self.fileInfo           = FileInfo(self)
         self.declarationHistory = DeclarationHistory(self)
+        self.kernel             = kernel
+        self.acumulador         = acumulador
+        self.initial_memory     = memory_available #! do i need this?
+        self.memory_available   = memory_available - kernel - 1 #TODO volver len(self.getMemory)
+        self.pre_compile_memory = 0
         self.pending_programs   = []
         self.programs_saved     = []  
         self.step_by_step       = []
@@ -15,6 +17,8 @@ class Memory:
     def getMemory(self): 
         return self.declarationHistory.getMemory()
 
+    def getFileInfo(self):
+        return self.fileInfo
     
     def orderPendingInstructions(self, run_instances):
         for instance in run_instances:

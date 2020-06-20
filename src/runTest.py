@@ -2,6 +2,8 @@ from chmaquina import Chmaquina
 import os.path
 
 def test():
+    #!TODO put fileinfo in memory!!
+    #* put names in cpubursts and arrival times
     ch = Chmaquina()
     ch.compileFile( os.path.dirname(__file__) + '/../programs/printerTest.ch')
     ch.compileFile( os.path.dirname(__file__) + '/../programs/printerTest2.ch')
@@ -10,7 +12,7 @@ def test():
     ch.compileFile( os.path.dirname(__file__) + '/../programs/miProgTest.ch')
     # ch.compileFile( os.path.dirname(__file__) + '/../programs/testLea.ch')
     # ch.setAlgorithm("fifo")
-    ch.setAlgorithm("fifo")
+    ch.setAlgorithm("priority")
     scheduler = ch.getScheduler()
     time = scheduler.getAlgorithm().getTime()
     print("start slice: ",time.getSlice())

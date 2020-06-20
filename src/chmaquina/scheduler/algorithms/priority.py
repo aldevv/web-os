@@ -3,6 +3,7 @@ from random import randint
 
 class Priority(Algorithm):
     def __init__(self, run_instances, expropiativo=False):
+        super().__init__()
         self.run_instances          = run_instances
         self.priotity_and_instances = None
         self.expropiativo           = expropiativo
@@ -28,18 +29,25 @@ class Priority(Algorithm):
             self.run_instances.append(self.priotity_and_instances[i][1])
 
     def getInfo(self):
-        return self.priotity_and_instances
+        return [(item[0], item[1].getFilename()) for item in self.priotity_and_instances]
 
     def setup(self):
         self.setPriorities()
-        self.time.setArrivalTimes(self.run_instances)
-        self.time.setCpuBursts(self.run_instances)
         self.orderRunInstances()
         self.orderPendingInstructions(self.run_instances)
+        self.time.setArrivalTimes(self.run_instances)
+        self.time.setCpuBursts(self.run_instances)
 
     def run(self):
-        num_instances = len(self.run_instances)
-        for i in range(num_instances):
-            instance = self.run_instances.pop(0)
-            instance.run_all()
-    
+        try:
+            num_instances = len(self.run_instances)
+            instance = None
+            for i in range(num_instances):
+                instance = self.run_instances.pop(0)
+                if self.time.checkIfTheresTime(instance):
+                    instance.run_all()
+                else:
+                    raise Exception()
+        except Exception as err:
+            print(traceback.format_exc())
+            print("not enough time!, program: ", self.time.calculate_program_time(instance), " vs slice: ", self.time.getSlice())

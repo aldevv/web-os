@@ -109,3 +109,10 @@ class InstructionRunner:
 
     def setProgdefs(self, progDefs):
         self.progDefs = progDefs
+
+    def getFilename(self):
+        declaration = self.progDefs.getDeclaration()
+        instruction = self.__mem.getInstructionFromDeclaration(declaration)
+        index       = self.__mem.get_programs().index(instruction)
+        fileInfo    = self.__mem.getFileInfo()
+        return fileInfo.getFilenames()[index]

@@ -11,10 +11,10 @@ class MachinaRunner(object):
         self.ch.run_all() 
         print("in runner stdout", self.ch.getStdout())
         data = {
-            'stdout': self.ch.getStdout(),
+            'stdout':  self.ch.getStdout(),
             'printer': self.ch.getPrinter(),
-            'steps': self.ch.getSteps(),
-            'memory': self.ch.getMemory(),
+            'steps':   self.ch.getSteps(),
+            'memory':  self.ch.getMemory(),
         }
         resp.media = data;
         resp.status = falcon.HTTP_201

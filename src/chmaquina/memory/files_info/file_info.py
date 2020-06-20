@@ -1,4 +1,4 @@
-
+from pathlib import Path
 class FileInfo:
     def __init__(self, mem):
         self.mem = mem
@@ -54,6 +54,8 @@ class FileInfo:
 
     def saveFilePath(self, filepath):
         self.filepaths.append(filepath)
+        p = Path(filepath)
+        self.saveFilename(p.name)
 
     def clear(self):
         self.filenames = []

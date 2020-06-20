@@ -2,16 +2,28 @@ from random import randint
 class Time:
     # def __init__(self, slice_=5):
     def __init__(self, slice_=45):
-        self.slice       = slice_
+        self.slice                = slice_
         self.IOfunctionExceptions = {'lea', 'imprima', 'muestre'} 
-        self.arrive_times   = {}
-        self.cpu_burst      = {}
+        self.arrive_times         = {}
+        self.cpu_burst            = {}
 
     def getArrivalTimes(self):
-        return self.arrive_times
+        instances = self.arrive_times.keys()
+        times     = self.arrive_times.items()
+        formated  = []
+        for instance, time in zip(instances, times):
+            name = instance.getFilename()
+            formated.append((name,time[1]))
+        return formated
 
     def getCpuBursts(self):
-        return self.cpu_burst
+        instances = self.cpu_burst.keys()
+        times     = self.cpu_burst.items()
+        formated  = []
+        for instance, time in zip(instances, times):
+            name = instance.getFilename()
+            formated.append((name,time[1]))
+        return formated
 
     def getTimeToFinish(self):
         return self.time_to_finish
@@ -45,7 +57,7 @@ class Time:
         return self.slice
 
     def checkIfTheresTime(self, instance):
-        program_time = self.calculate_program_time(instance)
+        program_time = self.cpu_burst[instance]
         if program_time <=self.slice:
             self.slice -= program_time
             return True
@@ -55,15 +67,23 @@ class Time:
             for instance in run_instances:
                 self.cpu_burst[instance] = self.calculate_program_time(instance)
 
-    def arriveTime(self, run_instance, prev_time):
+    def setArriveTime(self, run_instance, prev_time, first_time = False):
         program = self.getProgramFromInstance(run_instance)
         num_instructions = 0
+        if first_time:
+            return 0
         for line in program:
             num_instructions += 1
         return (prev_time + num_instructions) / 4
 
     def setArrivalTimes(self, run_instances):
         time = 0
+        first = True
         for instance in run_instances:
-            time = self.arriveTime(instance, time)
+            if first:
+                time = self.setArriveTime(instance, time, first)
+                self.arrive_times[instance] = time
+                first = False
+                continue
+            time = self.setArriveTime(instance, time)
             self.arrive_times[instance] = time

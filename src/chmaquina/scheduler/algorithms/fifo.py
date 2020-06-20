@@ -5,21 +5,30 @@ class FIFO(Algorithm):
     def __init__(self, run_instances):
         super().__init__()
         self.run_instances = run_instances
-        self.memory = self.run_instances
 
     def getInfo(self):
-        progs = self.memory.get_programs()
+        arrivals = self.time.getArrivalTimes()
+        names    = []
+        for item in arrivals:
+            names.append(item[0])
+
         concat = []
         id_ = 1
-        for program in progs:
-            concat.append((id_, program))
+        for name in names:
+            concat.append((id_, name))
             id_ += 1
         return concat
 
+    def printOrder(self):
+        print("order run")
+        for instance in self.run_instances:
+            file = instance.getFilename()
+            print(file)
+
     def setup(self):
+        self.orderPendingInstructions(self.run_instances)
         self.time.setArrivalTimes(self.run_instances)
         self.time.setCpuBursts(self.run_instances)
-        self.orderPendingInstructions(self.run_instances)
 
     def run(self):
         try:

@@ -6,16 +6,15 @@ import copy
 class Chmaquina:
     def __init__(self, memory_available=80,kernel=10, acumulador=0):
         self.mem                = Factory.createMemory(memory_available,kernel, acumulador)
-        self.fileInfo           = Factory.createFileInfo(self.mem)
         self.declaration        = None
         self.compiler           = None
         self.instructionRunner  = None
         self.scheduler          = Factory.createScheduler()
-        self.original           = [copy.deepcopy(self.mem), copy.deepcopy(self.fileInfo), None, None, None, copy.deepcopy(self.scheduler)]
+        self.original           = [copy.deepcopy(self.mem), None, None, None, copy.deepcopy(self.scheduler)]
 
     def resetMaquina(self):
-        self.mem, self.fileInfo, self.declaration, self.compiler, self.instructionRunner, self.scheduler = self.original
-        self.original           = [copy.deepcopy(self.mem), copy.deepcopy(self.fileInfo), None, None, None, copy.deepcopy(self.scheduler)]
+        self.mem, self.declaration, self.compiler, self.instructionRunner, self.scheduler = self.original
+        self.original           = [copy.deepcopy(self.mem), None, None, None, copy.deepcopy(self.scheduler)]
 
     def compileFile(self, path):
         self.declaration       = Factory.createDeclaration(self.mem)
@@ -135,7 +134,8 @@ class Chmaquina:
         return self.mem.get_programs()
 
     def getRegisters(self):
-        return self.fileInfo.getRegisters()
+        fileInfo = self.mem.getFileInfo()
+        return fileInfo.getRegisters()
 
     def getAcumulador(self):
         return self.mem.getAcumulador()
@@ -170,28 +170,24 @@ class Chmaquina:
 
     def setMemory(self, value):
         self.mem                = Factory.createMemory(value, self.mem.getKernel(), 0)
-        self.fileInfo           = Factory.createFileInfo(self.mem)
         self.declaration        = None
         self.compiler           = None
         self.instructionRunner  = None
 
     def setKernel(self, value):
         self.mem                = Factory.createMemory(self.mem.initial_memory, value,0)
-        self.fileInfo           = Factory.createFileInfo(self.mem)
         self.declaration        = None
         self.compiler           = None
         self.instructionRunner  = None
 
     def setAcumulador(self, value):
         self.mem                = Factory.createMemory(self.mem.initial_memory, self.mem.getKernel(), value)
-        self.fileInfo           = Factory.createFileInfo(self.mem)
         self.declaration        = None
         self.compiler           = None
         self.instructionRunner  = None
     
     def clean(self, memory, kernel, acu):
         self.mem                = Factory.createMemory(memory, kernel, acu)
-        self.fileInfo           = Factory.createFileInfo(self.mem)
         self.declaration        = None
         self.compiler           = None
         self.instructionRunner  = None
