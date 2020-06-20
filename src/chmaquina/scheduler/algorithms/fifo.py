@@ -1,16 +1,18 @@
 from .algorithm import Algorithm
+from tabulate   import tabulate
 import traceback
 
 class FIFO(Algorithm):
     def __init__(self, run_instances):
         super().__init__()
-        self.run_instances = run_instances
+        self.run_instances     = run_instances
+        self.ordered_instances = None
 
-    def getInfo(self):
-        arrivals = self.time.getArrivalTimes()
+    def getOrder(self):
+        instances = self.ordered_instances
         names    = []
-        for item in arrivals:
-            names.append(item[0])
+        for item in instances:
+            names.append(item.getFilename())
 
         concat = []
         id_ = 1
@@ -19,16 +21,20 @@ class FIFO(Algorithm):
             id_ += 1
         return concat
 
-    def printOrder(self):
-        print("order run")
-        for instance in self.run_instances:
-            file = instance.getFilename()
-            print(file)
+    def orderRunInstances(self):
+        arrive_times = list(self.time.arrive_times.items())
+        arrive_times.sort(key= lambda tuple: tuple[1])
+        
+        self.run_instances.clear()
+        for elem in arrive_times:
+            self.run_instances.append(elem[0])
+        self.ordered_instances = self.run_instances.copy()
 
     def setup(self):
-        self.orderPendingInstructions(self.run_instances)
         self.time.setArrivalTimes(self.run_instances)
         self.time.setCpuBursts(self.run_instances)
+        self.orderRunInstances()
+        self.orderPendingInstructions(self.run_instances)
 
     def run(self):
         try:
@@ -44,4 +50,17 @@ class FIFO(Algorithm):
             print(traceback.format_exc())
             print("not enough time!, program: ",instance.getFilename(), ", cpu burst: ", self.time.cpu_burst[instance], " vs slice: ", self.time.getSlice())
 
+    def getTable(self):
+        instances = self.ordered_instances
+        arrival   = []
+        for instance in instances:
+            arrival.append(self.time.getArrivalTime(instance))
 
+        cpu  = []
+        for instance in instances:
+            cpu.append(self.time.getCpuBurst(instance))
+
+        table = []
+        for instance,arr, cp in zip(instances,arrival,cpu):
+            table.append([instance.getFilename(), arr, cp])
+        return tabulate(table, headers=['Nombre', 'Tiempo de llegada', 'Rafaga de cpu'], tablefmt='orgtbl')

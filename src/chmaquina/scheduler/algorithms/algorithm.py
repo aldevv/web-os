@@ -16,6 +16,12 @@ class Algorithm:
         # how it runs
         pass
 
+    def getOrder(self):
+        pass
+
+    def getTable(self):
+        pass
+
 
     def getMemory(self, run_instances):
         return run_instances[0].getMemory()

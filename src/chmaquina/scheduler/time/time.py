@@ -84,3 +84,9 @@ class Time:
                 continue
             time = self.setArriveTime(instance, time)
             self.arrive_times[instance] = time
+    
+    def getArrivalTime(self, instance):
+        return self.arrive_times[instance]
+
+    def getCpuBurst(self, instance):
+        return self.cpu_burst[instance]

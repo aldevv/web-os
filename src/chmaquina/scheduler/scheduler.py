@@ -5,14 +5,14 @@ class Scheduler:
         self.compile_instances     = []
         self.pending_run_instances = []
         self.algorithm             = None
-    
+
     def setSlice(self, slice_):
         self.algorithm.setSlice(slice_)
 
-
     def getSchedulerReport(self):
         print("Algoritmo: ", type(self.getAlgorithm()).__name__)
-        print("Info: ", self.getAlgorithmInfo())
+        print("Order: ", self.getAlgorithmOrder(),"\n")
+        print(self.getAlgorithm().getTable() ,"\n")
 
     def appendRunInstance(self, runner_instance):
         self.run_instances.append(runner_instance)
@@ -48,8 +48,8 @@ class Scheduler:
     def getAlgorithm(self):
         return self.algorithm
 
-    def getAlgorithmInfo(self):
-        return self.algorithm.getInfo()
+    def getAlgorithmOrder(self):
+        return self.algorithm.getOrder()
     
     def getCompilerFromDeclaration(self, declaration):
         for compiler in self.compile_instances:

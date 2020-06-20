@@ -8,7 +8,6 @@ class Memory:
         self.kernel             = kernel
         self.acumulador         = acumulador
         self.initial_memory     = memory_available #! do i need this?
-        self.memory_available   = memory_available - kernel - 1 #TODO volver len(self.getMemory)
         self.pre_compile_memory = 0
         self.pending_programs   = []
         self.programs_saved     = []  
@@ -110,7 +109,3 @@ class Memory:
 
     def getMemoryBeforeCompile(self):
         return self.pre_compile_memory
-    
-
-
-
