@@ -258,7 +258,6 @@ class OperatorDefinitions:
             self.runner.appendPrinter(self.__mem.getAcumulador())
             return
         if not self.__declaration.inDeclarations(name):
-            print("las declaradas son: ", self.getDeclaration().getVariables())
             ErrorHandlerVariables.throw_var_no_declarada(name)
             return
         value = self.__declaration.getVariable(name)

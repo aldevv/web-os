@@ -61,7 +61,7 @@ class InstructionRunner:
         return self.current_line
 
     def load_instruction(self, programs_to_run):
-        instruction = self.find_instruction(programs_to_run, self.getCurrentLine())
+        instruction = self.find_instruction(programs_to_run, self.getCurrentLine()) #!bug
         operator = self.program_name(instruction)
         if operator in self.progDefs.get_possible_operators():
             self.run_operator(operator, instruction)
@@ -78,6 +78,8 @@ class InstructionRunner:
 
     def run_operator(self, name, instruction):
         try:
+            # print("the declaration is: ", self.progDefs.getDeclaration().getVariables())
+            # print(f"the instruction is: {instruction} \n")
             self.progDefs.get_possible_operators()[name](*instruction[1:])
         except TypeError:
             ErrorHandlerCompiler.throw_too_many_arguments(name, instruction)

@@ -23,39 +23,85 @@ class Priority(Algorithm):
             priorities[instance] = randint(0,100) # (priority, run_instance), example: (8, run_instance of factorial.ch)
         return priorities
         
-    def orderRunInstances(self):
+    def orderRunInstancesByArrival(self):
+        self.time.setArrivalTimes(self.run_instances)
+        self.time.setCpuBursts(self.run_instances)
         arrive_times = list(self.time.arrive_times.items())
         arrive_times.sort(key= lambda tuple: tuple[1])
         
         self.run_instances.clear()
         for elem in arrive_times:
             self.run_instances.append(elem[0])
+        # self.ordered_instances = self.run_instances.copy()
+    
+    def orderRunInstancesByPriority(self):
+        self.orderRunInstancesByArrival()
+        num_instances = len(self.run_instances)
+        new_order_run_instances = []
+        prev_cpu_burst = 0
+        for i in range(num_instances):
+            possible = self.runnableInstances(prev_cpu_burst) 
+            instance = self.findHighestPriority(possible)
+            _,cpu    = self.extractFromTimeAndCpu(instance)
+            prev_cpu_burst += cpu
+            new_order_run_instances.append(instance)
+            self.run_instances.remove(instance)
+        self.run_instances.clear()
+        self.run_instances = new_order_run_instances
         self.ordered_instances = self.run_instances.copy()
 
     def getOrder(self):
         return [( instance.getFilename(), self.getPriority(instance) ) for instance in self.ordered_instances]
 
     def setup(self):
-        self.time.setArrivalTimes(self.run_instances)
-        self.time.setCpuBursts(self.run_instances)
         self.setPriorities()
-        self.orderRunInstances()
+        self.orderRunInstancesByPriority()
         self.orderPendingInstructions(self.run_instances)
 
     def run(self):
+        
         try:
             num_instances = len(self.run_instances)
             instance = None
             for i in range(num_instances):
                 instance = self.run_instances.pop(0)
                 if self.time.checkIfTheresTime(instance):
-
                     instance.run_all()
                 else:
                     raise Exception()
         except Exception as err:
             print(traceback.format_exc())
-            print("not enough time!, program: ",instance.getFilename(), ", cpu burst: ", self.time.cpu_burst[instance], " vs slice: ", self.time.getSlice(), "error of: ", self.time.getSlice() - self.time.cpu_burst[instance])
+            print("not enough time!, program: ",instance.getFilename(), ", cpu burst: ", self.time.cpu_burst[instance], " vs slice: ", self.time.getSlice())
+
+    def extractFromTimeAndCpu(self, instance):
+        times    = self.time.getArrivalTimes()
+        cpu      = self.time.getCpuBursts()
+        times    = times.pop(instance, None)
+        cpu      = cpu.pop(instance, None)
+        return times, cpu
+
+    def runnableInstances(self, prev_cpu_burst):
+        arrive_times = self.time.getArrivalTimes()
+        possible = []
+        arrive_times = list(arrive_times.items())
+        arrive_times.sort(key= lambda tuple_: tuple_[1])
+        for time in arrive_times:
+            if time[1] <= prev_cpu_burst:
+                possible.append(time[0])
+        return possible
+
+    def findHighestPriority(self, instances_possible):
+        highest = -1
+        answer  = None
+        for instance in instances_possible:
+            # print(f"possible: {instance.getFilename()} priority:{self.getPriority(instance)}")
+            if self.getPriority(instance) > highest:
+                answer = instance
+                highest = self.getPriority(instance)
+        # print("\n")
+        return answer
+
+
 
     def getTable(self):
         instances  = []

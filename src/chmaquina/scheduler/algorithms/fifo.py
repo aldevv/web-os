@@ -22,6 +22,8 @@ class FIFO(Algorithm):
         return concat
 
     def orderRunInstances(self):
+        self.time.setArrivalTimes(self.run_instances)
+        self.time.setCpuBursts(self.run_instances)
         arrive_times = list(self.time.arrive_times.items())
         arrive_times.sort(key= lambda tuple: tuple[1])
         
@@ -31,10 +33,9 @@ class FIFO(Algorithm):
         self.ordered_instances = self.run_instances.copy()
 
     def setup(self):
-        self.time.setArrivalTimes(self.run_instances)
-        self.time.setCpuBursts(self.run_instances)
         self.orderRunInstances()
         self.orderPendingInstructions(self.run_instances)
+        
 
     def run(self):
         try:

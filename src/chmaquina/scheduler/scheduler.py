@@ -10,6 +10,7 @@ class Scheduler:
         self.algorithm.setSlice(slice_)
 
     def getSchedulerReport(self):
+        print("\n")
         print("Algoritmo: ", type(self.getAlgorithm()).__name__)
         print("Order: ", self.getAlgorithmOrder(),"\n")
         print(self.getAlgorithm().getTable() ,"\n")
