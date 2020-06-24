@@ -1,38 +1,35 @@
 from .algorithm import Algorithm
-from random     import randint
 from tabulate   import tabulate
 import traceback
 
-class Priority(Algorithm):
+class SJF(Algorithm):
+    #Shortest job first
     def __init__(self, run_instances):
         super().__init__()
-        self.run_instances          = run_instances
-        self.ordered_instances      = None
-        self.priorities             = {}
+        self.run_instances     = run_instances
+        self.ordered_instances = None
 
-    def getPriority(self, instance):
-        return self.priorities[instance]
+    def getOrder(self):
+        instances = self.ordered_instances
+        names    = []
+        for item in instances:
+            names.append(item.getFilename())
 
-    def setPriorities(self):
-        self.priorities = self.genPriorities() # [(priority_num, run_instance), ...]
+        concat = []
+        id_ = 1
+        for name in names:
+            concat.append((id_, name))
+            id_ += 1
+        return concat
 
-    def genPriorities(self):
-        priorities = {}
-        for instance in self.run_instances:
-            priorities[instance] = randint(0,100) # (priority, run_instance), example: (8, run_instance of factorial.ch)
-        return priorities
-        
-    def orderRunInstancesByPriority(self):
+    def orderRunInstancesByTimeLeft(self):
         self.orderRunInstancesByArrival()
-        # print("before") #!to see table without priority ordering
-        # self.ordered_instances = self.run_instances.copy()
-        # print(self.getTable())
         num_instances = len(self.run_instances)
         new_order_run_instances = []
         current_time = 0
         for i in range(num_instances):
-            possible = self.runnableInstances(current_time) 
-            instance = self.findHighestPriority(possible)
+            possible = self.runnableInstances(current_time)
+            instance = self.findShortestJob(possible)
             _,cpu    = self.extractFromTimeAndCpu(instance)
             current_time += cpu
             new_order_run_instances.append(instance)
@@ -61,15 +58,13 @@ class Priority(Algorithm):
                 possible.append(time[0])
         return possible
 
-    def findHighestPriority(self, instances_possible):
-        highest = -1
+    def findShortestJob(self, instances_possible):
+        shortest = 99999999
         answer  = None
         for instance in instances_possible:
-            # print(f"possible: {instance.getFilename()} priority:{self.getPriority(instance)}")
-            if self.getPriority(instance) > highest:
+            if self.time.getCpuBurst(instance) < shortest:
                 answer = instance
-                highest = self.getPriority(instance)
-        # print("\n")
+                shortest = self.time.getCpuBurst(instance)
         return answer
 
     def extractFromTimeAndCpu(self, instance): #TODO make it work without time object, but a queue object wrapper that uses cpu, time, and runners
@@ -79,16 +74,12 @@ class Priority(Algorithm):
         cpu      = cpu.pop(instance, None)
         return times, cpu
 
-    def getOrder(self):
-        return [( instance.getFilename(), self.getPriority(instance) ) for instance in self.ordered_instances]
-
     def setup(self):
-        self.setPriorities()
-        self.orderRunInstancesByPriority()
+        self.orderRunInstancesByTimeLeft()
         self.orderPendingInstructions(self.run_instances)
+        
 
     def run(self):
-        
         try:
             num_instances = len(self.run_instances)
             instance = None
@@ -102,23 +93,17 @@ class Priority(Algorithm):
             print(traceback.format_exc())
             print("not enough time!, program: ",instance.getFilename(), ", cpu burst: ", self.time.cpu_burst[instance], " vs slice: ", self.time.getSlice())
 
-
-
-
-
-
     def getTable(self):
-        instances  = []
-        arrival    = []
-        cpu        = []
-        priorities = []
-        for instance in self.ordered_instances:
-            instances.append(instance)
+        instances = self.ordered_instances
+        arrival   = []
+        for instance in instances:
             arrival.append(self.time.getArrivalTime(instance))
+
+        cpu  = []
+        for instance in instances:
             cpu.append(self.time.getCpuBurst(instance))
-            priorities.append(self.getPriority(instance))
 
         table = []
-        for instance,arr, cp, prio in zip(instances,arrival,cpu, priorities):
-            table.append([instance.getFilename(), arr, cp, prio])
-        return tabulate(table, headers=['Nombre', 'Tiempo de llegada', 'Rafaga de cpu', 'Prioridad'], tablefmt='orgtbl')
+        for instance,arr, cp in zip(instances,arrival,cpu):
+            table.append([instance.getFilename(), arr, cp])
+        return tabulate(table, headers=['Nombre', 'Tiempo de llegada', 'Rafaga de cpu'], tablefmt='orgtbl')
