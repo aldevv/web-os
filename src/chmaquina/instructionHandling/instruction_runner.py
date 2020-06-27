@@ -48,12 +48,9 @@ class InstructionRunner:
     def run_saved_instructions(self):
         try:
             programs_to_run = self.__mem.pending_programs
-            print(f"programs_to_run: {programs_to_run[0]}")
             while self.getCurrentLine() < len(programs_to_run[0]):
                 self.load_instruction(programs_to_run)
                 self.nextPosition()
-                print(f"current line: {self.getCurrentLine()}") #!bug has to do with vaya si
-            print("\n")
             programs_to_run.pop(0)
             self.__mem.saveDeclaration(self.progDefs.getDeclaration(), True)
         except Exception as err:
@@ -66,11 +63,13 @@ class InstructionRunner:
     def load_instruction(self, programs_to_run):
         instruction = self.find_instruction(programs_to_run, self.getCurrentLine()) 
         operator = self.program_name(instruction)
+        print(f"the instruction is: {instruction}")
         if operator in self.progDefs.get_possible_operators():
             self.run_operator(operator, instruction)
             self.save_in_history(instruction)
 
     def find_instruction(self, programs_to_run, id_):
+        print("in find instruction, id: ", id_)
         return programs_to_run[0][id_]
 
     def program_name(self, instruction):
@@ -110,7 +109,6 @@ class InstructionRunner:
             limit = self.getCurrentLine() + num_lines_to_run
             while self.getCurrentLine() < limit:
                 if self.getCurrentLine() == len(programs_to_run[0]):
-                    print("i finished")
                     programs_to_run.pop(0)
                     break
                 self.load_instruction(programs_to_run)

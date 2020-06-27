@@ -1,8 +1,8 @@
 from random import randint
 class Time:
-    # def __init__(self, slice_=5):
-    def __init__(self, slice_=1000):
-        self.slice                = slice_
+    # def __init__(self, quantum=5):
+    def __init__(self, quantum=5):
+        self.quantum                = quantum
         self.IOfunctionExceptions = {'lea', 'imprima', 'muestre'} 
         self.arrive_times_history = {}
         self.cpu_burst_history    = {}
@@ -55,28 +55,25 @@ class Time:
         mem         = instance.getMemory()
         return mem.getInstructionFromDeclaration(declaration)
 
-    def setSlice(self, slice_):
-        self.slice = slice_
+    def setSlice(self, quantum):
+        self.quantum = quantum
     
-    def getSlice(self):
-        return self.slice
-    
-    def timeLimit(self):
-        return self.slice
+    def getQuantum(self):
+        return self.quantum
 
     def checkIfTheresTime(self, instance):
         program_time = self.cpu_burst_history[instance]
-        if program_time <=self.slice:
-            self.slice -= program_time
+        if program_time <=self.quantum:
+            self.quantum -= program_time
             return True
         return False
 
     def checkIfTheresTimeExpro(self, instance):
         program_time = self.cpu_burst[instance]
-        if program_time <=self.slice:
-            self.slice -= program_time
+        if program_time <=self.quantum:
+            self.quantum -= program_time
             print(f"program_time: {program_time}")
-            print(f"current slice: {self.slice}")
+            print(f"current quantum: {self.quantum}")
             return True
         return False
     
