@@ -6,6 +6,7 @@ class DeclarationHistory:
         self.os_memory = None
         self.declarationHistory = {}
         self.declarationHashInstruction = {}
+        self.expropiativeDeclarationHashInstruction = {}
         self.pending_declarations = []
 
     def getMemory(self): 
@@ -110,3 +111,6 @@ class DeclarationHistory:
     
     def getPending(self):
         return self.pending_declarations
+
+    def saveDeclarationsInstructionExpropiative(self, declaration, instruction):
+        self.expropiativeDeclarationHashInstruction[declaration] = instruction

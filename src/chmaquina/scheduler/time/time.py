@@ -1,7 +1,7 @@
 from random import randint
 class Time:
     # def __init__(self, slice_=5):
-    def __init__(self, slice_=85):
+    def __init__(self, slice_=1000):
         self.slice                = slice_
         self.IOfunctionExceptions = {'lea', 'imprima', 'muestre'} 
         self.arrive_times_history = {}
@@ -70,6 +70,15 @@ class Time:
             self.slice -= program_time
             return True
         return False
+
+    def checkIfTheresTimeExpro(self, instance):
+        program_time = self.cpu_burst[instance]
+        if program_time <=self.slice:
+            self.slice -= program_time
+            print(f"program_time: {program_time}")
+            print(f"current slice: {self.slice}")
+            return True
+        return False
     
     def setCpuBursts(self, run_instances):
             for instance in run_instances:
@@ -100,3 +109,25 @@ class Time:
 
     def getCpuBurst(self, instance):
         return self.cpu_burst_history[instance]
+
+    def getCurrentCpuBurst(self, instance):
+        return self.cpu_burst[instance]
+    
+    def substractFromCPU(self, instance, quantity):
+        if quantity >= 0:
+            self.cpu_burst[instance] -= quantity
+        else:
+            self.cpu_burst[instance] = 0
+
+    def getSortedArrivalTimes(self):
+        arrive_times = self.getArrivalTimes()
+        possible = []
+        arrive_times = list(arrive_times.items())
+        arrive_times.sort(key= lambda tuple_: tuple_[1])
+        return arrive_times
+
+    def getTimeToRunAllInstances(self):
+        sum_ = 0
+        for instance, cpu in self.cpu_burst_history.items():
+            sum_ += cpu
+        return sum_

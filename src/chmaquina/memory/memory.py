@@ -25,6 +25,9 @@ class Memory:
             instruction = self.getInstructionFromDeclaration(declaration)
             self.addToPending(instruction)
 
+    def orderPendingInstructionsExpro(self, instructions_ready):
+        self.pending_programs = instructions_ready
+
     def getVariables(self): 
         return self.declarationHistory.getVariables()
     
@@ -48,6 +51,9 @@ class Memory:
 
     def getInstructionFromDeclaration(self, declaration):
         return self.declarationHistory.getInstructionFromDeclaration(declaration)
+
+    def getDeclarationInstructionDictionary(self):
+        return self.declarationHistory.declarationHashInstruction
 
     def get_used_memory(self):
         return len(self.getMemory())

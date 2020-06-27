@@ -1,5 +1,5 @@
 from .factory import Factory
-from .scheduler.algorithms import FIFO, Priority, SJF
+from .scheduler.algorithms import FIFO, Priority, SJF, SJFEx
 import copy
 
 class Chmaquina:
@@ -106,6 +106,8 @@ class Chmaquina:
             self.scheduler.setAlgorithm(Priority(self.scheduler.pending_run_instances))
         if name == 'SJF' or name == 'sjf':
             self.scheduler.setAlgorithm(SJF(self.scheduler.pending_run_instances))
+        if name == 'SJFEX' or name == 'sjfEx' or name == 'sjfex':
+            self.scheduler.setAlgorithm(SJFEx(self.scheduler.pending_run_instances))
         # if name == 'PriorityEx' or name == 'priorityex':
         #     self.scheduler.setAlgorithm(Priority(self.scheduler.pending_run_instances, expropiativo=True))
 

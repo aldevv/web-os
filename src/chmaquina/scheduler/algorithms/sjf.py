@@ -49,10 +49,8 @@ class SJF(Algorithm):
             self.run_instances.append(elem[0])
     
     def runnableInstances(self, current_time):
-        arrive_times = self.time.getArrivalTimes()
         possible = []
-        arrive_times = list(arrive_times.items())
-        arrive_times.sort(key= lambda tuple_: tuple_[1])
+        arrive_times = self.time.getSortedArrivalTimes()
         for time in arrive_times:
             if time[1] <= current_time:
                 possible.append(time[0])
@@ -80,18 +78,11 @@ class SJF(Algorithm):
         
 
     def run(self):
-        try:
-            num_instances = len(self.run_instances)
-            instance = None
-            for i in range(num_instances):
-                instance = self.run_instances.pop(0)
-                if self.time.checkIfTheresTime(instance):
-                    instance.run_all()
-                else:
-                    raise Exception()
-        except Exception as err:
-            print(traceback.format_exc())
-            print("not enough time!, program: ",instance.getFilename(), ", cpu burst: ", self.time.cpu_burst[instance], " vs slice: ", self.time.getSlice())
+        num_instances = len(self.run_instances)
+        instance = None
+        for i in range(num_instances):
+            instance = self.run_instances.pop(0)
+            instance.run_all()
 
     def getTable(self):
         instances = self.ordered_instances

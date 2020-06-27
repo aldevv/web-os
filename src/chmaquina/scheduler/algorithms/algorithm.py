@@ -29,3 +29,6 @@ class Algorithm:
     def orderPendingInstructions(self, run_instances):
         self.memory = self.getMemory(run_instances)
         self.memory.orderPendingInstructions(run_instances)
+
+    def orderPendingInstructionsExpro(self, instructions_ready):
+        self.memory.orderPendingInstructionsExpro(instructions_ready)

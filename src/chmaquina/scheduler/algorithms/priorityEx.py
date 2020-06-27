@@ -88,24 +88,20 @@ class Priority(Algorithm):
         self.orderPendingInstructions(self.run_instances)
 
     def run(self):
-        num_instances = len(self.run_instances)
-        instance = None
-        for i in range(num_instances):
-            instance = self.run_instances.pop(0)
-            instance.run_all()
+        
+        try:
+            num_instances = len(self.run_instances)
+            instance = None
+            for i in range(num_instances):
+                instance = self.run_instances.pop(0)
+                if self.time.checkIfTheresTime(instance):
+                    instance.run_all()
+                else:
+                    raise Exception()
+        except Exception as err:
+            print(traceback.format_exc())
+            print("not enough time!, program: ",instance.getFilename(), ", cpu burst: ", self.time.cpu_burst[instance], " vs slice: ", self.time.getSlice())
 
-        # try:
-        #     num_instances = len(self.run_instances)
-        #     instance = None
-        #     for i in range(num_instances):
-        #         instance = self.run_instances.pop(0)
-        #         if self.time.checkIfTheresTime(instance):
-        #             instance.run_all()
-        #         else:
-        #             raise Exception()
-        # except Exception as err:
-        #     print(traceback.format_exc())
-        #     print("not enough time!, program: ",instance.getFilename(), ", cpu burst: ", self.time.cpu_burst[instance], " vs slice: ", self.time.getSlice())
 
 
 

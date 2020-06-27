@@ -1,3 +1,5 @@
-from .fifo      import FIFO
-from .sjf       import SJF
-from .priority  import Priority
+from .fifo        import FIFO
+from .sjf         import SJF
+from .sjfEx       import SJFEx
+from .priority    import Priority
+# from .priorityEx  import PriorityEx
