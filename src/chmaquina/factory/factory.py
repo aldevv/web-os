@@ -17,8 +17,8 @@ class Factory:
         return runner
 
     @staticmethod
-    def createMemory(memory_available,kernel,acumulador):
-        return Memory(memory_available,kernel,acumulador)
+    def createMemory(memory_available,kernel):
+        return Memory(memory_available,kernel)
 
     @staticmethod
     def createDeclaration(mem):

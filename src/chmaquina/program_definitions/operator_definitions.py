@@ -41,10 +41,10 @@ class OperatorDefinitions:
         if not self.__declaration.inDeclarations(name):
             ErrorHandlerVariables.throw_var_no_declarada(name)
             return
-        prev = self.__mem.getAcumulador()
+        prev = self.__mem.getAcumulador(self.getDeclaration())
         new  = self.__declaration.getVariable(name)
 
-        self.__mem.setAcumulador(new)
+        self.__mem.setAcumulador(self.getDeclaration(),new)
         self.__mem.saveStepOneArg("Acumulador", prev, new)
 
     def almacene(self, name):  # * works
@@ -53,7 +53,7 @@ class OperatorDefinitions:
             exit()  # ! must send index to the end of the file
             return
         prev = self.__declaration.getVariable(name)
-        new  = self.__mem.getAcumulador()
+        new  = self.__mem.getAcumulador(self.getDeclaration())
         self.__declaration.setVariable(name, new)
         self.__mem.saveStepOneArg(name, prev, new)
 
@@ -74,11 +74,11 @@ class OperatorDefinitions:
             exit()
             return
         prev = self.runner.getCurrentLine()
-        if self.__mem.getAcumulador() > 0:
+        if self.__mem.getAcumulador(self.getDeclaration()) > 0:
             self.runner.setLine(self.__declaration.getTag(tag1) -2) # makes it equal to the value in tag1
             self.__mem.saveStepOneArg("vayasi",str(" desde " + str(prev+1)+ " hasta "), self.runner.getCurrentLine()+1)
             return
-        if self.__mem.getAcumulador() < 0:
+        if self.__mem.getAcumulador(self.getDeclaration()) < 0:
             self.runner.setLine(self.__declaration.getTag(tag2)-2) # makes it equal to the value in tag2
             self.__mem.saveStepOneArg("vayasi", str(" desde " + str(prev+1)+ " hasta ") , self.runner.getCurrentLine()+1)
             return
@@ -128,29 +128,29 @@ class OperatorDefinitions:
         if not self.__declaration.inDeclarations(name):
             ErrorHandlerVariables.throw_var_no_declarada(name)
             return
-        prev = self.__mem.getAcumulador()
-        new  = self.__mem.getAcumulador() + self.__declaration.getVariable(name)
+        prev = self.__mem.getAcumulador(self.getDeclaration())
+        new  = self.__mem.getAcumulador(self.getDeclaration()) + self.__declaration.getVariable(name)
 
-        self.__mem.setAcumulador(new)
+        self.__mem.setAcumulador(self.getDeclaration(),new)
         self.__mem.saveStepOneArg("Acumulador", prev, new)
 
     def reste(self, name):
         if not self.__declaration.inDeclarations(name):
             ErrorHandlerVariables.throw_var_no_declarada(name)
             return
-        prev = self.__mem.getAcumulador()
-        new  = self.__mem.getAcumulador() - self.__declaration.getVariable(name)
-        self.__mem.setAcumulador(new)
+        prev = self.__mem.getAcumulador(self.getDeclaration())
+        new  = self.__mem.getAcumulador(self.getDeclaration()) - self.__declaration.getVariable(name)
+        self.__mem.setAcumulador(self.getDeclaration(),new)
         self.__mem.saveStepOneArg("Acumulador", prev, new)
 
     def multiplique(self, name):
         if not self.__declaration.inDeclarations(name):
             ErrorHandlerVariables.throw_var_no_declarada(name)
             return
-        prev = self.__mem.getAcumulador()
-        new = self.__mem.getAcumulador() * self.__declaration.getVariable(name)
+        prev = self.__mem.getAcumulador(self.getDeclaration())
+        new = self.__mem.getAcumulador(self.getDeclaration()) * self.__declaration.getVariable(name)
 
-        self.__mem.setAcumulador(new)
+        self.__mem.setAcumulador(self.getDeclaration(),new)
         self.__mem.saveStepOneArg("Acumulador", prev, new)
 
     def divida(self, name):
@@ -159,61 +159,61 @@ class OperatorDefinitions:
             return
         if self.__declaration.getVariable(name) == 0:
             ErrorHandlerVariables.throw_division_por_cero(
-                self.__mem.getAcumulador(), self.__declaration.getVariable(name)
+                self.__mem.getAcumulador(self.getDeclaration()), self.__declaration.getVariable(name)
             )
             return
         
-        prev = self.__mem.getAcumulador()
-        new  = self.__mem.getAcumulador() / self.__declaration.getVariable(name)
+        prev = self.__mem.getAcumulador(self.getDeclaration())
+        new  = self.__mem.getAcumulador(self.getDeclaration()) / self.__declaration.getVariable(name)
 
-        self.__mem.setAcumulador(new)
+        self.__mem.setAcumulador(self.getDeclaration(),new)
         self.__mem.saveStepOneArg("Acumulador", prev, new)
 
     def potencia(self, name):
         if not self.__declaration.inDeclarations(name):
             ErrorHandlerVariables.throw_var_no_declarada(name)
             return
-        prev = self.__mem.getAcumulador()
-        new  = self.__mem.getAcumulador() ** self.__declaration.getVariable(name)
+        prev = self.__mem.getAcumulador(self.getDeclaration())
+        new  = self.__mem.getAcumulador(self.getDeclaration()) ** self.__declaration.getVariable(name)
 
-        self.__mem.setAcumulador(new)
+        self.__mem.setAcumulador(self.getDeclaration(),new)
         self.__mem.saveStepOneArg("Acumulador", prev, new)
 
     def modulo(self, name):
         if not self.__declaration.inDeclarations(name):
             ErrorHandlerVariables.throw_var_no_declarada(name)
             return
-        prev = self.__mem.getAcumulador()
-        new  = self.__mem.getAcumulador() % self.__declaration.getVariable(name)
+        prev = self.__mem.getAcumulador(self.getDeclaration())
+        new  = self.__mem.getAcumulador(self.getDeclaration()) % self.__declaration.getVariable(name)
 
-        self.__mem.setAcumulador(new)
+        self.__mem.setAcumulador(self.getDeclaration(),new)
         self.__mem.saveStepOneArg("Acumulador", prev, new)
 
     def concatene(self, name):  # ! variable value has to be a string
         if not self.__declaration.inDeclarations(name):
             # if not a variable then is a normal string to concat
-            self.__mem.setAcumulador(str(self.__mem.getAcumulador()) + name)
+            self.__mem.setAcumulador(self.getDeclaration(),str(self.__mem.getAcumulador(self.getDeclaration())) + name)
             return
-        prev = self.__mem.getAcumulador()
-        new = str(self.__mem.getAcumulador()) + self.__declaration.getVariable(name)
+        prev = self.__mem.getAcumulador(self.getDeclaration())
+        new = str(self.__mem.getAcumulador(self.getDeclaration())) + self.__declaration.getVariable(name)
 
-        self.__mem.setAcumulador(new)
+        self.__mem.setAcumulador(self.getDeclaration(),new)
         self.__mem.saveStepOneArg("Acumulador", prev, new)
 
     def elimine(self, to_delete, ans):
         if not self.__declaration.inDeclarations(ans):
             ErrorHandlerVariables.throw_var_no_declarada(ans)
             return
-        prev = self.__mem.getAcumulador()
+        prev = self.__mem.getAcumulador(self.getDeclaration())
         if not self.__declaration.inDeclarations(to_delete):
             # if not a variable then is a normal string to concat
-            substring = str(self.__mem.getAcumulador()).replace(to_delete, '')
+            substring = str(self.__mem.getAcumulador(self.getDeclaration())).replace(to_delete, '')
             self.__declaration.setVariable(ans, substring)
             self.__mem.saveStepOneArg("Elimine",prev, substring)
             return
 
         to_delete = self.__declaration.getVariable(to_delete)
-        substring = str(self.__mem.getAcumulador()).replace(to_delete, '')
+        substring = str(self.__mem.getAcumulador(self.getDeclaration())).replace(to_delete, '')
         self.__declaration.setVariable(ans, substring)
         self.__mem.saveStepOneArg(ans, prev, substring)
 
@@ -221,9 +221,9 @@ class OperatorDefinitions:
         if not self.__declaration.inDeclarations(ans):
             ErrorHandlerVariables.throw_var_no_declarada(ans)
             return
-        prev = self.__mem.getAcumulador()
+        prev = self.__mem.getAcumulador(self.getDeclaration())
 
-        substring = self.__mem.getAcumulador()[:int(num_elem)]
+        substring = self.__mem.getAcumulador(self.getDeclaration())[:int(num_elem)]
         self.__declaration.setVariable(ans, substring)
         self.__mem.saveStepOneArg(ans, prev, substring)
 
@@ -244,7 +244,7 @@ class OperatorDefinitions:
 
     def muestre(self, name):
         if(name == "acumulador"):
-            self.runner.appendStdout(self.__mem.getAcumulador())
+            self.runner.appendStdout(self.__mem.getAcumulador(self.getDeclaration()))
             return
         if not self.__declaration.inDeclarations(name):
             ErrorHandlerVariables.throw_var_no_declarada(name)
@@ -255,7 +255,7 @@ class OperatorDefinitions:
 
     def imprima(self, name):
         if(name == "acumulador"):
-            self.runner.appendPrinter(self.__mem.getAcumulador())
+            self.runner.appendPrinter(self.__mem.getAcumulador(self.getDeclaration()))
             return
         if not self.__declaration.inDeclarations(name):
             ErrorHandlerVariables.throw_var_no_declarada(name)

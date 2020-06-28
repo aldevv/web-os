@@ -9,6 +9,8 @@ class DeclarationHistory:
         self.expropiativeDeclarationHashInstruction = {}
         self.pending_declarations = []
 
+    
+
     def getMemory(self): 
         memory = self.get_all()
         declarationHistory = self.getDeclarationHistory()
@@ -27,11 +29,11 @@ class DeclarationHistory:
         return memory
 
     def get_all(self):
-        self.os_memory = self.set_all(self.mem.kernel)
+        self.os_memory = self.set_all(self.mem.getKernel())
         return self.os_memory
 
     def set_all(self, kernel):
-        return [[self.mem.getAcumulador()]] + [["OS " + str(i)] for i in range(kernel)]
+        return [[self.mem.getAcumuladorLastRun()]] + [["OS " + str(i)] for i in range(kernel)]
 
     def getVariables(self):
         memory = self.get_all()

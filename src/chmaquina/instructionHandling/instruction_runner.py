@@ -64,6 +64,7 @@ class InstructionRunner:
         instruction = self.find_instruction(programs_to_run, self.getCurrentLine()) 
         operator = self.program_name(instruction)
         print(f"the instruction is: {instruction}")
+        self.__mem.saveInstanceAsLastRun(self)
         if operator in self.progDefs.get_possible_operators():
             self.run_operator(operator, instruction)
             self.save_in_history(instruction)

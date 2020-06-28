@@ -14,7 +14,5 @@ class MachinaSettings(object):
             self.ch.setMemory(int(raw_data.get('memoria')))
         if changed_name == 'kernel':
             self.ch.setKernel(int(raw_data.get('kernel')))
-        if changed_name == 'acumulador':
-            self.ch.setAcumulador(int(raw_data.get('acumulador')))
         resp.status = falcon.HTTP_200
 

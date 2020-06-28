@@ -3,8 +3,8 @@ from .scheduler.algorithms import *
 import copy
 
 class Chmaquina:
-    def __init__(self, memory_available=80,kernel=10, acumulador=0):
-        self.mem                = Factory.createMemory(memory_available,kernel, acumulador)
+    def __init__(self, memory_available=80,kernel=10):
+        self.mem                = Factory.createMemory(memory_available,kernel)
         self.declaration        = None
         self.compiler           = None
         self.instructionRunner  = None
@@ -143,7 +143,7 @@ class Chmaquina:
         return fileInfo.getRegisters()
 
     def getAcumulador(self):
-        return self.mem.getAcumulador()
+        return self.mem.getAcumuladorLastRun()
     
     def getStdout(self):
         # return self.instructionRunner.getStdout()  # get it from the scheduler!
@@ -180,19 +180,13 @@ class Chmaquina:
         self.instructionRunner  = None
 
     def setKernel(self, value):
-        self.mem                = Factory.createMemory(self.mem.initial_memory, value,0)
-        self.declaration        = None
-        self.compiler           = None
-        self.instructionRunner  = None
-
-    def setAcumulador(self, value):
-        self.mem                = Factory.createMemory(self.mem.initial_memory, self.mem.getKernel(), value)
+        self.mem                = Factory.createMemory(self.mem.initial_memory, value)
         self.declaration        = None
         self.compiler           = None
         self.instructionRunner  = None
     
     def clean(self, memory, kernel, acu):
-        self.mem                = Factory.createMemory(memory, kernel, acu)
+        self.mem                = Factory.createMemory(memory, kernel)
         self.declaration        = None
         self.compiler           = None
         self.instructionRunner  = None

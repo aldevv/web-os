@@ -1,17 +1,20 @@
 from .declarationsInMemory import DeclarationHistory
 from .files_info           import FileInfo
+from .maquina_settings     import MachinaSettings
 
 class Memory:
-    def __init__(self, memory_available, kernel, acumulador):
+    def __init__(self, memory_available, kernel):
         self.fileInfo           = FileInfo(self)
         self.declarationHistory = DeclarationHistory(self)
-        self.kernel             = kernel
-        self.acumulador         = acumulador
-        self.initial_memory     = memory_available #! do i need this?
-        self.pre_compile_memory = 0
+        self.acumulador         = 0
+        self.settings           = MachinaSettings(memory_available, kernel)
         self.pending_programs   = []
-        self.programs_saved     = []  
+        self.programs_saved     = []
         self.step_by_step       = []
+
+
+    def getAcumuladorLastRun(self):
+        return self.settings.getAcumuladorLastRun()
 
     def getMemory(self): 
         return self.declarationHistory.getMemory()
@@ -66,7 +69,7 @@ class Memory:
         self.programs_saved.append(program)
 
     def memory_isEmpty(self):
-        return self.initial_memory - len(self.getMemory())<= 0
+        return self.settings.getInitialMemory() - len(self.getMemory())<= 0
 
     def find_instruction(self, program, id_):
         return self.programs_saved[program][id_]
@@ -77,11 +80,16 @@ class Memory:
     def num_instructions_saved(self, program):
         return len(self.programs_saved[program]) if len(self.programs_saved) != 0 else 0
 
-    def getAcumulador(self):
-        return self.acumulador
+    def getAcumulador(self, declaration=None):
+        if declaration == None:
+            declaration = self.settings.getProgramLastRun().progDefs.getDeclaration()
+        return self.settings.getAcumulador(declaration)
 
-    def setAcumulador(self, value):
-        self.acumulador = value
+    def setAcumulador(self, declaration, value):
+        self.settings.setAcumulador(declaration, value)
+
+    def saveInstanceAsLastRun(self, instance):
+        self.settings.saveInstanceAsLastRun(instance)
 
     def saveStepOneArg(self, name, old_value, new_value=None):
         if new_value != None:
@@ -101,12 +109,12 @@ class Memory:
         return self.step_by_step
     
     def getKernel(self):
-        return self.kernel
+        return self.settings.getKernel()
     
     def setMemoryBeforeCompile(self):
         #used so that the runner knows where the program saved starts
         if len(self.programs_saved) == 0:
-            self.pre_compile_memory = 0
+            self.settings.setPreCompileMemory(0)
         else:
             sum_ = 0
             for program in self.programs_saved:
@@ -114,4 +122,4 @@ class Memory:
             return sum_-1 # because acu
 
     def getMemoryBeforeCompile(self):
-        return self.pre_compile_memory
+        return self.settings.getPreCompileMemory()
