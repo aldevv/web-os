@@ -1,7 +1,6 @@
 from ..memory              import Memory
 from ..declaration         import Declaration, Declarable_Item
 from ..program_definitions import DeclarationDefinitions, OperatorDefinitions
-from ..scheduler           import Scheduler
 
 class Factory:
     @staticmethod
@@ -35,7 +34,3 @@ class Factory:
     @staticmethod
     def createOperatorDefinitions(mem, declaration, runner):
         return OperatorDefinitions(mem, declaration, runner)
-
-    @staticmethod
-    def createScheduler():
-        return Scheduler()

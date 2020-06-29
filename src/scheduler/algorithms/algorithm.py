@@ -1,4 +1,4 @@
-from ..time import Time
+from .time import Time
 
 class Algorithm:
     def __init__(self):

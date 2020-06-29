@@ -35,6 +35,9 @@ class MachinaSettings:
 
     def saveInstanceAsLastRun(self, instance):
         self.program_last_run = instance
+        declaration = instance.progDefs.getDeclaration()
+        if declaration not in self.acumulador:
+            self.acumulador[declaration] = 0
     
     def getProgramLastRun(self):
         return self.program_last_run

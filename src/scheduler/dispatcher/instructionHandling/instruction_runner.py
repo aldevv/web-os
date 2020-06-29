@@ -63,14 +63,14 @@ class InstructionRunner:
     def load_instruction(self, programs_to_run):
         instruction = self.find_instruction(programs_to_run, self.getCurrentLine()) 
         operator = self.program_name(instruction)
-        print(f"the instruction is: {instruction}")
+        # print(f"the instruction is: {instruction}")
         self.__mem.saveInstanceAsLastRun(self)
         if operator in self.progDefs.get_possible_operators():
             self.run_operator(operator, instruction)
             self.save_in_history(instruction)
 
     def find_instruction(self, programs_to_run, id_):
-        print("in find instruction, id: ", id_)
+        # print("in find instruction, id: ", id_)
         return programs_to_run[0][id_]
 
     def program_name(self, instruction):

@@ -62,7 +62,7 @@ class Memory:
         return len(self.getMemory())
 
     def get_available_memory(self):
-        return len(self.getMemory())
+        return self.settings.getInitialMemory()- len(self.getMemory())
 
     def saveProgram(self, program):
         # saves the command int a slot so it can be loaded later with vaya (goto)

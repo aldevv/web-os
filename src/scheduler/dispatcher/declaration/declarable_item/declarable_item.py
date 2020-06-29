@@ -19,8 +19,6 @@ class Declarable_Item :
         return True if name in self.all_data else False
 
     def setValue(self, name, value):
-        print(f"name of variable {name}, value: {value}")
-        print(f"all vars: {self.all_data}")
         self.save_type_and_use_memory_if_first_time(name, value)
         self.update_value_in_declarations(name, value)
     

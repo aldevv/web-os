@@ -1,23 +1,23 @@
 import sys, os
 sys.path.append(os.path.dirname(os.path.abspath(__file__)) + "/..")
-from   chmaquina import Chmaquina
+from   scheduler import Scheduler
 import unittest
 import unittest.mock
 
-ch = Chmaquina()
-mem = ch.mem
+ch = Scheduler()
+mem = ch.dispatcher.mem
 class Almacene_Lea_Test(unittest.TestCase):
 
     def testAlmacene(self):
         lines = ["nueva m I 5", "nueva n I 20", "cargue m", "almacene n"]
         ch.compileLines(lines)
         ch.run_all()
-        declaration = ch.declaration
+        declaration = ch.getDeclaration()
         self.assertEqual(5, declaration.getVariable('n'))
         ch.resetMaquina()
 
     # def testLea(self):
-    #     ch = Chmaquina()
+    #     ch = Scheduler()
     #     variables = ch.variables
     #     self.clearStaticVariables(variables)
     #     lines = ["nueva m I 12", "lea m"]
