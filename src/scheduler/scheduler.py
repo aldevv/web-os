@@ -4,6 +4,7 @@ from .algorithms import *
 class Scheduler:
     def __init__(self):
         self.algorithm  = None           
+        self.time       = None
         self.dispatcher = Dispatcher()
 
     def setSlice(self, slice_): #!finish
@@ -31,7 +32,8 @@ class Scheduler:
 
     def setAlgorithm(self, algorithm):
         self.algorithm = algorithm
-        self.algorithm.setup()
+        if self.algorithm != None:
+            self.algorithm.setup()
 
     def getAlgorithm(self):
         return self.algorithm
@@ -48,10 +50,10 @@ class Scheduler:
     def run_line(self):
         self.dispatcher.run_line()
 
-    def run_all(self):
-        if self.getAlgorithm() == None:
-            self.setAlgorithm(FIFO(self.dispatcher.getPendingRunInstances()))
+    def run_all(self, algorithm="FIFO"):
+        self.setAlgorithmType(algorithm)
         self.run()
+        # self.setAlgorithm(None) #! this is so it can load new programs 
     
     def run(self):
         try:

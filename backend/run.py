@@ -3,7 +3,7 @@ from lea                  import MachinaInput
 from chmaquina_settings   import MachinaSettings
 import falcon, os, sys
 sys.path.append(os.path.dirname(os.path.abspath(__file__)) + "/../src")
-from chmaquina import Chmaquina
+from scheduler import Scheduler
 from falcon_multipart.middleware import MultipartMiddleware
 from falcon_cors import CORS
 
@@ -15,7 +15,7 @@ cors = CORS(allow_origins_list=['*'],
 
 api = application = falcon.API(middleware=[MultipartMiddleware(), cors.middleware])
 
-ch = Chmaquina()
+ch = Scheduler()
 # api.add_route('/api/leaCreateForm', MachinaInputCreate(ch))
 api.add_route('/api/lea'          , MachinaInput(ch))
 api.add_route('/api/compile'      , MachinaCompiler(ch))

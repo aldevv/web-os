@@ -28,16 +28,22 @@ class Dispatcher:
 
     def getStdout(self):
         stdout = []
+        dataStream = self.mem.getDataStream()
+        stdout_all_instances = dataStream.stdout
         for runner_instance in self.run_instances:
-            if len(runner_instance.getStdout()) > 0:
-                stdout.extend(runner_instance.getStdout())
+            declaration = runner_instance.progDefs.getDeclaration()
+            if declaration in stdout_all_instances:
+                stdout.extend(dataStream.getStdout(declaration))
         return stdout
 
     def getPrinter(self):
         printer = []
+        dataStream = self.mem.getDataStream()
+        printer_all_instances = dataStream.printer
         for runner_instance in self.run_instances:
-            if len(runner_instance.getPrinter()) > 0:
-                printer.extend(runner_instance.getPrinter())
+            declaration = runner_instance.progDefs.getDeclaration()
+            if declaration in printer_all_instances:
+                printer.extend(dataStream.getPrinter(declaration))
         return printer
 
     def getRunInstances(self):
@@ -165,7 +171,7 @@ class Dispatcher:
         return self.compiler.getProgramLengthNoComments()
 
     def setMemory(self, value):
-        self.mem                = Factory.createMemory(value, self.mem.getKernel(), 0)
+        self.mem                = Factory.createMemory(value, self.mem.getKernel())
         self.declaration        = None
         self.compiler           = None
         self.instructionRunner  = None

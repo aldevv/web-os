@@ -1,17 +1,20 @@
 from .declarationsInMemory import DeclarationHistory
 from .files_info           import FileInfo
 from .maquina_settings     import MachinaSettings
+from .dataStream           import DataStream
 
 class Memory:
     def __init__(self, memory_available, kernel):
+        self.settings           = MachinaSettings(memory_available, kernel)
         self.fileInfo           = FileInfo(self)
         self.declarationHistory = DeclarationHistory(self)
-        self.acumulador         = 0
-        self.settings           = MachinaSettings(memory_available, kernel)
+        self.dataStream         = DataStream()
         self.pending_programs   = []
         self.programs_saved     = []
         self.step_by_step       = []
 
+    def getDataStream(self):
+        return self.dataStream
 
     def getAcumuladorLastRun(self):
         return self.settings.getAcumuladorLastRun()

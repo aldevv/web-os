@@ -1,14 +1,11 @@
-from ..errorHandling          import ErrorHandlerCompiler, ErrorHandlerVariables
-from ..factory               import Factory
+from ..errorHandling  import ErrorHandlerCompiler, ErrorHandlerVariables
 import traceback
 
 class InstructionRunner:
     def __init__(self, mem):
-        self.__mem              = mem
-        self.progDefs           = None
-        self.current_line       = None # represents the current instruction
-        self.stdout             = []
-        self.printer            = []
+        self.__mem         = mem
+        self.progDefs      = None
+        self.current_line  = None # represents the current instruction
         self.operators_executed_history    = []
 
     def getMemory(self):
@@ -119,18 +116,6 @@ class InstructionRunner:
         except Exception as err:
             print(traceback.format_exc())
             print("Hubo un error en runtime ", err.args, self.getCurrentLine(), err)
-
-    def appendStdout(self, string):
-        self.stdout.append(string)
-    
-    def appendPrinter(self, string):
-        self.printer.append(string)
-
-    def getPrinter(self):
-        return self.printer
-
-    def getStdout(self):
-        return self.stdout
 
     def get_operators_executed_history(self):
         return self.operators_executed_history

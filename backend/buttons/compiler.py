@@ -44,7 +44,8 @@ class MachinaCompiler(object):
 
             # Define file_path to save
             file_path = os.path.join(self._storage_path, filename)
-            fileHandler = self.ch.mem.getFileInfo()
+            mem = self.ch.dispatcher.getMemory()
+            fileHandler = mem.getFileInfo()
             # fileHandler.saveFilename(filename)
             # fileHandler.saveFilePath(file_path)
 

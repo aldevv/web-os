@@ -1,15 +1,14 @@
 from ..errorHandling          import ErrorHandlerCompiler
-from ..factory               import Factory
 import os.path
 
 class Compiler:
-    def __init__(self, mem, progDefs):
+    def __init__(self, mem):
         self.mem                   = mem
-        self.progDefs              = progDefs
+        self.progDefs              = None
         self.current_line          = None
         self.programLength         = []
-        self.declarations_executed_history       = []
-        self.currentProgram        = []
+        self.currentProgram        = [] #instructions
+        self.declarations_executed_history = []
 
     def compileLines(self, lines):
         self.current_line = len(lines)
@@ -92,8 +91,5 @@ class Compiler:
     def getProgramLengthNoComments(self):
         return self.programLength
 
-if __name__ == "__main__":
-    #! TODO
-    """
-    imprima
-    """ 
+    def setProgdefs(self, progDefs):
+        self.progDefs = progDefs

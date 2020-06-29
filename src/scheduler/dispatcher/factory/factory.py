@@ -6,7 +6,10 @@ class Factory:
     @staticmethod
     def createCompiler(mem, declaration):
         from ..instructionHandling   import Compiler
-        return Compiler(mem, Factory.createDeclarationDefinitions(mem, declaration))
+        compiler = Compiler(mem)
+        compiler.setProgdefs(Factory.createDeclarationDefinitions(mem, declaration))
+        return compiler
+
 
     @staticmethod
     def createInstructionRunner(mem, declaration):

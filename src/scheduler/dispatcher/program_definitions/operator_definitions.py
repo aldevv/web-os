@@ -243,25 +243,27 @@ class OperatorDefinitions:
         self.__mem.saveStepOneArg("NO", first, ans)
 
     def muestre(self, name):
+        dataStream = self.__mem.getDataStream()
         if(name == "acumulador"):
-            self.runner.appendStdout(self.__mem.getAcumulador(self.getDeclaration()))
+            dataStream.appendStdout(self.getDeclaration(), self.__mem.getAcumulador(self.getDeclaration()))
             return
         if not self.__declaration.inDeclarations(name):
             ErrorHandlerVariables.throw_var_no_declarada(name)
             return
         value = self.__declaration.getVariable(name)
-        self.runner.appendStdout(value)
+        dataStream.appendStdout(self.getDeclaration(), value)
         self.__mem.saveStepOneArg(name, value)
 
     def imprima(self, name):
+        dataStream = self.__mem.getDataStream()
         if(name == "acumulador"):
-            self.runner.appendPrinter(self.__mem.getAcumulador(self.getDeclaration()))
+            dataStream.appendPrinter(self.getDeclaration(), self.__mem.getAcumulador(self.getDeclaration()))
             return
         if not self.__declaration.inDeclarations(name):
             ErrorHandlerVariables.throw_var_no_declarada(name)
             return
         value = self.__declaration.getVariable(name)
-        self.runner.appendPrinter(value)
+        dataStream.appendPrinter(self.getDeclaration(), value)
         self.__mem.saveStepOneArg(name, value)
 
     def max_(self, a, b, c):
