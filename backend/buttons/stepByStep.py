@@ -23,7 +23,9 @@ class MachinaStep(object):
 
 
     def on_get(self, req, resp):
-        if self.ch.instructionRunner != None:
+        dispatcher = self.ch.dispatcher
+        instructionRunner = dispatcher.instructionRunner
+        if  instructionRunner != None:
             data = {
                 'acumulador': self.ch.getAcumulador(),
                 'variables': self.ch.getVariables(),
