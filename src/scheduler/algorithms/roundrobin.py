@@ -40,6 +40,7 @@ class RoundRobin(Algorithm):
         num_lines_to_run_all_instances = []
         current_time     = 0
         lines_to_run = 0
+        quantum_timer = 0
         declarationHistory = self.memory.declarationHistory
 
         print(f"numInstructionsAllinstances: {timeToRunAll}")
@@ -51,7 +52,7 @@ class RoundRobin(Algorithm):
 
             declaration = instance.progDefs.getDeclaration()
             instructions = instructionDictionary[declaration]
-            print(f"instructions: {instructions}\n")
+            print(f"instructions: {instructions}")
             if len(instructions) == 1:
                 lines_to_run +=1
                 instructionDictionary[declaration] = []
@@ -63,6 +64,7 @@ class RoundRobin(Algorithm):
             print(f"chosen instance: {instance.getFilename()}, current cpu burst: {self.time.getCurrentCpuBurst(instance)}, lines to run: {lines_to_run}, quantum: {self.time.getQuantum()}")
 
 
+            quantum_timer += 1
             #if instance is finished then add it to the list
             if self.time.getCurrentCpuBurst(instance) == 0:
                 # print("did it 1")
@@ -71,23 +73,22 @@ class RoundRobin(Algorithm):
                 self.removeInstanceFromQueue()
                 current_time +=1
                 lines_to_run = 0
+                quantum_timer = 0
                 print(f"checked: {self.instancesToReadable(new_order_run_instances)}\n_______________________\n")
                 continue
             else:
                 #if quantum limit reached, append 
-                if lines_to_run == self.time.getQuantum():
+                if quantum_timer == self.time.getQuantum():
                     num_lines_to_run_all_instances.append(lines_to_run)
                     new_order_run_instances.append(instance)
                     self.putInstanceInTheBack()
                     current_time +=1
                     lines_to_run = 0
+                    quantum_timer = 0
                     print(f"checked: {self.instancesToReadable(new_order_run_instances)}\n_______________________\n")
                     continue
 
-            print(f"checked: {self.instancesToReadable(new_order_run_instances)} ")
-
-            
-
+            print(f"checked: {self.instancesToReadable(new_order_run_instances)}\n_______________________\n")
             current_time += 1
         self.run_instances = new_order_run_instances
         self.num_lines_to_run_all_instances = num_lines_to_run_all_instances

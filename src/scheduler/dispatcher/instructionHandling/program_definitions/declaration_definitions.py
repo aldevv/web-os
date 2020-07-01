@@ -1,4 +1,4 @@
-from ..errorHandling         import ErrorHandlerVariables
+from ...errorHandling         import ErrorHandlerVariables
 
 class DeclarationDefinitions:
     def __init__(self , mem, declaration):

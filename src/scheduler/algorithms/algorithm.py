@@ -32,3 +32,9 @@ class Algorithm:
 
     def orderPendingInstructionsExpro(self, instructions_ready):
         self.memory.orderPendingInstructionsExpro(instructions_ready)
+
+    def instancesToReadable(self, run_instances):
+        names = []
+        for instance in run_instances:
+            names.append(instance.getFilename())
+        return names

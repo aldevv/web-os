@@ -1,6 +1,5 @@
 from ..memory              import Memory
 from ..declaration         import Declaration, Declarable_Item
-from ..program_definitions import DeclarationDefinitions, OperatorDefinitions
 
 class Factory:
     @staticmethod
@@ -32,8 +31,10 @@ class Factory:
 
     @staticmethod
     def createDeclarationDefinitions(mem, declaration):
+        from ..instructionHandling   import DeclarationDefinitions
         return DeclarationDefinitions(mem, declaration)
 
     @staticmethod
     def createOperatorDefinitions(mem, declaration, runner):
+        from ..instructionHandling   import OperatorDefinitions
         return OperatorDefinitions(mem, declaration, runner)

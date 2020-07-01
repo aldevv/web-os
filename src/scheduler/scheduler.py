@@ -25,7 +25,7 @@ class Scheduler:
             self.setAlgorithm(SJF(self.dispatcher.getPendingRunInstances()))
         if name == 'SJFEX' or name == 'sjfEx' or name == 'sjfex':
             self.setAlgorithm(SJFEx(self.dispatcher.getPendingRunInstances()))
-        if name == 'PriorityEx' or name == 'priorityex':
+        if name == 'PriorityEx' or name == 'priorityex' or name == 'priorityEx':
             self.setAlgorithm(PriorityEx(self.dispatcher.getPendingRunInstances()))
         if name == 'roundrobin' or name == 'RoundRobin' or name == 'RR' or name == 'rr':
             self.setAlgorithm(RoundRobin(self.dispatcher.getPendingRunInstances()))
@@ -50,10 +50,10 @@ class Scheduler:
     def run_line(self):
         self.dispatcher.run_line()
 
-    def run_all(self, algorithm="FIFO"):
+    def run_all(self, algorithm="RoundRobin"):
+    # def run_all(self, algorithm="FIFO"):
         self.setAlgorithmType(algorithm)
         self.run()
-        # self.setAlgorithm(None) #! this is so it can load new programs 
     
     def run(self):
         try:

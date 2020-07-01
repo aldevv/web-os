@@ -13,6 +13,7 @@ class PriorityEx(Algorithm):
         self.ordered_instances = None # in arrival order
         self.num_lines_to_run_all_instances = None
         self.priorities = {}
+        self.aging = {}
 
     def getOrder(self):
         instances = self.order
@@ -48,10 +49,11 @@ class PriorityEx(Algorithm):
         print(f"numInstructionsAllinstances: {timeToRunAll}")
         while(current_time < timeToRunAll):
             possible = self.runnableInstances(current_time) 
+            self.ageInstances(possible)
             self.log(possible) 
             instance = self.findHighestPriority(possible)
             self.time.substractFromCPU(instance,  1)
-            print(f"shortest instance: {instance.getFilename()}, current cpu burst: {self.time.getCurrentCpuBurst(instance)}, lines to run: {lines_to_run}")
+            print(f"instancia mayor prioridad: {instance.getFilename()},  rafaga cpu actual: {self.time.getCurrentCpuBurst(instance)}, lineas a correr: {lines_to_run}")
 
 
             if first_time:
@@ -98,11 +100,6 @@ class PriorityEx(Algorithm):
     def instanceChanged(self, prev_instance, instance):
         return prev_instance != instance
 
-    def instancesToReadable(self, run_instances):
-        names = []
-        for instance in run_instances:
-            names.append(instance.getFilename())
-        return names
 
     def getNumInstructionsInAllInstances(self):
         self.memory = self.getMemory(self.run_instances)
@@ -129,6 +126,27 @@ class PriorityEx(Algorithm):
             if time[1] <= current_time and self.time.getCurrentCpuBurst(time[0]) > 0:
                 possible.append(time[0])
         return possible
+
+
+    def ageInstances(self,possible):
+        for instance in possible:
+            if instance not in self.aging:
+                self.aging[instance] = 0
+            else:
+                self.aging[instance] += 1
+                age_value = self.aging[instance]
+                if self.age(instance, age_value):
+                    self.aging[instance] = 0
+
+    def age(self, instance, age_value):
+        if age_value >= 25:
+            if self.priorities[instance] + 20 <= 100:
+                self.priorities[instance] += 20
+            else:
+                self.priorities[instance] = 100
+            print(f"i did it:{instance.getFilename()}, {instance}, priority before {self.priorities[instance] -20}, priority after {self.priorities[instance]}")
+            return True
+        return False
 
     def findHighestPriority(self, instances_possible):
         highest = -1

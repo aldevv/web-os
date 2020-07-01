@@ -1,4 +1,4 @@
-from ..errorHandling         import ErrorHandlerVariables
+from ...errorHandling         import ErrorHandlerVariables
 import time, requests, json, urllib.request
 
 class OperatorDefinitions:

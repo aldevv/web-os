@@ -6,9 +6,10 @@ import traceback
 class Priority(Algorithm):
     def __init__(self, run_instances):
         super().__init__()
-        self.run_instances          = run_instances
-        self.ordered_instances      = None
-        self.priorities             = {}
+        self.run_instances      = run_instances
+        self.ordered_instances  = None
+        self.priorities         = {}
+        self.aging              = {}
 
     def getPriority(self, instance):
         return self.priorities[instance]
@@ -32,8 +33,11 @@ class Priority(Algorithm):
         current_time = 0
         for i in range(num_instances):
             possible = self.runnableInstances(current_time) 
+            # self.ageInstances(possible)
+            print(f"possible: {self.instancesToReadable(possible)}, tiempo: {current_time}")
             instance = self.findHighestPriority(possible)
             _,cpu    = self.extractFromTimeAndCpu(instance)
+            print(f"instancia mayor prioridad: {instance.getFilename()},  rafaga cpu actual: {self.time.getCpuBurst(instance)}, prioridad: {self.getPriority(instance)}\n")
             current_time += cpu
             new_order_run_instances.append(instance)
             self.run_instances.remove(instance)
@@ -54,10 +58,32 @@ class Priority(Algorithm):
     def runnableInstances(self, current_time):
         possible = []
         arrive_times = self.time.getSortedArrivalTimes()
+        print(f"arrive_times: {arrive_times}")
         for time in arrive_times:
             if time[1] <= current_time:
                 possible.append(time[0])
         return possible
+
+
+    def ageInstances(self,possible):
+        for instance in possible:
+            if instance not in self.aging:
+                self.aging[instance] = 0
+            else:
+                self.aging[instance] += 1
+                age_value = self.aging[instance]
+                if self.age(instance, age_value):
+                    self.aging[instance] = 0
+
+    def age(self, instance, age_value):
+        if age_value >= 3:
+            if self.priorities[instance] + 20 <= 100:
+                self.priorities[instance] += 20
+            else:
+                self.priorities[instance] = 100
+            print(f"i did it:{instance.getFilename()}, {instance}, priority before {self.priorities[instance] -20}, priority after {self.priorities[instance]}")
+            return True
+        return False
 
     def findHighestPriority(self, instances_possible):
         highest = -1
@@ -91,20 +117,6 @@ class Priority(Algorithm):
         for i in range(num_instances):
             instance = self.run_instances.pop(0)
             instance.run_all()
-
-        # try:
-        #     num_instances = len(self.run_instances)
-        #     instance = None
-        #     for i in range(num_instances):
-        #         instance = self.run_instances.pop(0)
-        #         if self.time.checkIfTheresTime(instance):
-        #             instance.run_all()
-        #         else:
-        #             raise Exception()
-        # except Exception as err:
-        #     print(traceback.format_exc())
-        #     print("not enough time!, program: ",instance.getFilename(), ", cpu burst: ", self.time.cpu_burst[instance], " vs slice: ", self.time.getSlice())
-
 
     def getTable(self):
         instances  = []
