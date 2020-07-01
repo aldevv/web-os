@@ -13,6 +13,7 @@ class InstructionRunner:
 
     def run_line(self):
         programs_to_run = self.__mem.pending_programs
+        print(f"programs_to_run: {programs_to_run}")
         if len(programs_to_run) == 0:
                 print("nothing more to run")
                 return

@@ -96,6 +96,7 @@ class Dispatcher:
         self.createRunnerIfNone() ## need to create it according to the first declaration in the first file sent
         declaration = self.instructionRunner.progDefs.getDeclaration()
         compiler = self.getCompilerFromDeclaration(declaration)
+        dataStream = self.mem.getDataStream()
         stepsInCompiler = compiler.get_declarations_executed_history()
 
         if(self.instructionRunner.getCurrentLine() == None):
@@ -112,7 +113,7 @@ class Dispatcher:
             instructionName = " ".join(step[1])
             message = "line: " + str(line) + " " + str(instructionName) + " | " + self.mem.getSteps().pop()
             # print("message: ", message)
-            self.instructionRunner.appendStdout(message)
+            dataStream.appendStdout(declaration, message)
             print("stdout:", self.getStdout(), "\n")
             if self.instructionRunner not in self.getRunInstances():
                 self.appendRunInstance(self.instructionRunner)
@@ -123,7 +124,7 @@ class Dispatcher:
                 instructionName = step[1]
                 instructionName = " ".join(step[1])
                 message = "line: " + str(line) + " " + str(instructionName) + " | " + self.mem.getSteps().pop(0)
-                self.instructionRunner.appendStdout(message)
+                dataStream.appendStdout(declaration, message)
 
                 if self.instructionRunner not in self.getRunInstances():
                     self.appendRunInstance(self.instructionRunner)

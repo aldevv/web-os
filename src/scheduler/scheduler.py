@@ -47,11 +47,13 @@ class Scheduler:
     def compileLines(self, lines):
         self.dispatcher.compileLines(lines)
 
-    def run_line(self):
+    def run_line(self, algorithm="FIFO"):
+        if self.algorithm == None:
+            self.setAlgorithmType(algorithm) #should become none after done running all instructions
         self.dispatcher.run_line()
 
-    def run_all(self, algorithm="RoundRobin"):
-    # def run_all(self, algorithm="FIFO"):
+    # def run_all(self, algorithm="RoundRobin"):
+    def run_all(self, algorithm="FIFO"):
         self.setAlgorithmType(algorithm)
         self.run()
     
