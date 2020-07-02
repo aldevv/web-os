@@ -3,6 +3,7 @@ class DataStream:
         self.stdout  = {}
         self.stderr  = {}
         self.printer = {}
+        self.steps = {}
     
     def appendStderr(self, declaration, string):
         self.stderr[declaration] = string
@@ -28,3 +29,17 @@ class DataStream:
 
     def getStdout(self, declaration):
         return self.stdout[declaration]
+    
+    def clearSteps(self):
+        self.steps = {}
+
+    def appendStep(self, declaration, string):
+        if declaration not in self.steps:
+            printer = []
+            printer.append(string)
+            self.steps[declaration] = printer
+        else:
+            self.steps[declaration].append(string)
+
+    def getSteps(self, declaration):
+        return self.steps[declaration]

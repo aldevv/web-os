@@ -4,14 +4,13 @@ import copy
 class Dispatcher:
     def __init__(self, memory_available=80,kernel=10):
         self.mem                = Factory.createMemory(memory_available,kernel)
-        self.declaration        = None
+        self.declaration        = None # for unit testing
         self.compiler           = None
-        self.instructionRunner  = None
-        self.original           = [copy.deepcopy(self.mem), None, None, None]
+        self.original           = [copy.deepcopy(self.mem), None, None]
 
     def resetMaquina(self):
-        self.mem, self.declaration, self.compiler, self.instructionRunner = self.original
-        self.original = [copy.deepcopy(self.mem), None, None, None]
+        self.mem, self.declaration, self.compiler = self.original
+        self.original = [copy.deepcopy(self.mem), None, None]
 
     def appendRunInstance(self, runner_instance):
         queue = self.mem.getQueues()
@@ -78,21 +77,9 @@ class Dispatcher:
         self.mem.addDeclarationToPending(self.declaration)
         self.createRunners()
 
-    def createDeclarationIfNone(self):
-        if(self.declaration == None):
-            self.declaration = Factory.createDeclaration(self.mem)
-
     def createCompilerIfNone(self):
         if(self.compiler == None):
             self.compiler    = Factory.createCompiler(self.mem, self.declaration)
-
-    def createRunnerIfNone(self):
-        if(self.instructionRunner == None):
-            pendingDeclarations = self.mem.getPendingDeclarations()
-            print("this declaration's variables: ", pendingDeclarations[0].getVariables())
-            self.instructionRunner    = Factory.createInstructionRunner(self.mem, pendingDeclarations.pop(0))
-
-            #!save declaration?
 
     def createRunners(self):
         all_declarations = self.mem.declarationHistory
@@ -101,32 +88,20 @@ class Dispatcher:
         # print("num declarations pending: ", num_declaration_pending)
         for i in range(num_declaration_pending):
             # print("the pending variables: before ", pending[0].getVariables())
-            self.instructionRunner = Factory.createInstructionRunner(self.mem, pending.pop(0))
-            self.appendRunInstance(self.instructionRunner)
-
-        # return self.mem.getVariablesNoPos()
-
-        # return self.mem.getTagsNoPos()
+            instructionRunner = Factory.createInstructionRunner(self.mem, pending.pop(0))
+            self.appendRunInstance(instructionRunner)
 
     def getSteps(self): #!
-        #TODO make the steps for each compiler and instructionRunner made
-        pass
-        # steps = []
-        # instructions_compiled = []
-        # instructions_ran      =  []
-        # num_progs = len(self.getCompileInstances())
-        # compilers = self.getCompileInstances()
-        # runners = self.getRunInstances()
-        # for i in range(num_progs):
-        #     declaration = runners[i].progDefs.getDeclaration()
-        #     if self.mem.getSteps(declaration) == []:
-        #         continue
-        #     steps += self.mem.getSteps(declaration)
-        #     instructions_compiled += compilers[i].get_declarations_executed_history()
-        #     instructions_ran      += runners[i].get_operators_executed_history()
-        # all_ = instructions_compiled + instructions_ran
-        # print(f"all_: {all_}, steps: {steps}")
-        # return "\n".join(["line: " + str(a[0]) + " " + str(a[1][0]) + " " + str(a[1][1]) + " | " + str(b) for a, b in zip(all_, steps)])
+        steps = []
+        dataStream = self.mem.getDataStream()
+        steps_all_instances = dataStream.steps
+        queues = self.mem.getQueues()
+        run_instances = queues.getRunInstances()
+        for run_instance in run_instances:
+            declaration = run_instance.progDefs.getDeclaration()
+            if declaration in steps_all_instances:
+                steps.extend(dataStream.getSteps(declaration))
+        return steps
     
     def getFileLengthNoComments(self):
         return self.compiler.getProgramLengthNoComments()
@@ -135,16 +110,13 @@ class Dispatcher:
         self.mem                = Factory.createMemory(value, self.mem.getKernel())
         self.declaration        = None
         self.compiler           = None
-        self.instructionRunner  = None
 
     def setKernel(self, value):
         self.mem                = Factory.createMemory(self.mem.initial_memory, value)
         self.declaration        = None
         self.compiler           = None
-        self.instructionRunner  = None
     
-    def clean(self, memory, kernel, acu):
+    def clean(self, memory, kernel):
         self.mem                = Factory.createMemory(memory, kernel)
         self.declaration        = None
         self.compiler           = None
-        self.instructionRunner  = None

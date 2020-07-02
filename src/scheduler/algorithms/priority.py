@@ -11,6 +11,9 @@ class Priority(Algorithm):
         self.priorities         = {}
         self.aging              = {}
 
+    def getRunInstances(self):
+        return self.run_instances
+
     def getPriority(self, instance):
         return self.priorities[instance]
 
@@ -117,6 +120,48 @@ class Priority(Algorithm):
         for i in range(num_instances):
             instance = self.run_instances.pop(0)
             instance.run_all()
+
+    def runLine(self):
+        if self.currentLineRunInstance == None and len(self.run_instances) == 0:
+            print("nothing more to run")
+            return 
+        else:
+            if self.currentLineRunInstance == None:
+                self.currentLineRunInstance = self.run_instances.pop(0)
+
+        itRan = self.currentLineRunInstance.run_line()
+        declaration = self.currentLineRunInstance.progDefs.getDeclaration() 
+        dataStream = self.memory.getDataStream()
+        dataStream.clearSteps() 
+        if itRan:
+            stepsInRunner = self.currentLineRunInstance.get_operators_executed_history() 
+            step = stepsInRunner.pop(0)
+            line = step[0]
+            instructionName = step[1]
+            instructionName = " ".join(step[1])
+            message = "line: " + str(line) + " " + str(instructionName) + " | " + self.memory.getSteps(declaration).pop() #!
+            print(f"entered here, where it ran, the message is: {message}")
+            dataStream.appendStep(declaration, message)
+        else:
+            queues = self.memory.getQueues()
+            compiler = queues.getCompilerFromDeclaration(declaration)
+            stepsInCompiler = compiler.get_declarations_executed_history()
+            if len(stepsInCompiler) > 0:
+                step = stepsInCompiler.pop(0)
+                line = step[0]
+                instructionName = step[1]
+                instructionName = " ".join(step[1])
+                message = "line: " + str(line) + " " + str(instructionName) + " | " + self.memory.getSteps(declaration).pop(0) #!
+                print(f"entered here, where it did not run, the message is: {message}")
+                dataStream.appendStep(declaration, message)
+
+        current_line = self.currentLineRunInstance.getCurrentLine()
+        length_program = len(self.memory.getInstructionFromDeclaration(declaration))
+        finished = True if  current_line == length_program else False
+
+        if finished: 
+            self.currentLineRunInstance = None
+
 
     def getTable(self):
         instances  = []

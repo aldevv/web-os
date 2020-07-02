@@ -9,6 +9,9 @@ class FIFO(Algorithm):
         self.ordered_instances = None
         self.currentLineRunInstance   = None
 
+    def getRunInstances(self):
+        return self.run_instances
+
     def getOrder(self):
         instances = self.ordered_instances
         names    = []
@@ -56,7 +59,7 @@ class FIFO(Algorithm):
         itRan = self.currentLineRunInstance.run_line()
         declaration = self.currentLineRunInstance.progDefs.getDeclaration() 
         dataStream = self.memory.getDataStream()
-        print(f"steps: {self.memory.getSteps(declaration)}")
+        dataStream.clearSteps() 
         if itRan:
             stepsInRunner = self.currentLineRunInstance.get_operators_executed_history() 
             step = stepsInRunner.pop(0)
@@ -65,7 +68,7 @@ class FIFO(Algorithm):
             instructionName = " ".join(step[1])
             message = "line: " + str(line) + " " + str(instructionName) + " | " + self.memory.getSteps(declaration).pop() #!
             print(f"entered here, where it ran, the message is: {message}")
-            dataStream.appendStdout(declaration, message)
+            dataStream.appendStep(declaration, message)
         else:
             queues = self.memory.getQueues()
             compiler = queues.getCompilerFromDeclaration(declaration)
@@ -77,7 +80,7 @@ class FIFO(Algorithm):
                 instructionName = " ".join(step[1])
                 message = "line: " + str(line) + " " + str(instructionName) + " | " + self.memory.getSteps(declaration).pop(0) #!
                 print(f"entered here, where it did not run, the message is: {message}")
-                dataStream.appendStdout(declaration, message)
+                dataStream.appendStep(declaration, message)
 
         current_line = self.currentLineRunInstance.getCurrentLine()
         length_program = len(self.memory.getInstructionFromDeclaration(declaration))

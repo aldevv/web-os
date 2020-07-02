@@ -37,3 +37,6 @@ class Queue:
 
     def getPendingRunInstances(self):
         return self.pending_run_instances
+
+    def clearPendingRunInstances(self):
+        self.pending_run_instances = []

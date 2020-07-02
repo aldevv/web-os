@@ -12,6 +12,12 @@ class RoundRobin(Algorithm):
         self.ordered_instances = None
         self.num_lines_to_run_all_instances = None
         self.possible_queue    = None
+        self.currentLineRunInstance = None
+        self.currentNumberLinesToRun = None
+        self.linesRan               = 0
+
+    def getRunInstances(self):
+        return self.run_instances
 
     def getOrder(self):
         instances = self.order
@@ -155,6 +161,14 @@ class RoundRobin(Algorithm):
         cpu      = cpu.pop(instance, None)
         return times, cpu
 
+
+    def printPossible(self, possible):
+        for each in possible:
+            print("possible: ", each.getFilename())
+        print("\n")
+        for instance2,cpu in self.time.getCpuBursts().items():
+            print(f"{instance2.getFilename()},  arrival: {self.time.getArrivalTime(instance2)},  cpu: {cpu}")
+
     def setup(self):
         self.orderRunInstancesRound()
         
@@ -172,12 +186,62 @@ class RoundRobin(Algorithm):
             print(f"going to run: {instance.getFilename()}, this many lines: {self.num_lines_to_run_all_instances[0]}")
             instance.run_all_expro(self.num_lines_to_run_all_instances.pop(0))
         
-    def printPossible(self, possible):
-        for each in possible:
-            print("possible: ", each.getFilename())
-        print("\n")
-        for instance2,cpu in self.time.getCpuBursts().items():
-            print(f"{instance2.getFilename()},  arrival: {self.time.getArrivalTime(instance2)},  cpu: {cpu}")
+        
+    def runLine(self):
+        if self.currentLineRunInstance == None and len(self.run_instances) == 0:
+            print("nothing more to run")
+            return 
+        else:
+            if self.currentLineRunInstance == None:
+                self.currentLineRunInstance = self.run_instances.pop(0)
+                self.currentNumberLinesToRun = self.num_lines_to_run_all_instances.pop(0)
+                while self.currentNumberLinesToRun == 0 and len(self.num_lines_to_run_all_instances) != 0:
+                    self.currentLineRunInstance = self.run_instances.pop(0)
+                    self.currentNumberLinesToRun = self.num_lines_to_run_all_instances.pop(0)
+                if len(self.num_lines_to_run_all_instances) == 0 and self.currentNumberLinesToRun == 0:
+                    queues = self.memory.getQueues()
+                    queues.clearPendingRunInstances()
+                    print(f"pending programs: {queues.getPendingRunInstances()}")
+                    print("nothing more to run. 2")
+                    self.currentLineRunInstance = None
+                    self.currentNumberLinesToRun = None
+                    return
+        print(f"currentlineRunInstance: {self.currentLineRunInstance}, num run instances: {len(self.run_instances)}")
+        itRan = self.currentLineRunInstance.run_line()
+        declaration = self.currentLineRunInstance.progDefs.getDeclaration() 
+        dataStream = self.memory.getDataStream()
+        dataStream.clearSteps() 
+        if itRan:
+            stepsInRunner = self.currentLineRunInstance.get_operators_executed_history() 
+            step = stepsInRunner.pop(0)
+            line = step[0]
+            instructionName = step[1]
+            instructionName = " ".join(step[1])
+            message = "line: " + str(line) + " " + str(instructionName) + " | " + self.memory.getSteps(declaration).pop() #!
+            print(f"entered here, where it ran, the message is: {message}")
+            dataStream.appendStep(declaration, message)
+        else:
+            queues = self.memory.getQueues()
+            compiler = queues.getCompilerFromDeclaration(declaration)
+            stepsInCompiler = compiler.get_declarations_executed_history()
+            if len(stepsInCompiler) > 0:
+                step = stepsInCompiler.pop(0)
+                line = step[0]
+                instructionName = step[1]
+                instructionName = " ".join(step[1])
+                message = "line: " + str(line) + " " + str(instructionName) + " | " + self.memory.getSteps(declaration).pop(0) #!
+                print(f"entered here, where it did not run, the message is: {message}")
+                dataStream.appendStep(declaration, message)
+
+        current_line = self.currentLineRunInstance.getCurrentLine()
+        length_program = len(self.memory.getInstructionFromDeclaration(declaration))
+        self.linesRan += 1
+        finished = True if  self.linesRan == self.currentNumberLinesToRun or current_line == length_program else False
+        if finished: 
+            print("it finished..................................")
+            self.currentLineRunInstance = None
+            self.currentNumberLinesToRun = None
+            self.linesRan = 0
 
 
     def getTable(self):

@@ -41,6 +41,7 @@ class InstructionRunner:
 
     def possibleToRun(self):
         program = [self.__mem.getInstructionFromDeclaration(self.progDefs.getDeclaration())]
+        print(f"current line: {self.getCurrentLine()}")
         instruction = self.find_instruction(program, self.getCurrentLine()) 
         operator = self.program_name(instruction)
         if operator in self.progDefs.get_possible_operators():
@@ -105,6 +106,7 @@ class InstructionRunner:
     def setLine(self, value):
         self.current_line = value
 
+
     
     def run_all_expro(self,num_lines_to_run):
         self.startCurrentLineAt0IfNone()
@@ -117,7 +119,6 @@ class InstructionRunner:
     def run_saved_instructionsEx(self, num_lines_to_run):
         try:
             programs_to_run = [self.__mem.getInstructionFromDeclaration(self.progDefs.getDeclaration())]
-            print(f"programs_to_run: {programs_to_run}")
             limit = self.getCurrentLine() + num_lines_to_run
             while self.getCurrentLine() < limit:
                 if self.getCurrentLine() == len(programs_to_run[0]):
@@ -133,6 +134,9 @@ class InstructionRunner:
 
     def get_operators_executed_history(self):
         return self.operators_executed_history
+
+    def run_line_expro(self):
+        pass
 
     def num_prog_ran(self):
         return len(self.operators_executed_history)

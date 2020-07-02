@@ -280,6 +280,6 @@ class OperatorDefinitions:
         ans = a if a > b else b
         self.__declaration.setVariable(c, ans)
 
-    def returne(self, value):
+    def returne(self, value):#! save return value
         self.__mem.saveStepOneArg(self.getDeclaration(), "returne", value)
         return

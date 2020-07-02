@@ -6,6 +6,15 @@ class Scheduler:
         self.algorithm  = None           
         self.time       = None
         self.dispatcher = Dispatcher()
+        self.ex_algorithms = {"sjfex", "priorityex", "roundrobin"}
+        self.algorithms_possible = {
+            "fifo": FIFO,
+            "sjf": SJF,
+            "priority": Priority,
+            "sjfex": SJFEx,
+            "priorityex": PriorityEx,
+            "roundrobin": RoundRobin
+        }
 
     def setSlice(self, slice_): #!finish
         self.algorithm.setSlice(slice_)
@@ -16,19 +25,6 @@ class Scheduler:
         print("Order: ", self.getAlgorithmOrder(),"\n")
         print(self.getAlgorithm().getTable() ,"\n")
 
-    def setAlgorithmType(self, name): #change
-        if name == 'FIFO' or name == 'fifo':
-            self.setAlgorithm(FIFO(self.dispatcher.getPendingRunInstances()))
-        if name == 'Priority' or name == 'priority':
-            self.setAlgorithm(Priority(self.dispatcher.getPendingRunInstances()))
-        if name == 'SJF' or name == 'sjf':
-            self.setAlgorithm(SJF(self.dispatcher.getPendingRunInstances()))
-        if name == 'SJFEX' or name == 'sjfEx' or name == 'sjfex':
-            self.setAlgorithm(SJFEx(self.dispatcher.getPendingRunInstances()))
-        if name == 'PriorityEx' or name == 'priorityex' or name == 'priorityEx':
-            self.setAlgorithm(PriorityEx(self.dispatcher.getPendingRunInstances()))
-        if name == 'roundrobin' or name == 'RoundRobin' or name == 'RR' or name == 'rr':
-            self.setAlgorithm(RoundRobin(self.dispatcher.getPendingRunInstances()))
 
     def setAlgorithm(self, algorithm):
         self.algorithm = algorithm
@@ -48,26 +44,55 @@ class Scheduler:
         self.dispatcher.compileLines(lines)
 
     def run_line(self, algorithm="FIFO"):
+    # def run_line(self, algorithm="RoundRobin"):
+        if algorithm.lower() in self.ex_algorithms:
+            print("entered ex")
+            self.run_line_ex(algorithm)
+        else:
+            print("entered normal")
+            self.run_line_normal(algorithm)
+
+
+
+    def run_line_ex(self, algorithm):
+        if len(self.dispatcher.getPendingRunInstances()) == 0:
+            print("no programs pending")
+            return
+        print(f"pending programs before run line: {len(self.dispatcher.getPendingRunInstances())}")
+        self.setAlgorithmType(algorithm) #should become none after done running all instructions
+        self.run("line")
+
+    def run_line_normal(self, algorithm="FIFO"):
         if self.algorithm == None:
             self.setAlgorithmType(algorithm) #should become none after done running all instructions
-        self.run_line_ex()
+        self.run("line")
+
+    def setAlgorithmType(self, name): #change
+        print("self.algorithm: ", self.algorithm)
+        print("pendinglefttorun left to run: ", self.dispatcher.getPendingRunInstances())
+        if self.algorithm != None:
+            print("instances left to run: ", self.instancesLeftToRun())
+            if self.instancesLeftToRun():
+                return
+        name = name.lower()
+        pending_programs = self.dispatcher.getPendingRunInstances()
+        self.setAlgorithm(self.algorithms_possible[name](pending_programs))
 
 
-    def run_line_ex(self):
-        try:
-            self.algorithm.runLine()
-        except Exception as err:
-            print(traceback.format_exc())
-            print("Hubo un error en runtime ", err.args, err)
+    def instancesLeftToRun(self):
+        return len(self.algorithm.getRunInstances()) != 0
 
     # def run_all(self, algorithm="RoundRobin"):
     def run_all(self, algorithm="FIFO"):
         self.setAlgorithmType(algorithm)
         self.run()
     
-    def run(self):
+    def run(self, type_="all"):
         try:
-            self.algorithm.run()
+            if type_ == "all":
+                self.algorithm.run()
+            if type_ == "line":
+                self.algorithm.runLine()
         except Exception as err:
             print(traceback.format_exc())
             print("Hubo un error en runtime ", err.args, err)
@@ -112,8 +137,8 @@ class Scheduler:
     def setKernel(self, value):
         self.dispatcher.setKernel(value)
 
-    def clean(self, memory, kernel, acu):
-        self.dispatcher.clean(value)
+    def clean(self, memory, kernel):
+        self.dispatcher.clean(memory, kernel)
 
     def getMemoryAvailable(self):
         mem = self.dispatcher.getMemory()

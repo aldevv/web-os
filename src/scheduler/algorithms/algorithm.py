@@ -22,6 +22,8 @@ class Algorithm:
     def getTable(self):
         pass
 
+    def getRunInstances(self):
+        pass
 
     def getMemory(self, run_instances):
         return run_instances[0].getMemory()
