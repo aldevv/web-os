@@ -2,6 +2,8 @@ from .declarationsInMemory import DeclarationHistory
 from .files_info           import FileInfo
 from .maquina_settings     import MachinaSettings
 from .dataStream           import DataStream
+from .stepbystep           import StepByStep
+from .queues               import Queue
 
 class Memory:
     def __init__(self, memory_available, kernel):
@@ -9,9 +11,9 @@ class Memory:
         self.fileInfo           = FileInfo(self)
         self.declarationHistory = DeclarationHistory(self)
         self.dataStream         = DataStream()
-        self.pending_programs   = []
+        self.steps              = StepByStep()
+        self.queues             = Queue()
         self.programs_saved     = []
-        self.step_by_step       = []
 
     def getDataStream(self):
         return self.dataStream
@@ -25,6 +27,9 @@ class Memory:
     def getFileInfo(self):
         return self.fileInfo
     
+    def getQueues(self):
+        return self.queues
+    
     def orderPendingInstructions(self, run_instances):
         for instance in run_instances:
             declaration = instance.progDefs.getDeclaration()
@@ -32,13 +37,13 @@ class Memory:
             self.addToPending(instruction)
 
     def orderPendingInstructionsExpro(self, instructions_ready):
-        self.pending_programs = instructions_ready
+        self.queues.setPendingPrograms(instructions_ready)
 
     def getVariables(self): 
         return self.declarationHistory.getVariables()
     
     def addToPending(self, program):
-        self.pending_programs.append(program)
+        self.queues.addToPending(program)
 
     def addDeclarationToPending(self, declaration):
         self.declarationHistory.addToPending(declaration)
@@ -94,22 +99,14 @@ class Memory:
     def saveInstanceAsLastRun(self, instance):
         self.settings.saveInstanceAsLastRun(instance)
 
-    def saveStepOneArg(self, name, old_value, new_value=None):
-        if new_value != None:
-            step = str(name) + ": "+ str(old_value) + " => " + str(new_value)
-        else:
-            step = str(name) + ": "+ str(old_value) 
-        self.append_step(step)
+    def saveStepOneArg(self,declaration, name, old_value, new_value=None):
+        self.steps.saveStepOneArg(declaration,name,old_value,new_value)
     
-    def saveStepTwoArg(self, func_name, first, second, ans):
-        step = str(first) + " " + str(func_name) + " " + str(second) + " => " + str(ans)
-        self.append_step(step)
+    def saveStepTwoArg(self, declaration, func_name, first, second, ans):
+        self.steps.saveStepTwoArg(declaration, func_name, first, second, ans)
 
-    def append_step(self, step):
-        self.step_by_step.append(step)
-
-    def getSteps(self):
-        return self.step_by_step
+    def getSteps(self, declaration):
+        return self.steps.getSteps(declaration)
     
     def getKernel(self):
         return self.settings.getKernel()

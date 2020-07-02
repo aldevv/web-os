@@ -50,7 +50,15 @@ class Scheduler:
     def run_line(self, algorithm="FIFO"):
         if self.algorithm == None:
             self.setAlgorithmType(algorithm) #should become none after done running all instructions
-        self.dispatcher.run_line()
+        self.run_line_ex()
+
+
+    def run_line_ex(self):
+        try:
+            self.algorithm.runLine()
+        except Exception as err:
+            print(traceback.format_exc())
+            print("Hubo un error en runtime ", err.args, err)
 
     # def run_all(self, algorithm="RoundRobin"):
     def run_all(self, algorithm="FIFO"):

@@ -24,7 +24,7 @@ class DeclarationDefinitions:
 
         value = self.check_type_and_cast(type_, value)
         self.__declaration.setVariable(name, value)
-        self.__mem.saveStepOneArg(name, value)
+        self.__mem.saveStepOneArg(self.getDeclaration(), name, value)
 
     def check_type_and_cast(self, type_, value):
         try:
@@ -52,4 +52,4 @@ class DeclarationDefinitions:
             ErrorHandlerVariables.throw_operando_no_es_numero()
             exit()
         self.__declaration.setTag(name, value)
-        self.__mem.saveStepOneArg(name, value)
+        self.__mem.saveStepOneArg(self.getDeclaration(), name, value)

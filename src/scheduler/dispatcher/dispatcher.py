@@ -8,20 +8,18 @@ class Dispatcher:
         self.compiler           = None
         self.instructionRunner  = None
         self.original           = [copy.deepcopy(self.mem), None, None, None]
-        self.compile_instances  = []
-        self.run_instances      = []
-        self.pending_run_instances = []
 
     def resetMaquina(self):
         self.mem, self.declaration, self.compiler, self.instructionRunner = self.original
         self.original = [copy.deepcopy(self.mem), None, None, None]
 
     def appendRunInstance(self, runner_instance):
-        self.run_instances.append(runner_instance)
-        self.pending_run_instances.append(runner_instance)
+        queue = self.mem.getQueues()
+        queue.appendRunInstance(runner_instance)
     
     def getPendingRunInstances(self):
-        return self.pending_run_instances
+        queues = self.mem.getQueues()
+        return queues.getPendingRunInstances()
 
     def getMemory(self):
         return self.mem
@@ -30,8 +28,10 @@ class Dispatcher:
         stdout = []
         dataStream = self.mem.getDataStream()
         stdout_all_instances = dataStream.stdout
-        for runner_instance in self.run_instances:
-            declaration = runner_instance.progDefs.getDeclaration()
+        queues = self.mem.getQueues()
+        run_instances = queues.getRunInstances()
+        for run_instance in run_instances:
+            declaration = run_instance.progDefs.getDeclaration()
             if declaration in stdout_all_instances:
                 stdout.extend(dataStream.getStdout(declaration))
         return stdout
@@ -40,25 +40,25 @@ class Dispatcher:
         printer = []
         dataStream = self.mem.getDataStream()
         printer_all_instances = dataStream.printer
-        for runner_instance in self.run_instances:
-            declaration = runner_instance.progDefs.getDeclaration()
+        queues = self.mem.getQueues()
+        run_instances = queues.getRunInstances()
+        for run_instance in run_instances:
+            declaration = run_instance.progDefs.getDeclaration()
             if declaration in printer_all_instances:
                 printer.extend(dataStream.getPrinter(declaration))
         return printer
 
     def getRunInstances(self):
-        return self.run_instances
+        queues = self.mem.getQueues()
+        return queues.getRunInstances()
 
     def appendCompileInstance(self, compile_instance):
-        self.compile_instances.append(compile_instance)
+        queue = self.mem.getQueues()
+        queue.appendCompileInstance(compile_instance)
 
     def getCompileInstances(self):
-        return self.compile_instances
-
-    def getCompilerFromDeclaration(self, declaration):
-        for compiler in self.compile_instances:
-            if compiler.progDefs.getDeclaration() == declaration:
-                return compiler
+        queue = self.mem.getQueues()
+        return queue.getCompileInstances()
 
     def compileFile(self, path):
         self.declaration       = Factory.createDeclaration(self.mem)
@@ -92,50 +92,7 @@ class Dispatcher:
             print("this declaration's variables: ", pendingDeclarations[0].getVariables())
             self.instructionRunner    = Factory.createInstructionRunner(self.mem, pendingDeclarations.pop(0))
 
-    def run_line(self):
-        self.createRunnerIfNone() ## need to create it according to the first declaration in the first file sent
-        declaration = self.instructionRunner.progDefs.getDeclaration()
-        compiler = self.getCompilerFromDeclaration(declaration)
-        dataStream = self.mem.getDataStream()
-        stepsInCompiler = compiler.get_declarations_executed_history()
-
-        if(self.instructionRunner.getCurrentLine() == None):
-            self.instructionRunner.current_line = 0
-        step = None
-        programs_to_run = self.mem.pending_programs.copy()
-        didItRun = self.instructionRunner.run_line()
-        # print("did it run ", didItRun, "\n")
-        if  didItRun == True: #true si era un operador, false si era declaracion
-            stepsInRunner = self.instructionRunner.get_operators_executed_history()
-            step = stepsInRunner.pop(0)
-            line = step[0]
-            instructionName = step[1]
-            instructionName = " ".join(step[1])
-            message = "line: " + str(line) + " " + str(instructionName) + " | " + self.mem.getSteps().pop()
-            # print("message: ", message)
-            dataStream.appendStdout(declaration, message)
-            print("stdout:", self.getStdout(), "\n")
-            if self.instructionRunner not in self.getRunInstances():
-                self.appendRunInstance(self.instructionRunner)
-        else:
-            if len(stepsInCompiler) > 0:
-                step = stepsInCompiler.pop(0)
-                line = step[0]
-                instructionName = step[1]
-                instructionName = " ".join(step[1])
-                message = "line: " + str(line) + " " + str(instructionName) + " | " + self.mem.getSteps().pop(0)
-                dataStream.appendStdout(declaration, message)
-
-                if self.instructionRunner not in self.getRunInstances():
-                    self.appendRunInstance(self.instructionRunner)
-
-        if len(self.mem.pending_programs) != len(programs_to_run):
-            pendingDeclarations = self.mem.getPendingDeclarations()
-            if pendingDeclarations != []:
-                print("this declaration's variables: ", pendingDeclarations[0].getVariables())
-                self.instructionRunner    = Factory.createInstructionRunner(self.mem, pendingDeclarations.pop(0))
-        
-        #!save declaration?
+            #!save declaration?
 
     def createRunners(self):
         all_declarations = self.mem.declarationHistory
@@ -151,22 +108,25 @@ class Dispatcher:
 
         # return self.mem.getTagsNoPos()
 
-    def getSteps(self): #! only shows the last program steps, but all the steps are saved in mem
+    def getSteps(self): #!
         #TODO make the steps for each compiler and instructionRunner made
-        steps = self.mem.getSteps()
-        # print(self.mem.getSteps())
-        if steps == []:
-            return None
-        instructions_compiled = []
-        instructions_ran      =  []
-        num_progs = len(self.getCompileInstances())
-        compilers = self.getCompileInstances()
-        runners = self.getRunInstances()
-        for i in range(num_progs):
-            instructions_compiled += compilers[i].get_declarations_executed_history()
-            instructions_ran      += runners[i].get_operators_executed_history()
-        all_ = instructions_compiled + instructions_ran
-        return "\n".join(["line: " + str(a[0]) + " " + str(a[1][0]) + " " + str(a[1][1]) + " | " + str(b) for a, b in zip(all_, steps)])
+        pass
+        # steps = []
+        # instructions_compiled = []
+        # instructions_ran      =  []
+        # num_progs = len(self.getCompileInstances())
+        # compilers = self.getCompileInstances()
+        # runners = self.getRunInstances()
+        # for i in range(num_progs):
+        #     declaration = runners[i].progDefs.getDeclaration()
+        #     if self.mem.getSteps(declaration) == []:
+        #         continue
+        #     steps += self.mem.getSteps(declaration)
+        #     instructions_compiled += compilers[i].get_declarations_executed_history()
+        #     instructions_ran      += runners[i].get_operators_executed_history()
+        # all_ = instructions_compiled + instructions_ran
+        # print(f"all_: {all_}, steps: {steps}")
+        # return "\n".join(["line: " + str(a[0]) + " " + str(a[1][0]) + " " + str(a[1][1]) + " | " + str(b) for a, b in zip(all_, steps)])
     
     def getFileLengthNoComments(self):
         return self.compiler.getProgramLengthNoComments()

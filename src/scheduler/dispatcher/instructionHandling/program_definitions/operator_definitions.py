@@ -45,7 +45,7 @@ class OperatorDefinitions:
         new  = self.__declaration.getVariable(name)
 
         self.__mem.setAcumulador(self.getDeclaration(),new)
-        self.__mem.saveStepOneArg("Acumulador", prev, new)
+        self.__mem.saveStepOneArg(self.getDeclaration(), "Acumulador", prev, new)
 
     def almacene(self, name):  # * works
         if not self.__declaration.inDeclarations(name):
@@ -55,14 +55,14 @@ class OperatorDefinitions:
         prev = self.__declaration.getVariable(name)
         new  = self.__mem.getAcumulador(self.getDeclaration())
         self.__declaration.setVariable(name, new)
-        self.__mem.saveStepOneArg(name, prev, new)
+        self.__mem.saveStepOneArg(self.getDeclaration(), name, prev, new)
 
     def vaya(self,tag):
         if not self.__declaration.inDeclarations(tag):
             ErrorHandlerVariables.throw_tag_no_declarada(tag)
             return
         self.runner.setLine(self.__declaration.getTag(tag) -2)
-        self.__mem.saveStepOneArg("vaya",str(" desde " + str(prev+1)+ " hasta "), self.runner.getCurrentLine()+1)
+        self.__mem.saveStepOneArg(self.getDeclaration(), "vaya",str(" desde " + str(prev+1)+ " hasta "), self.runner.getCurrentLine()+1)
 
     def vayasi(self, tag1, tag2):
         if not self.__declaration.inDeclarations(tag1):
@@ -76,13 +76,13 @@ class OperatorDefinitions:
         prev = self.runner.getCurrentLine()
         if self.__mem.getAcumulador(self.getDeclaration()) > 0:
             self.runner.setLine(self.__declaration.getTag(tag1) -2) # makes it equal to the value in tag1
-            self.__mem.saveStepOneArg("vayasi",str(" desde " + str(prev+1)+ " hasta "), self.runner.getCurrentLine()+1)
+            self.__mem.saveStepOneArg(self.getDeclaration(), "vayasi",str(" desde " + str(prev+1)+ " hasta "), self.runner.getCurrentLine()+1)
             return
         if self.__mem.getAcumulador(self.getDeclaration()) < 0:
             self.runner.setLine(self.__declaration.getTag(tag2)-2) # makes it equal to the value in tag2
-            self.__mem.saveStepOneArg("vayasi", str(" desde " + str(prev+1)+ " hasta ") , self.runner.getCurrentLine()+1)
+            self.__mem.saveStepOneArg(self.getDeclaration(), "vayasi", str(" desde " + str(prev+1)+ " hasta ") , self.runner.getCurrentLine()+1)
             return
-        self.__mem.saveStepOneArg("vayasi",str("desde " + str(prev+1)+ " hasta ") , self.runner.getCurrentLine()+1)
+        self.__mem.saveStepOneArg(self.getDeclaration(), "vayasi",str("desde " + str(prev+1)+ " hasta ") , self.runner.getCurrentLine()+1)
 
     def lea(self, name):
         if not self.__declaration.inDeclarations(name):
@@ -96,7 +96,7 @@ class OperatorDefinitions:
 
         self.__declaration.setVariable(name, value)
         some  = self.__declaration.getVariable(name)
-        self.__mem.saveStepOneArg(name, prev, value)
+        self.__mem.saveStepOneArg(self.getDeclaration(), name, prev, value)
 
     def getValues(self, name):
 
@@ -132,7 +132,7 @@ class OperatorDefinitions:
         new  = self.__mem.getAcumulador(self.getDeclaration()) + self.__declaration.getVariable(name)
 
         self.__mem.setAcumulador(self.getDeclaration(),new)
-        self.__mem.saveStepOneArg("Acumulador", prev, new)
+        self.__mem.saveStepOneArg(self.getDeclaration(), "Acumulador", prev, new)
 
     def reste(self, name):
         if not self.__declaration.inDeclarations(name):
@@ -141,7 +141,7 @@ class OperatorDefinitions:
         prev = self.__mem.getAcumulador(self.getDeclaration())
         new  = self.__mem.getAcumulador(self.getDeclaration()) - self.__declaration.getVariable(name)
         self.__mem.setAcumulador(self.getDeclaration(),new)
-        self.__mem.saveStepOneArg("Acumulador", prev, new)
+        self.__mem.saveStepOneArg(self.getDeclaration(), "Acumulador", prev, new)
 
     def multiplique(self, name):
         if not self.__declaration.inDeclarations(name):
@@ -151,7 +151,7 @@ class OperatorDefinitions:
         new = self.__mem.getAcumulador(self.getDeclaration()) * self.__declaration.getVariable(name)
 
         self.__mem.setAcumulador(self.getDeclaration(),new)
-        self.__mem.saveStepOneArg("Acumulador", prev, new)
+        self.__mem.saveStepOneArg(self.getDeclaration(), "Acumulador", prev, new)
 
     def divida(self, name):
         if not self.__declaration.inDeclarations(name):
@@ -167,7 +167,7 @@ class OperatorDefinitions:
         new  = self.__mem.getAcumulador(self.getDeclaration()) / self.__declaration.getVariable(name)
 
         self.__mem.setAcumulador(self.getDeclaration(),new)
-        self.__mem.saveStepOneArg("Acumulador", prev, new)
+        self.__mem.saveStepOneArg(self.getDeclaration(), "Acumulador", prev, new)
 
     def potencia(self, name):
         if not self.__declaration.inDeclarations(name):
@@ -177,7 +177,7 @@ class OperatorDefinitions:
         new  = self.__mem.getAcumulador(self.getDeclaration()) ** self.__declaration.getVariable(name)
 
         self.__mem.setAcumulador(self.getDeclaration(),new)
-        self.__mem.saveStepOneArg("Acumulador", prev, new)
+        self.__mem.saveStepOneArg(self.getDeclaration(), "Acumulador", prev, new)
 
     def modulo(self, name):
         if not self.__declaration.inDeclarations(name):
@@ -187,7 +187,7 @@ class OperatorDefinitions:
         new  = self.__mem.getAcumulador(self.getDeclaration()) % self.__declaration.getVariable(name)
 
         self.__mem.setAcumulador(self.getDeclaration(),new)
-        self.__mem.saveStepOneArg("Acumulador", prev, new)
+        self.__mem.saveStepOneArg(self.getDeclaration(), "Acumulador", prev, new)
 
     def concatene(self, name):  # ! variable value has to be a string
         if not self.__declaration.inDeclarations(name):
@@ -198,7 +198,7 @@ class OperatorDefinitions:
         new = str(self.__mem.getAcumulador(self.getDeclaration())) + self.__declaration.getVariable(name)
 
         self.__mem.setAcumulador(self.getDeclaration(),new)
-        self.__mem.saveStepOneArg("Acumulador", prev, new)
+        self.__mem.saveStepOneArg(self.getDeclaration(), "Acumulador", prev, new)
 
     def elimine(self, to_delete, ans):
         if not self.__declaration.inDeclarations(ans):
@@ -209,13 +209,13 @@ class OperatorDefinitions:
             # if not a variable then is a normal string to concat
             substring = str(self.__mem.getAcumulador(self.getDeclaration())).replace(to_delete, '')
             self.__declaration.setVariable(ans, substring)
-            self.__mem.saveStepOneArg("Elimine",prev, substring)
+            self.__mem.saveStepOneArg(self.getDeclaration(), "Elimine",prev, substring)
             return
 
         to_delete = self.__declaration.getVariable(to_delete)
         substring = str(self.__mem.getAcumulador(self.getDeclaration())).replace(to_delete, '')
         self.__declaration.setVariable(ans, substring)
-        self.__mem.saveStepOneArg(ans, prev, substring)
+        self.__mem.saveStepOneArg(self.getDeclaration(), ans, prev, substring)
 
     def extraiga(self, num_elem, ans):
         if not self.__declaration.inDeclarations(ans):
@@ -225,34 +225,35 @@ class OperatorDefinitions:
 
         substring = self.__mem.getAcumulador(self.getDeclaration())[:int(num_elem)]
         self.__declaration.setVariable(ans, substring)
-        self.__mem.saveStepOneArg(ans, prev, substring)
+        self.__mem.saveStepOneArg(self.getDeclaration(), ans, prev, substring)
 
     def Y(self, first, second, ans):
         value = True if self.__declaration.getVariable(first) and self.__declaration.getVariable(second) else False
         self.__declaration.setVariable(ans, value)
-        self.__mem.saveStepTwoArg("Y", first, second, value)
+        self.__mem.saveStepTwoArg(self.getDeclaration(), "Y", first, second, value)
 
     def O(self, first, second, ans):
         value = True if self.__declaration.getVariable(first) or self.__declaration.getVariable(second) else False
         self.__declaration.setVariable(ans, value)
-        self.__mem.saveStepTwoArg("O", first, second, value)
+        self.__mem.saveStepTwoArg(self.getDeclaration(), "O", first, second, value)
 
     def NO(self, first, ans):
         value = not self.__declaration.getVariable(first)
         self.__declaration.setVariable(ans, value)
-        self.__mem.saveStepOneArg("NO", first, ans)
+        self.__mem.saveStepOneArg(self.getDeclaration(), "NO", first, ans)
 
     def muestre(self, name):
         dataStream = self.__mem.getDataStream()
         if(name == "acumulador"):
             dataStream.appendStdout(self.getDeclaration(), self.__mem.getAcumulador(self.getDeclaration()))
+            self.__mem.saveStepOneArg(self.getDeclaration(), name, self.__mem.getAcumulador(self.getDeclaration()))
             return
         if not self.__declaration.inDeclarations(name):
             ErrorHandlerVariables.throw_var_no_declarada(name)
             return
         value = self.__declaration.getVariable(name)
         dataStream.appendStdout(self.getDeclaration(), value)
-        self.__mem.saveStepOneArg(name, value)
+        self.__mem.saveStepOneArg(self.getDeclaration(), name, value)
 
     def imprima(self, name):
         dataStream = self.__mem.getDataStream()
@@ -264,7 +265,7 @@ class OperatorDefinitions:
             return
         value = self.__declaration.getVariable(name)
         dataStream.appendPrinter(self.getDeclaration(), value)
-        self.__mem.saveStepOneArg(name, value)
+        self.__mem.saveStepOneArg(self.getDeclaration(), name, value)
 
     def max_(self, a, b, c):
         a = self.__declaration.getVariable(a)
@@ -280,5 +281,5 @@ class OperatorDefinitions:
         self.__declaration.setVariable(c, ans)
 
     def returne(self, value):
-        self.__mem.saveStepOneArg("returne", value)
+        self.__mem.saveStepOneArg(self.getDeclaration(), "returne", value)
         return
