@@ -134,6 +134,7 @@ form > #lea, form > #leaButton {
     border-bottom: 1px solid var(--side-A-col);
 }
 
-.algorithm {
+.acu {
+    border-left: 1px dotted var(--side-A-col);
 
 }
