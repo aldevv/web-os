@@ -5,9 +5,10 @@ import traceback
 
 class RoundRobin(Algorithm):
     #Shortest job first
-    def __init__(self, run_instances):
+    def __init__(self, run_instances, quantum):
         super().__init__()
         self.run_instances     = run_instances
+        self.quantum           = quantum
         self.order             = None
         self.ordered_instances = None
         self.num_lines_to_run_all_instances = None
@@ -170,6 +171,7 @@ class RoundRobin(Algorithm):
             print(f"{instance2.getFilename()},  arrival: {self.time.getArrivalTime(instance2)},  cpu: {cpu}")
 
     def setup(self):
+        self.time.setQuantum(self.quantum)
         self.orderRunInstancesRound()
         
 

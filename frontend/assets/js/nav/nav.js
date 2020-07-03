@@ -29,11 +29,11 @@ kernel.addEventListener("change", e => {
     }).catch(console.error);
 });
 
-acumulador.addEventListener("change", e => {
+quantum.addEventListener("change", e => {
     e.preventDefault();
-    const acumulador = document.getElementById("acumulador")
+    const quantum = document.getElementById("quantum")
     const endpoint  = 'http://localhost:8000/api/nav';
-    let data = {'acumulador': e.target.value};
+    let data = {'quantum': e.target.value};
     fetch(endpoint, {
         method: "POST",
         headers: {

@@ -19,7 +19,7 @@ def test():
     # ch.setAlgorithmType("sjf")
     # ch.setAlgorithmType("sjfEx")
     # ch.setAlgorithmType("priorityex")
-    ch.run_all("priorityEx")
+    ch.run_all("roundrobin")
     time = ch.getAlgorithm().getTime()
     print("arrivals: ", time.getArrivalTimesHistory())
     print("cpuBursts: ", time.getCpuBurstsHistory())

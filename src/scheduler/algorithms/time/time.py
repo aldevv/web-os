@@ -55,7 +55,7 @@ class Time:
         mem         = instance.getMemory()
         return mem.getInstructionFromDeclaration(declaration)
 
-    def setSlice(self, quantum):
+    def setQuantum(self, quantum):
         self.quantum = quantum
     
     def getQuantum(self):

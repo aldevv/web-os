@@ -3,9 +3,9 @@ from .dispatcher import Dispatcher
 from .algorithms import *
 class Scheduler:
     def __init__(self):
-        self.algorithm  = None           
-        self.time       = None
         self.dispatcher = Dispatcher()
+        self.default_quantum = 5
+        self.algorithm  = None           
         self.ex_algorithms = {"sjfex", "priorityex", "roundrobin"}
         self.algorithms_possible = {
             "fifo": FIFO,
@@ -15,9 +15,6 @@ class Scheduler:
             "priorityex": PriorityEx,
             "roundrobin": RoundRobin
         }
-
-    def setSlice(self, slice_): #!finish
-        self.algorithm.setSlice(slice_)
 
     def getSchedulerReport(self):
         print("\n")
@@ -43,7 +40,7 @@ class Scheduler:
     def compileLines(self, lines):
         self.dispatcher.compileLines(lines)
 
-    def run_line(self, algorithm="FIFO"):
+    def run_line(self, algorithm="roundrobin"):
     # def run_line(self, algorithm="RoundRobin"):
         if algorithm.lower() in self.ex_algorithms:
             print("entered ex")
@@ -62,7 +59,7 @@ class Scheduler:
         self.setAlgorithmType(algorithm) #should become none after done running all instructions
         self.run("line")
 
-    def run_line_normal(self, algorithm="FIFO"):
+    def run_line_normal(self, algorithm):
         if self.algorithm == None:
             self.setAlgorithmType(algorithm) #should become none after done running all instructions
         self.run("line")
@@ -76,14 +73,18 @@ class Scheduler:
                 return
         name = name.lower()
         pending_programs = self.dispatcher.getPendingRunInstances()
-        self.setAlgorithm(self.algorithms_possible[name](pending_programs))
+        if name == "roundrobin":
+            self.setAlgorithm(self.algorithms_possible[name](pending_programs, self.default_quantum))
+        else:
+            self.setAlgorithm(self.algorithms_possible[name](pending_programs))
+
 
 
     def instancesLeftToRun(self):
         return len(self.algorithm.getRunInstances()) != 0
 
-    # def run_all(self, algorithm="RoundRobin"):
-    def run_all(self, algorithm="FIFO"):
+    def run_all(self, algorithm="RoundRobin"):
+    # def run_all(self, algorithm="FIFO"):
         self.setAlgorithmType(algorithm)
         self.run()
     
@@ -91,6 +92,7 @@ class Scheduler:
         try:
             if type_ == "all":
                 self.algorithm.run()
+                self.getSchedulerReport()
             if type_ == "line":
                 self.algorithm.runLine()
         except Exception as err:
@@ -133,12 +135,22 @@ class Scheduler:
 
     def setMemory(self, value):
         self.dispatcher.setMemory(value)
+        self.algorithm = None
 
     def setKernel(self, value):
         self.dispatcher.setKernel(value)
+        self.algorithm = None
 
-    def clean(self, memory, kernel):
+    def setQuantum(self, value):
+        self.dispatcher.resetMaquina()
+        self.default_quantum = value
+        self.algorithm = None
+        
+
+    def clean(self, memory, kernel, quantum):
         self.dispatcher.clean(memory, kernel)
+        self.default_quantum   = quantum
+        self.algorithm = None
 
     def getMemoryAvailable(self):
         mem = self.dispatcher.getMemory()

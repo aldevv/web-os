@@ -65,9 +65,9 @@ getData()
         registers_table.innerHTML   = originalHtml['register'];
         memory_table.innerHTML      = originalHtml['memory'];
         const memoria = document.getElementById("memoria");
-        const kernel = document.getElementById("kernel");
-        const acumulador = document.getElementById("acumulador");
-        let data = {'memoria': memoria.value, 'kernel': kernel.value, 'acumulador': acumulador.value};
+        const kernel  = document.getElementById("kernel");
+        const quantum = document.getElementById("quantum");
+        let data = {'memoria': memoria.value, 'kernel': kernel.value, 'quantum': quantum.value};
         fetch(endpoint, {
             method: "POST",
             headers: {
