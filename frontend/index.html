@@ -17,15 +17,32 @@
 
     <div class="container my-container">
         <div class="">
-            <div class="row pb-2 mt-4 mb-2 border-bottom">
-                <h2>Chmaquina <small> control</small></h2>
-            </div>
+            <!-- <div class="row pb-2 mt-4 mb-2 border-bottom">
+                <div class="col-3 title">
+                    <h2>Chmaquina <small> control</small></h2>
+                </div>
+            </div> -->
             <div class="row nav-buttons">
                 <form id="myform" action="http://localhost:8000/api/compile" enctype="multipart/form-data">
-                    <div>
-                        <label for="myfile">Seleccionar programas</label>
-                        <br>
-                        <input type="file" id="myfile" accept=".ch" name="file" multiple> 
+                    <div class="row">
+                        <div class="col-4">
+                            <label for="myfile">Programas</label>
+                            <br>
+                            <input type="file" id="myfile" accept=".ch" name="file" multiple> 
+
+
+                        </div>
+                        <div class="col-3 algorithm">
+                            <label for="algoritmos">Algoritmos</label>
+                            <select name="algoritmos" id="algoritmos">
+                                <option value="roundrobin">RoundRobin</option>
+                                <option value="fifo">FIFO</option>
+                                <option value="sjf">SJF</option>
+                                <option value="priority">Prioridad</option>
+                                <option value="sjfex">SJF Expropiativo</option>
+                                <option value="priorityex">Prioridad Expropiativo</option>
+                            </select>
+                        </div>
                     </div>
                     <br>
                     <input id="compilar"            type="submit" value="Compilar" >
@@ -41,7 +58,7 @@
 
         </div>
         <div class="row">
-                <div class="col-6 side-A">
+                <div class="col-lg-6  side-A">
                     <div class="row nav-row">
                         <div class="col-4 input-buttons">
 
@@ -68,6 +85,11 @@
 
                     <div class="row align-items-center monitor-row">
                         <div id="monitor" class="col-12 ">
+                        </div>
+                    </div>
+                    <div class="row align-bottom pasos">
+                        <div id="pasos">
+                            paso:  
                         </div>
                     </div>
                     <div class="row align-bottom printer">

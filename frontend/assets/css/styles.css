@@ -124,4 +124,16 @@ form > #lea, form > #leaButton {
     background-color: var(--side-B-col);
     height: 4.5%;
     border: 3px dotted var(--side-A-col);
+    border-top: 1px solid var(--side-A-col);
+}
+.pasos {
+    vertical-align: bottom;
+    background-color: var(--side-B-col);
+    height: 4.5%;
+    border: 3px dotted var(--side-A-col);
+    border-bottom: 1px solid var(--side-A-col);
+}
+
+.algorithm {
+
 }
