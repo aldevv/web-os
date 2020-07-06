@@ -30,9 +30,9 @@ class MachinaCompiler(object):
         https://github.com/yohanboniface/falcon-multipart
         """
 
-
+        algorithm = req.get_param('algorithm')
         num_programs_uploaded = len(req.params)
-        for i in range(num_programs_uploaded):
+        for i in range(num_programs_uploaded-1):
             input_file = req.get_param('file['+str(i)+']')
             # print("files", input_files)
             # print("some", type(input_files))
@@ -61,6 +61,6 @@ class MachinaCompiler(object):
             self.files_uploaded_paths.append(file_path)
 
         for i in range(num_programs_uploaded):
-            self.ch.compileFile(self.files_uploaded_paths.pop(0))
+            self.ch.compileFile(self.files_uploaded_paths.pop(0), algorithm)
 
         resp.status = falcon.HTTP_201

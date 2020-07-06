@@ -88,6 +88,11 @@ class SJF(Algorithm):
             instance.run_all()
 
     def runLine(self):
+        #this was added later
+        queues = self.memory.getQueues()
+        if len(queues.pending_programs) > 0:
+            queues.pending_programs = []
+
         if self.currentLineRunInstance == None and len(self.run_instances) == 0:
             print("nothing more to run")
             return 

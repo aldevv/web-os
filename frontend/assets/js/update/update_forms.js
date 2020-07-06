@@ -84,6 +84,7 @@ getData()
         e.preventDefault();
         const endpoint  = 'http://localhost:8000/api/clean';
         monitor.innerHTML           = "";
+        printer.innerHTML           = "Impresora: ";
         variables_table.innerHTML   = originalHtml['variables'];
         tags_table.innerHTML        = originalHtml['tags'];
         instruction_table.innerHTML = originalHtml['instruction'];

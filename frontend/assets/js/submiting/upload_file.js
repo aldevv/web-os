@@ -11,6 +11,12 @@ myform.addEventListener("submit", e => {
     for(var i=0; i<numFiles; i++)
         formData.set("file["+i+"]", myfile.files[i]);
 
+    const algorithm_options = document.getElementById("algoritmos");
+    let chosen_algorithm = algorithm_options.options[algorithm_options.selectedIndex];
+    console.log("chosen algorithm ", chosen_algorithm.value);
+    formData.set("algorithm", chosen_algorithm.value);
+    console.log("formDato", formData);
+
     fetch(endpoint, {
         method: "POST",
         body:   formData,

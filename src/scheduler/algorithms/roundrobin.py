@@ -68,7 +68,7 @@ class RoundRobin(Algorithm):
                     instructions.pop(0)
                     instructionDictionary[declaration] = instructions
                     lines_to_run +=1
-            print(f"chosen instance: {instance.getFilename()}, current cpu burst: {self.time.getCurrentCpuBurst(instance)}, lines to run: {lines_to_run}, quantum: {self.time.getQuantum()}")
+            self.printChosen(instance, lines_to_run) 
 
 
             quantum_timer += 1
@@ -103,6 +103,10 @@ class RoundRobin(Algorithm):
     def removeInstanceFromQueue(self):
         self.possible_queue.pop(0)
 
+    def printChosen(self, instance, lines_to_run):
+        if len(self.memory.getFileInfo().getFilenames()) == 0:
+            return
+        print(f"chosen instance: {instance.getFilename()}, current cpu burst: {self.time.getCurrentCpuBurst(instance)}, lines to run: {lines_to_run}, quantum: {self.time.getQuantum()}")
 
     def putInstanceInTheBack(self):
         for pos in self.possible_queue:
@@ -113,6 +117,8 @@ class RoundRobin(Algorithm):
             print("new possible", pos[0].getFilename())
 
     def instancesToReadable(self, run_instances):
+        if len(self.memory.getFileInfo().getFilenames()) == 0:
+            return
         names = []
         for instance in run_instances:
             names.append(instance.getFilename())
@@ -164,6 +170,8 @@ class RoundRobin(Algorithm):
 
 
     def printPossible(self, possible):
+        if len(self.memory.getFileInfo().getFilenames()) == 0:
+            return
         for each in possible:
             print("possible: ", each.getFilename())
         print("\n")
@@ -181,15 +189,33 @@ class RoundRobin(Algorithm):
         instance = None
         print(f"to run: ")
         names = self.instancesToReadable(self.run_instances)
-        for name, lines in zip(names,self.num_lines_to_run_all_instances):
-            print(name," ", lines)
-        for i in range(num_instances):              #! error esta aqui
+        self.printNamesAndLinesToRun(names)
+        for i in range(num_instances):      
             instance = self.run_instances.pop(0)
-            print(f"going to run: {instance.getFilename()}, this many lines: {self.num_lines_to_run_all_instances[0]}")
+            self.printInstanceToRun(instance)
             instance.run_all_expro(self.num_lines_to_run_all_instances.pop(0))
+        #this was added later
+        queues = self.memory.getQueues()
+        queues.pending_programs = []
+
+    def printNamesAndLinesToRun(self, names):
+        if len(self.memory.getFileInfo().getFilenames()) == 0:
+            return
+        for name, lines in zip(names, self.num_lines_to_run_all_instances):
+            print(name," ", lines)
+
+    def printInstanceToRun(self, instance):
+        if len(self.memory.getFileInfo().getFilenames()) == 0:
+            return
+        print(f"going to run: {instance.getFilename()}, this many lines: {self.num_lines_to_run_all_instances[0]}")
         
         
     def runLine(self):
+        #this was added later
+        queues = self.memory.getQueues()
+        if len(queues.pending_programs) > 0:
+            queues.pending_programs = []
+
         if self.currentLineRunInstance == None and len(self.run_instances) == 0:
             print("nothing more to run")
             return 

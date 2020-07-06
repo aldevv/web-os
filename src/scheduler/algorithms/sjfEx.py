@@ -162,8 +162,16 @@ class SJFEx(Algorithm):
             instance = self.run_instances.pop(0)
             print(f"goint to run: {instance.getFilename()}")
             instance.run_all_expro(self.num_lines_to_run_all_instances.pop(0))
+        queues = self.memory.getQueues()
+        queues.pending_programs = []
 
     def runLine(self):
+
+        #this was added later
+        queues = self.memory.getQueues()
+        if len(queues.pending_programs) > 0:
+            queues.pending_programs = []
+
         if self.currentLineRunInstance == None and len(self.run_instances) == 0:
             print("nothing more to run")
             return 

@@ -17,6 +17,8 @@ class Scheduler:
         }
 
     def getSchedulerReport(self):
+        if len(self.dispatcher.getMemory().getFileInfo().getFilenames()) == 0: #ya que no hay archivos que reportar
+            return
         print("\n")
         print("Algoritmo: ", type(self.getAlgorithm()).__name__)
         print("Order: ", self.getAlgorithmOrder(),"\n")
@@ -34,14 +36,14 @@ class Scheduler:
     def getAlgorithmOrder(self):
         return self.algorithm.getOrder()
     
-    def compileFile(self, path):
+    def compileFile(self, path, algorithm=None):
+        self.resetMaquinaIfAlgorithmChanged(algorithm)
         self.dispatcher.compileFile(path)
 
     def compileLines(self, lines):
         self.dispatcher.compileLines(lines)
 
     def run_line(self, algorithm="roundrobin"):
-    # def run_line(self, algorithm="RoundRobin"):
         if algorithm.lower() in self.ex_algorithms:
             print("entered ex")
             self.run_line_ex(algorithm)
@@ -49,27 +51,30 @@ class Scheduler:
             print("entered normal")
             self.run_line_normal(algorithm)
 
-
+    def resetMaquinaIfAlgorithmChanged(self,algorithm):
+        if self.algorithm != None and type(self.getAlgorithm()).__name__.lower() != algorithm:
+            self.dispatcher.resetMaquina()
 
     def run_line_ex(self, algorithm):
         if len(self.dispatcher.getPendingRunInstances()) == 0:
             print("no programs pending")
             return
         print(f"pending programs before run line: {len(self.dispatcher.getPendingRunInstances())}")
-        self.setAlgorithmType(algorithm) #should become none after done running all instructions
+        self.setAlgorithmType(algorithm, mode="line") #should become none after done running all instructions
         self.run("line")
 
     def run_line_normal(self, algorithm):
         if self.algorithm == None:
-            self.setAlgorithmType(algorithm) #should become none after done running all instructions
+            self.setAlgorithmType(algorithm, mode="line") #should become none after done running all instructions
         self.run("line")
 
-    def setAlgorithmType(self, name): #change
+    def setAlgorithmType(self, name, mode="normal"): #change
         print("self.algorithm: ", self.algorithm)
         print("pendinglefttorun left to run: ", self.dispatcher.getPendingRunInstances())
         if self.algorithm != None:
-            print("instances left to run: ", self.instancesLeftToRun())
-            if self.instancesLeftToRun():
+            print("instances left to run: ", self.instancesLeftToRun()) 
+            if mode == "line" and self.instancesLeftToRun():
+                print("\nreturned!!!\n")
                 return
         name = name.lower()
         pending_programs = self.dispatcher.getPendingRunInstances()

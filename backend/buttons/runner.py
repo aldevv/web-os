@@ -27,6 +27,5 @@ class MachinaRunner(object):
     def on_post(self, req, resp):
         data = raw_data = json.load(req.bounded_stream)
         self.algorithm = raw_data.get('algorithm')
-        print(f"algorithm: {self.algorithm}")
         resp.status = falcon.HTTP_200
 

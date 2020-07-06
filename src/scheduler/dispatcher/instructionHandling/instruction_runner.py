@@ -106,8 +106,6 @@ class InstructionRunner:
     def setLine(self, value):
         self.current_line = value
 
-
-    
     def run_all_expro(self,num_lines_to_run):
         self.startCurrentLineAt0IfNone()
         self.run_saved_instructionsEx(num_lines_to_run)
