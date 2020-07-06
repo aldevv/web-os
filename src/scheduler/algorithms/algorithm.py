@@ -12,6 +12,9 @@ class Algorithm:
         # setup before run
         pass
 
+    def runLine(self):
+        pass
+
     def run(self):
         # how it runs
         pass

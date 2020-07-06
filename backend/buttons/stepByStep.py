@@ -6,8 +6,14 @@ class MachinaStep(object):
         self.ch              = ch
         self.instructions    = None
         self.numPrograms     = None
+        self.algorithm       = None
     
     def on_post(self, req, resp):
+
+        data = raw_data = json.load(req.bounded_stream)
+        self.algorithm = raw_data.get('algorithm')
+        print(f"algorithm: {self.algorithm}")
+        resp.status = falcon.HTTP_200
         
         if self.instructions == None:
             self.instructions = self.ch.getPrograms()
@@ -18,7 +24,9 @@ class MachinaStep(object):
             self.instructions = None
             return
 
-        self.ch.run_line()
+        if self.algorithm == None:
+            return 
+        self.ch.run_line(self.algorithm)
         resp.status = falcon.HTTP_201
 
 

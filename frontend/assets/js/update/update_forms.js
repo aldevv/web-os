@@ -9,6 +9,8 @@ let registers_table   = document.getElementById('registers');
 let memory_table      = document.getElementById('memory-table');
 let monitor           = document.getElementById('monitor');
 let printer           = document.getElementById('printer');
+let acumulador        = document.getElementById('acu');
+let pasoMonitor       = document.getElementById('pasoMonitor');
 export let mode              = document.getElementById('mode');
 
 let variables = [];
@@ -23,24 +25,47 @@ getData()
     update_forms(data);
 })
 .then(() => {
-    const correrButton = document.getElementById("correr")
+    const correrButton = document.getElementById("correr");
     correrButton.addEventListener("click", e => {
-        getRunAll()
-        .then(data => {
-            showLogDataRun(data);
-            showMonitorAndPrinter(data);
-            refreshMemory(data);
-            mode.setAttribute("src", "assets/images/Usuario.png")
+        const algorithm_options = document.getElementById("algoritmos");
+        let chosen_algorithm = algorithm_options.options[algorithm_options.selectedIndex];
+        console.log("chosen algorithm ", chosen_algorithm.value);
+        let toSend = {'algorithm': chosen_algorithm.value};
+        var endpoint  = 'http://localhost:8000/api/run';
+        fetch(endpoint, {
+            method: "POST",
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(toSend),
+        })
+        .catch()
+        .then( ()=> {
+            getRunAll()
+            .then(data => {
+                console.log("got here")
+                showLogDataRun(data);
+                showMonitorAndPrinter(data);
+                refreshMemory(data);
+                mode.setAttribute("src", "assets/images/Usuario.png")
+            });
         });
     });
 
     const paso   = document.getElementById("paso")
     paso.addEventListener("click", e => {
         e.preventDefault();
+        const algorithm_options = document.getElementById("algoritmos");
+        let chosen_algorithm = algorithm_options.options[algorithm_options.selectedIndex];
+        console.log("chosen algorithm ", chosen_algorithm.value);
+        let toSend = {'algorithm': chosen_algorithm.value};
         const endpoint  = 'http://localhost:8000/api/step'
         fetch(endpoint, {
             method: "POST",
-            body:   null,
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(toSend),
         })
         .catch(console.error)
         .then(()=> {
@@ -86,9 +111,15 @@ function refreshMemory(data) {
 }
 
 function showInMonitor(data, monitor) {
-    if (data['steps'].length != 0) {
+    monitor.innerHTML = " ";
+    data['stdout'].forEach(element => {
+        monitor.innerHTML += element + "<br>";
+    });
+
+    if (data['steps'].length > 0) {
+        pasoMonitor.innerHTML = "Paso: ";
         let elem = data['steps'].pop();
-        monitor.innerHTML = elem + "\ ";
+        pasoMonitor.innerHTML += elem + "\ ";
     }
 
     if (data['printer'].length > 0) {
@@ -97,6 +128,8 @@ function showInMonitor(data, monitor) {
             printer.innerHTML +=  element + " |  ";
         });
     }
+
+    acumulador.innerHTML = "acumulador: " + parseInt(data['acumulador']);
 }
 
 export function update_forms(data) {
@@ -124,13 +157,15 @@ function showMonitorAndPrinter(data) {
         monitor.innerHTML += element + "<br>";
     });
 
-    printer.innerHTML = " ";
     if (data['printer'].length > 0) {
+        printer.innerHTML = " ";
         printer.innerHTML = "impresora: ";
         data['printer'].forEach(element => {
             printer.innerHTML +=  element + " |  ";
         });
     }
+    acumulador.innerHTML = "acumulador: " + parseInt(data['acumulador']);
+
 }
 
 
