@@ -69,8 +69,6 @@ class Scheduler:
         self.run("line")
 
     def setAlgorithmType(self, name, mode="normal"): #change
-        print("self.algorithm: ", self.algorithm)
-        print("pendinglefttorun left to run: ", self.dispatcher.getPendingRunInstances())
         if self.algorithm != None:
             print("instances left to run: ", self.instancesLeftToRun()) 
             if mode == "line" and self.instancesLeftToRun():
@@ -172,3 +170,19 @@ class Scheduler:
     def resetMaquina(self):
         self.dispatcher.resetMaquina()
         self.algorithm = None
+
+    def getStatus(self):
+        mem = self.dispatcher.getMemory()
+        dataStream = mem.getDataStream()
+        array = []
+        for key, value in dataStream.getStatus().items():
+            array.append((key.getFilename(), value))
+        return array
+
+    def getStderr(self):
+        mem = self.dispatcher.getMemory()
+        dataStream = mem.getDataStream()
+        array = []
+        for key, value in dataStream.getStderr().items():
+            array.append((key.getFilename(), value))
+        return array

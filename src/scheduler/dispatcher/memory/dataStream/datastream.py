@@ -3,10 +3,11 @@ class DataStream:
         self.stdout  = {}
         self.stderr  = {}
         self.printer = {}
-        self.steps = {}
+        self.steps   = {}
+        self.status  = {} # return value
     
-    def appendStderr(self, declaration, string):
-        self.stderr[declaration] = string
+    def appendStderr(self, runner, string):
+        self.stderr[runner] = string
 
     def appendStdout(self, declaration, string):
         if declaration not in self.stdout:
@@ -43,3 +44,15 @@ class DataStream:
 
     def getSteps(self, declaration):
         return self.steps[declaration]
+
+    def appendStatus(self, runner, value):
+        self.status[runner] = value
+    
+    def getStatus(self):
+        return self.status
+    
+    def getStderr(self):
+        return self.stderr
+    
+    def appendError(self, runner, error):
+        self.stderr[runner] = error

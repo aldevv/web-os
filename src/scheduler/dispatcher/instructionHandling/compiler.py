@@ -4,6 +4,7 @@ import os.path
 class Compiler:
     def __init__(self, mem):
         self.mem                   = mem
+        self.dataStream            = mem.getDataStream()
         self.progDefs              = None
         self.current_line          = None
         self.programLength         = []
@@ -49,7 +50,7 @@ class Compiler:
 
     def parse_and_compile_line(self, string):
         if self.mem.memory_isEmpty():
-            ErrorHandlerCompiler.throw_not_enough_memory_comp(string)
+            ErrorHandlerCompiler.throw_not_enough_memory_comp(self, self.dataStream, string)
             raise Exception("Memoria")
 
         string = string.split()
@@ -75,7 +76,7 @@ class Compiler:
         try:
             self.progDefs.get_possible_declarations()[name](*instruction[1:])
         except TypeError:
-            ErrorHandlerCompiler.throw_too_many_arguments(name, instruction)
+            ErrorHandlerCompiler.throw_too_many_arguments(self, self.dataStream, name, instruction)
             raise
 
     def save_in_history(self, instruction):
@@ -93,3 +94,11 @@ class Compiler:
 
     def setProgdefs(self, progDefs):
         self.progDefs = progDefs
+        self.mem.settings.appendDeclarationsPossible(self.progDefs.possible_declarations)
+
+    def getFilename(self):
+        declaration = self.progDefs.getDeclaration()
+        instruction = self.mem.getInstructionFromDeclaration(declaration)
+        index       = self.mem.get_programs().index(instruction)
+        fileInfo    = self.mem.getFileInfo()
+        return fileInfo.getFilenames()[index]

@@ -6,6 +6,20 @@ class MachinaSettings:
         self.initial_memory     = memory_available #! do i need this?
         self.pre_compile_memory = 0
         self.program_last_run   = None
+        self.operations_and_declarations = set()
+
+    def appendDeclarationsPossible(self, declarations):
+        items = []
+        for key, value in declarations.items():
+            self.operations_and_declarations.add(key)
+
+    def appendOperatorsPossible(self, operators):
+        items = []
+        for key, value in operators.items():
+            self.operations_and_declarations.add(key)
+    
+    def getOperationsAndDeclarationsPossible(self):
+        return self.operations_and_declarations
      
     def getPreCompileMemory(self):
          return self.pre_compile_memory

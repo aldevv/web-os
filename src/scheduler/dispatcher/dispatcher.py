@@ -12,10 +12,6 @@ class Dispatcher:
         self.mem, self.declaration, self.compiler = self.original
         self.original = [copy.deepcopy(self.mem), None, None]
 
-    def appendRunInstance(self, runner_instance):
-        queue = self.mem.getQueues()
-        queue.appendRunInstance(runner_instance)
-    
     def getPendingRunInstances(self):
         queues = self.mem.getQueues()
         return queues.getPendingRunInstances()
@@ -82,14 +78,15 @@ class Dispatcher:
             self.compiler    = Factory.createCompiler(self.mem, self.declaration)
 
     def createRunners(self):
-        all_declarations = self.mem.declarationHistory
-        num_declaration_pending = len(all_declarations.getPending())
+        all_declarations = self.mem.declarationHistory #object
         pending = all_declarations.getPending()
-        # print("num declarations pending: ", num_declaration_pending)
+        num_declaration_pending = len(pending)
+        queue = self.mem.getQueues()
+        dataStream = self.mem.getDataStream()
         for i in range(num_declaration_pending):
-            # print("the pending variables: before ", pending[0].getVariables())
             instructionRunner = Factory.createInstructionRunner(self.mem, pending.pop(0))
-            self.appendRunInstance(instructionRunner)
+            queue.appendRunInstance(instructionRunner)
+            dataStream.appendStatus(instructionRunner, 1)
 
     def getSteps(self): #!
         steps = []

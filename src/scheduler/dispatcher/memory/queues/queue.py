@@ -25,12 +25,14 @@ class Queue:
             if compiler.progDefs.getDeclaration() == declaration:
                 return compiler
 
+    def getRunnerFromDeclaration(self, declaration):
+        for runner in self.run_instances:
+            if runner.progDefs.getDeclaration() == declaration:
+                return runner
+
     def appendRunInstance(self, runner_instance):
         self.run_instances.append(runner_instance)
         self.pending_run_instances.append(runner_instance)
-
-    def getRunInstances(self):
-        return self.run_instances
 
     def getRunInstances(self):
         return self.run_instances

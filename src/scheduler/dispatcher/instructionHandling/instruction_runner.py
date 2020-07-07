@@ -4,34 +4,13 @@ import traceback
 class InstructionRunner:
     def __init__(self, mem):
         self.__mem         = mem
+        self.dataStream    = mem.getDataStream()
         self.progDefs      = None
         self.current_line  = None # represents the current instruction
         self.operators_executed_history    = []
 
     def getMemory(self):
         return self.__mem
-
-    # def run_line(self):
-    #     programs_to_run = self.__mem.pending_programs
-    #     print(f"programs_to_run: {programs_to_run}")
-    #     if len(programs_to_run) == 0:
-    #             print("nothing more to run")
-    #             return
-        
-    #     instruction = self.find_instruction(programs_to_run, self.current_line)
-    #     self.load_instruction(programs_to_run)
-    #     self.nextPosition()
-    #     if self.getCurrentLine() == len(programs_to_run[0]):
-    #         programs_to_run.pop(0)
-    #         self.current_line = None
-    #     print("instruction: ", instruction)
-    #     # print("pending_ programs", programs_to_run)
-    #     print("step", self.__mem.getSteps(self.progDefs.getDeclaration()))
-    #     print("\n____________\n")
-    #     if instruction[0] in self.progDefs.possible_operators:
-    #         return True
-    #     else:
-    #         return False
 
     def run_line(self):
         self.startCurrentLineAt0IfNone()
@@ -67,7 +46,8 @@ class InstructionRunner:
             self.__mem.saveDeclaration(self.progDefs.getDeclaration(), True)
         except Exception as err:
             print(traceback.format_exc())
-            print("Hubo un error en runtime ", err.args, self.getCurrentLine(), err)
+            message = "Hubo un error en runtime ", "linea: ", self.getCurrentLine(), "instrucción: ", self.find_instruction(programs_to_run, self.getCurrentLine()), err
+            ErrorHandlerVariables.try_error(self, self.dataStream, message)
 
     def getCurrentLine(self):
         return self.current_line
@@ -80,6 +60,11 @@ class InstructionRunner:
         if operator in self.progDefs.get_possible_operators():
             self.run_operator(operator, instruction)
             self.save_in_history(instruction)
+        else: 
+            if operator not in self.__mem.settings.getOperationsAndDeclarationsPossible():
+                print("todas las funciones: ", self.__mem.settings.getOperationsAndDeclarationsPossible())
+                message = "Hubo un error en runtime ", "linea: ", self.getCurrentLine(), "funcion no definida: ", operator
+                ErrorHandlerVariables.funcion_no_definida(self, self.dataStream, message)
 
     def find_instruction(self, programs_to_run, id_):
         # print("in find instruction, id: ", id_)
@@ -96,7 +81,7 @@ class InstructionRunner:
             # print("the declaration is: ", self.progDefs.getDeclaration().getVariables())
             # print(f"the instruction is: {instruction} \n")
             self.progDefs.get_possible_operators()[name](*instruction[1:])
-        except TypeError:
+        except Exception:
             ErrorHandlerCompiler.throw_too_many_arguments(name, instruction)
             raise
 
@@ -141,6 +126,7 @@ class InstructionRunner:
 
     def setProgdefs(self, progDefs):
         self.progDefs = progDefs
+        self.__mem.settings.appendDeclarationsPossible(self.progDefs.possible_operators)
 
     def getFilename(self):
         declaration = self.progDefs.getDeclaration()

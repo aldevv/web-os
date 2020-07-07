@@ -6,6 +6,7 @@ class OperatorDefinitions:
         self.__mem         = mem
         self.__declaration = declaration
         self.runner        = runner
+        self.dataStream        = mem.getDataStream()
         self.lea_values    = None
         self.possible_operators = { 
                         "cargue":       self.cargar, 
@@ -39,7 +40,7 @@ class OperatorDefinitions:
 
     def cargar(self, name):
         if not self.__declaration.inDeclarations(name):
-            ErrorHandlerVariables.throw_var_no_declarada(name)
+            ErrorHandlerVariables.throw_var_no_declarada(self.runner, self.dataStream, name)
             return
         prev = self.__mem.getAcumulador(self.getDeclaration())
         new  = self.__declaration.getVariable(name)
@@ -49,7 +50,7 @@ class OperatorDefinitions:
 
     def almacene(self, name):  # * works
         if not self.__declaration.inDeclarations(name):
-            ErrorHandlerVariables.throw_var_no_declarada(name)
+            ErrorHandlerVariables.throw_var_no_declarada(self.runner, self.dataStream, name)
             exit()  # ! must send index to the end of the file
             return
         prev = self.__declaration.getVariable(name)
@@ -59,18 +60,18 @@ class OperatorDefinitions:
 
     def vaya(self,tag):
         if not self.__declaration.inDeclarations(tag):
-            ErrorHandlerVariables.throw_tag_no_declarada(tag)
+            ErrorHandlerVariables.throw_tag_no_declarada(self.runner, self.dataStream, tag)
             return
         self.runner.setLine(self.__declaration.getTag(tag) -2)
         self.__mem.saveStepOneArg(self.getDeclaration(), "vaya",str(" desde " + str(prev+1)+ " hasta "), self.runner.getCurrentLine()+1)
 
     def vayasi(self, tag1, tag2):
         if not self.__declaration.inDeclarations(tag1):
-            ErrorHandlerVariables.throw_tag_no_declarada(tag1)
+            ErrorHandlerVariables.throw_tag_no_declarada(self.runner, self.dataStream, tag1)
             exit()
             return
         if not self.__declaration.inDeclarations(tag2):
-            ErrorHandlerVariables.throw_tag_no_declarada(tag2)
+            ErrorHandlerVariables.throw_tag_no_declarada(self.runner, self.dataStream, tag2)
             exit()
             return
         prev = self.runner.getCurrentLine()
@@ -86,7 +87,7 @@ class OperatorDefinitions:
 
     def lea(self, name):
         if not self.__declaration.inDeclarations(name):
-            ErrorHandlerVariables.throw_var_no_declarada(name)
+            ErrorHandlerVariables.throw_var_no_declarada(self.runner, self.dataStream, name)
             return
 
         value = self.getValues(name)
@@ -126,7 +127,7 @@ class OperatorDefinitions:
 
     def sume(self, name):
         if not self.__declaration.inDeclarations(name):
-            ErrorHandlerVariables.throw_var_no_declarada(name)
+            ErrorHandlerVariables.throw_var_no_declarada(self.runner, self.dataStream, name)
             return
         prev = self.__mem.getAcumulador(self.getDeclaration())
         new  = self.__mem.getAcumulador(self.getDeclaration()) + self.__declaration.getVariable(name)
@@ -136,7 +137,7 @@ class OperatorDefinitions:
 
     def reste(self, name):
         if not self.__declaration.inDeclarations(name):
-            ErrorHandlerVariables.throw_var_no_declarada(name)
+            ErrorHandlerVariables.throw_var_no_declarada(self.runner, self.dataStream, name)
             return
         prev = self.__mem.getAcumulador(self.getDeclaration())
         new  = self.__mem.getAcumulador(self.getDeclaration()) - self.__declaration.getVariable(name)
@@ -145,7 +146,7 @@ class OperatorDefinitions:
 
     def multiplique(self, name):
         if not self.__declaration.inDeclarations(name):
-            ErrorHandlerVariables.throw_var_no_declarada(name)
+            ErrorHandlerVariables.throw_var_no_declarada(self.runner, self.dataStream, name)
             return
         prev = self.__mem.getAcumulador(self.getDeclaration())
         new = self.__mem.getAcumulador(self.getDeclaration()) * self.__declaration.getVariable(name)
@@ -155,10 +156,11 @@ class OperatorDefinitions:
 
     def divida(self, name):
         if not self.__declaration.inDeclarations(name):
-            ErrorHandlerVariables.throw_var_no_declarada(name)
+            ErrorHandlerVariables.throw_var_no_declarada(self.runner, self.dataStream, name)
             return
         if self.__declaration.getVariable(name) == 0:
             ErrorHandlerVariables.throw_division_por_cero(
+                self.runner, self.dataStream,
                 self.__mem.getAcumulador(self.getDeclaration()), self.__declaration.getVariable(name)
             )
             return
@@ -171,7 +173,7 @@ class OperatorDefinitions:
 
     def potencia(self, name):
         if not self.__declaration.inDeclarations(name):
-            ErrorHandlerVariables.throw_var_no_declarada(name)
+            ErrorHandlerVariables.throw_var_no_declarada(self.runner, self.dataStream, name)
             return
         prev = self.__mem.getAcumulador(self.getDeclaration())
         new  = self.__mem.getAcumulador(self.getDeclaration()) ** self.__declaration.getVariable(name)
@@ -181,7 +183,7 @@ class OperatorDefinitions:
 
     def modulo(self, name):
         if not self.__declaration.inDeclarations(name):
-            ErrorHandlerVariables.throw_var_no_declarada(name)
+            ErrorHandlerVariables.throw_var_no_declarada(self.runner, self.dataStream, name)
             return
         prev = self.__mem.getAcumulador(self.getDeclaration())
         new  = self.__mem.getAcumulador(self.getDeclaration()) % self.__declaration.getVariable(name)
@@ -202,7 +204,7 @@ class OperatorDefinitions:
 
     def elimine(self, to_delete, ans):
         if not self.__declaration.inDeclarations(ans):
-            ErrorHandlerVariables.throw_var_no_declarada(ans)
+            ErrorHandlerVariables.throw_var_no_declarada(self.runner, self.dataStream, ans)
             return
         prev = self.__mem.getAcumulador(self.getDeclaration())
         if not self.__declaration.inDeclarations(to_delete):
@@ -219,7 +221,7 @@ class OperatorDefinitions:
 
     def extraiga(self, num_elem, ans):
         if not self.__declaration.inDeclarations(ans):
-            ErrorHandlerVariables.throw_var_no_declarada(ans)
+            ErrorHandlerVariables.throw_var_no_declarada(self.runner, self.dataStream, ans)
             return
         prev = self.__mem.getAcumulador(self.getDeclaration())
 
@@ -249,7 +251,7 @@ class OperatorDefinitions:
             self.__mem.saveStepOneArg(self.getDeclaration(), name, self.__mem.getAcumulador(self.getDeclaration()))
             return
         if not self.__declaration.inDeclarations(name):
-            ErrorHandlerVariables.throw_var_no_declarada(name)
+            ErrorHandlerVariables.throw_var_no_declarada(self.runner, self.dataStream, name)
             return
         value = self.__declaration.getVariable(name)
         dataStream.appendStdout(self.getDeclaration(), value)
@@ -261,7 +263,7 @@ class OperatorDefinitions:
             dataStream.appendPrinter(self.getDeclaration(), self.__mem.getAcumulador(self.getDeclaration()))
             return
         if not self.__declaration.inDeclarations(name):
-            ErrorHandlerVariables.throw_var_no_declarada(name)
+            ErrorHandlerVariables.throw_var_no_declarada(self.runner, self.dataStream, name)
             return
         value = self.__declaration.getVariable(name)
         dataStream.appendPrinter(self.getDeclaration(), value)
@@ -271,15 +273,17 @@ class OperatorDefinitions:
         a = self.__declaration.getVariable(a)
         b = self.__declaration.getVariable(b)
         if(type(a) == str and type(b) == int):
-            ErrorHandlerVariables.throw_operando_no_es_numero()
+            ErrorHandlerVariables.throw_operando_no_es_numero(self.runner, self.dataStream, a)
             return 
         if(type(a) == int and type(b) == str):
-            ErrorHandlerVariables.throw_operando_no_es_numero()
+            ErrorHandlerVariables.throw_operando_no_es_numero(self.runner, self.dataStream, b)
             return 
 
         ans = a if a > b else b
         self.__declaration.setVariable(c, ans)
 
     def returne(self, value):#! save return value
+        dataStream = self.__mem.getDataStream()
+        dataStream.appendStatus(self.runner, value)
         self.__mem.saveStepOneArg(self.getDeclaration(), "returne", value)
         return

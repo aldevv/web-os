@@ -84,6 +84,9 @@ class DeclarationHistory:
             self.declarationHistory[len(self.declarationHistory)] = declaration
             self.saveDeclarationsInstruction(declaration)
 
+    def addStatusAsNotComplete(self, declaration):
+        self.mem.getDataStream().appendStatus(declaration, 1)
+
     def saveDeclarationsInstruction(self, declaration):
         self.declarationHashInstruction[declaration] = self.mem.get_programs()[-1]
 
