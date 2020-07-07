@@ -33,17 +33,18 @@ class MachinaStep(object):
     def on_get(self, req, resp):
         dispatcher = self.ch.dispatcher
         data = {
-            'acumulador': self.ch.getAcumulador(),
+            'stdout': self.ch.getStdout(),
+            'printer': self.ch.getPrinter(),
+            'steps': self.ch.getSteps(),
+            'errors': self.ch.getStderr(),
             'variables': self.ch.getVariables(),
             'tags': self.ch.getTags(),
             'programs': self.ch.getPrograms(),
             'registers': self.ch.getRegisters(),
+            'acumulador': self.ch.getAcumulador(),
             'memory': self.ch.getMemory(),
             'memoryAvailable': self.ch.getMemoryAvailable(),
             'memoryUsed': self.ch.getMemoryUsed(),
-            'steps': self.ch.getSteps(), #!
-            'stdout': self.ch.getStdout(), #!
-            'printer': self.ch.getPrinter(),
         }
         resp.media = data;
         resp.status = falcon.HTTP_201

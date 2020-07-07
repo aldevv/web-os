@@ -21,6 +21,8 @@ class InstructionRunner:
     def possibleToRun(self):
         program = [self.__mem.getInstructionFromDeclaration(self.progDefs.getDeclaration())]
         print(f"current line: {self.getCurrentLine()}")
+        if self.getCurrentLine() > len(program[0]) - 1:
+            return False
         instruction = self.find_instruction(program, self.getCurrentLine()) 
         operator = self.program_name(instruction)
         if operator in self.progDefs.get_possible_operators():
@@ -82,7 +84,7 @@ class InstructionRunner:
             # print(f"the instruction is: {instruction} \n")
             self.progDefs.get_possible_operators()[name](*instruction[1:])
         except Exception:
-            ErrorHandlerCompiler.throw_too_many_arguments(name, instruction)
+            ErrorHandlerCompiler.throw_too_many_arguments(self, self.dataStream, name, instruction)
             raise
 
     def save_in_history(self, instruction):
@@ -104,7 +106,7 @@ class InstructionRunner:
             programs_to_run = [self.__mem.getInstructionFromDeclaration(self.progDefs.getDeclaration())]
             limit = self.getCurrentLine() + num_lines_to_run
             while self.getCurrentLine() < limit:
-                if self.getCurrentLine() == len(programs_to_run[0]):
+                if self.getCurrentLine() >= len(programs_to_run[0]):
                     programs_to_run.pop(0)
                     break
                 self.load_instruction(programs_to_run)

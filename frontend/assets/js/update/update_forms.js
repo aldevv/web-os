@@ -85,6 +85,7 @@ getData()
         const endpoint  = 'http://localhost:8000/api/clean';
         monitor.innerHTML           = "";
         printer.innerHTML           = "Impresora: ";
+        pasoMonitor.innerHTML       = "Paso: ";
         variables_table.innerHTML   = originalHtml['variables'];
         tags_table.innerHTML        = originalHtml['tags'];
         instruction_table.innerHTML = originalHtml['instruction'];
@@ -112,25 +113,32 @@ function refreshMemory(data) {
 }
 
 function showInMonitor(data, monitor) {
-    monitor.innerHTML = " ";
-    data['stdout'].forEach(element => {
-        monitor.innerHTML += element + "<br>";
-    });
 
-    if (data['steps'].length > 0) {
-        pasoMonitor.innerHTML = "Paso: ";
-        let elem = data['steps'].pop();
-        pasoMonitor.innerHTML += elem + "\ ";
-    }
+    if (data['errors'].length > 0) {
+        console.log("errors: ",data['errors']);
+        monitor.innerHTML = data['errors'][0]
+    } else {
 
-    if (data['printer'].length > 0) {
-        printer.innerHTML = "impresora: ";
-        data['printer'].forEach(element => {
-            printer.innerHTML +=  element + " |  ";
+        monitor.innerHTML = " ";
+        data['stdout'].forEach(element => {
+            monitor.innerHTML += element + "<br>";
         });
-    }
 
-    acumulador.innerHTML = "acumulador: " + parseInt(data['acumulador']);
+        if (data['steps'].length > 0) {
+            pasoMonitor.innerHTML = "Paso: ";
+            let elem = data['steps'].pop();
+            pasoMonitor.innerHTML += elem + "\ ";
+        }
+
+        if (data['printer'].length > 0) {
+            printer.innerHTML = "impresora: ";
+            data['printer'].forEach(element => {
+                printer.innerHTML +=  element + " |  ";
+            });
+        }
+
+        acumulador.innerHTML = "acumulador: " + parseInt(data['acumulador']);
+    }
 }
 
 export function update_forms(data) {
@@ -153,19 +161,26 @@ function showLogDataRun(data) {
 }
 
 function showMonitorAndPrinter(data) {
-    monitor.innerHTML = " ";
-    data['stdout'].forEach(element => {
-        monitor.innerHTML += element + "<br>";
-    });
+    console.log("errors, before: ",data['errors']);
+    if (data['errors'].length > 0) {
 
-    if (data['printer'].length > 0) {
-        printer.innerHTML = " ";
-        printer.innerHTML = "impresora: ";
-        data['printer'].forEach(element => {
-            printer.innerHTML +=  element + " |  ";
+        console.log("errors: ",data['errors']);
+        monitor.innerHTML = data['errors'][0]
+    } else {
+        monitor.innerHTML = " ";
+        data['stdout'].forEach(element => {
+            monitor.innerHTML += element + "<br>";
         });
+
+        if (data['printer'].length > 0) {
+            printer.innerHTML = " ";
+            printer.innerHTML = "impresora: ";
+            data['printer'].forEach(element => {
+                printer.innerHTML +=  element + " |  ";
+            });
+        }
+        acumulador.innerHTML = "acumulador: " + parseInt(data['acumulador']);
     }
-    acumulador.innerHTML = "acumulador: " + parseInt(data['acumulador']);
 
 }
 

@@ -17,8 +17,9 @@ class MachinaRunner(object):
         data = {
             'stdout':  self.ch.getStdout(),
             'printer': self.ch.getPrinter(),
-            'acumulador': self.ch.getAcumulador(),
+            'errors':   self.ch.getStderr(),
             'steps':   self.ch.getSteps(),
+            'acumulador': self.ch.getAcumulador(),
             'memory':  self.ch.getMemory(),
         }
         resp.media = data;
