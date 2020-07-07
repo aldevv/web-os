@@ -1,7 +1,7 @@
 from .algorithm import Algorithm
 from tabulate   import tabulate
 from copy       import copy
-import traceback
+import traceback, concurrent.futures, time
 
 class RoundRobin(Algorithm):
     #Shortest job first
@@ -190,13 +190,25 @@ class RoundRobin(Algorithm):
         print(f"to run: ")
         names = self.instancesToReadable(self.run_instances)
         self.printNamesAndLinesToRun(names)
-        for i in range(num_instances):      
-            instance = self.run_instances.pop(0)
-            self.printInstanceToRun(instance)
-            instance.run_all_expro(self.num_lines_to_run_all_instances.pop(0))
-        #this was added later
+        start = time.perf_counter()
+        with concurrent.futures.ThreadPoolExecutor() as executor: #! hilos
+            for _ in range(num_instances):
+                instance = self.run_instances.pop(0)
+                self.printInstanceToRun(instance)
+                executor.submit(instance.run_all_expro, self.num_lines_to_run_all_instances.pop(0))
+        # for i in range(num_instances):  # 0.0061 sec, for 4 files
+        #     instance = self.run_instances.pop(0)
+        #     self.printInstanceToRun(instance)
+        #     instance.run_all_expro(self.num_lines_to_run_all_instances.pop(0))
+        finish = time.perf_counter()
+        print(f"start in: {start}")
+        print(f"finish in: {finish}")
+        print(f"Finished in: {round(finish-start, 4)}")
+
         queues = self.memory.getQueues()
         queues.pending_programs = []
+
+    
 
     def printNamesAndLinesToRun(self, names):
         if len(self.memory.getFileInfo().getFilenames()) == 0:
