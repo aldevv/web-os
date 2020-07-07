@@ -5,7 +5,8 @@ class Scheduler:
     def __init__(self):
         self.dispatcher = Dispatcher()
         self.default_quantum = 5
-        self.algorithm  = None           
+        self.algorithm      = None           
+        self.algorithm_name = None           
         self.ex_algorithms = {"sjfex", "priorityex", "roundrobin"}
         self.algorithms_possible = {
             "fifo": FIFO,
@@ -15,12 +16,13 @@ class Scheduler:
             "priorityex": PriorityEx,
             "roundrobin": RoundRobin
         }
+        
 
     def getSchedulerReport(self):
         if len(self.dispatcher.getMemory().getFileInfo().getFilenames()) == 0: #ya que no hay archivos que reportar
             return
         print("\n")
-        print("Algoritmo: ", type(self.getAlgorithm()).__name__)
+        print("Algoritmo: ", self.algorithm_name)
         print("Order: ", self.getAlgorithmOrder(),"\n")
         print(self.getAlgorithm().getTable() ,"\n")
 
@@ -28,6 +30,7 @@ class Scheduler:
     def setAlgorithm(self, algorithm):
         self.algorithm = algorithm
         if self.algorithm != None:
+            self.algorithm_name = type(self.getAlgorithm()).__name__.lower()
             self.algorithm.setup()
 
     def getAlgorithm(self):
@@ -52,7 +55,8 @@ class Scheduler:
             self.run_line_normal(algorithm)
 
     def resetMaquinaIfAlgorithmChanged(self,algorithm):
-        if self.algorithm != None and type(self.getAlgorithm()).__name__.lower() != algorithm:
+        if self.algorithm != None and self.algorithm_name != algorithm:
+            self.algorithm_name = algorithm
             self.dispatcher.resetMaquina()
 
     def run_line_ex(self, algorithm):
