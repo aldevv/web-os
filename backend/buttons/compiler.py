@@ -1,4 +1,4 @@
-import os, sys
+import os, sys, concurrent.futures
 import falcon
 
 
@@ -31,8 +31,8 @@ class MachinaCompiler(object):
         """
 
         algorithm = req.get_param('algorithm')
-        num_programs_uploaded = len(req.params)
-        for i in range(num_programs_uploaded-1):
+        num_programs_uploaded = len(req.params) -1 # por el algoritmo
+        for i in range(num_programs_uploaded):
             input_file = req.get_param('file['+str(i)+']')
             # print("files", input_files)
             # print("some", type(input_files))
@@ -60,7 +60,8 @@ class MachinaCompiler(object):
             os.rename(temp_file_path, file_path)
             self.files_uploaded_paths.append(file_path)
 
-        for i in range(num_programs_uploaded):
-            self.ch.compileFile(self.files_uploaded_paths.pop(0), algorithm)
+        with concurrent.futures.ThreadPoolExecutor() as executor:
+            for _ in range(num_programs_uploaded):
+                executor.submit(self.ch.compileFile, self.files_uploaded_paths.pop(0), algorithm) #compila el archivo en un hilo
 
         resp.status = falcon.HTTP_201
