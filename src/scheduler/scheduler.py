@@ -48,10 +48,8 @@ class Scheduler:
 
     def run_line(self, algorithm="roundrobin"):
         if algorithm.lower() in self.ex_algorithms:
-            print("entered ex")
             self.run_line_ex(algorithm)
         else:
-            print("entered normal")
             self.run_line_normal(algorithm)
 
     def resetMaquinaIfAlgorithmChanged(self,algorithm):

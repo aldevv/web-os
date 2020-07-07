@@ -115,7 +115,6 @@ function refreshMemory(data) {
 function showInMonitor(data, monitor) {
 
     if (data['errors'].length > 0) {
-        console.log("errors: ",data['errors']);
         monitor.innerHTML = data['errors'][0]
     } else {
 
@@ -161,10 +160,7 @@ function showLogDataRun(data) {
 }
 
 function showMonitorAndPrinter(data) {
-    console.log("errors, before: ",data['errors']);
     if (data['errors'].length > 0) {
-
-        console.log("errors: ",data['errors']);
         monitor.innerHTML = data['errors'][0]
     } else {
         monitor.innerHTML = " ";
