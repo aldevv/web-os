@@ -10,6 +10,7 @@ class Priority(Algorithm):
         self.ordered_instances  = None
         self.priorities         = {}
         self.aging              = {}
+        self.currentLineRunInstance   = None
 
     def getRunInstances(self):
         return self.run_instances

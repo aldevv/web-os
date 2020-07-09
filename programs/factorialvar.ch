@@ -18,5 +18,5 @@ etiqueta itere 10
 etiqueta fin  19
 muestre respuesta
 imprima respuesta
-retorne 0
+returne 0
 

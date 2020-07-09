@@ -8,6 +8,7 @@ class SJF(Algorithm):
         super().__init__()
         self.run_instances     = run_instances
         self.ordered_instances = None
+        self.currentLineRunInstance   = None
 
     def getRunInstances(self):
         return self.run_instances
