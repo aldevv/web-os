@@ -9,8 +9,8 @@ class RoundRobin(Algorithm):
         super().__init__()
         self.run_instances     = run_instances
         self.quantum           = quantum
-        self.order             = None
-        self.ordered_instances = None
+        self.order             = None # after round robin setup
+        self.ordered_instances = None # in arrival order
         self.num_lines_to_run_all_instances = None
         self.possible_queue    = None
         self.currentLineRunInstance = None

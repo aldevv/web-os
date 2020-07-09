@@ -20,6 +20,10 @@ pip install wheel && pip install -r requirements.txt
 ```bash
 pip install -r requirements.txt
 ```
+## Preparar el frontend
+Usar un servidor, en el desarrollo de esta aplicación se utilizo
+la extension de vscode llamada live server.
+
 ## Correr el servidor
 ir a la carpeta backend y correr 
 ```bash
