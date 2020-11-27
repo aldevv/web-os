@@ -1,4 +1,4 @@
-# No es funcional en windows, pero se puede hacer funcionar en windows instalando ubuntu en el windows store y usando la funcionalidad WSL para usar Ubuntu encima de Windows
+# No es funcional en Windows, pero se puede hacer funcionar en Windows instalando Ubuntu en el windows store y usando la funcionalidad WSL para usar Ubuntu encima de Windows
 # Dependencias
 ```
 sudo apt-get install make python3 python3-dev python3-venv
